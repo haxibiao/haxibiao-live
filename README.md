@@ -16,7 +16,9 @@
 
 ## 安装步骤
 1. `App/User`模型需要增加Trait: `use App\Traits\Macroable`(文件需要自己创建，Macroable详情放在文档附录中);
-2. 将安装包与对应的仓库链接更新到composer.json
+2. `composer.json`改动如下：
+    1. 在`require`中加入`"haxibiao/live-sdk": "*"`
+    2. 在`repositories`中添加远程仓库指向`http://code.haxibiao.cn/composer/haxibiao-live-sdk.git` 
 3. 执行`composer update haxibiao/live-sdk --lock --ignore-platform-reqs`
 4. 执行`php artisan live:install`
 5. 配置env文件以下三个参数值：
