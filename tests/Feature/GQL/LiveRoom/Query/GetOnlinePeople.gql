@@ -1,0 +1,8 @@
+#在线观众列表
+query GetOnlinePeople($roomid:Int!) {
+  getLiveRoomUsers(live_room_id: $roomid) {
+    id
+    name
+    avatar
+  }
+}

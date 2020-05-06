@@ -1,0 +1,8 @@
+#获取直播推流地址
+mutation GetLivePushURL($title: String){
+  createLiveRoom(title: $title){
+    id
+    title
+    push_url
+  }
+}

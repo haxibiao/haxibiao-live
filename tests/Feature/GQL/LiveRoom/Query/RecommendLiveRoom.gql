@@ -1,0 +1,15 @@
+#直播列表
+query RecommendLiveRoom($page: Int){
+  recommendLiveRoom(first:10,page: $page){
+    paginatorInfo{
+      currentPage
+      hasMorePages
+    }
+    data{
+      id
+      title
+      cover
+      count_audience
+    }
+  }
+}
