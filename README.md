@@ -29,10 +29,10 @@ LIVE_PULL_URL=live.dongdezhuan.com
 ```
 6. 完成
 
-### 如何更新？
+### 如何完成更新？
 > 远程仓库的composer package发生更新时如何进行更新操作呢？
-1.执行`composer update haxibiao/live-sdk`
-2.执行`php artisan live:install`
+1. 执行`composer update haxibiao/live-sdk`
+2. 执行`php artisan live:install`
 
 ## GQL接口说明
 
