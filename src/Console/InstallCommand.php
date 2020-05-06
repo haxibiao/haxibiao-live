@@ -3,6 +3,7 @@
 namespace Haxibiao\Live\Console;
 
 
+use App\Traits\UserResolvers;
 use Illuminate\Console\Command;
 use Illuminate\Console\DetectsApplicationNamespace;
 use Illuminate\Container\Container;
@@ -59,6 +60,12 @@ class InstallCommand extends Command
             "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL,
             "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL."        Haxibiao\Live\Providers\AppServiceProvider::class,".PHP_EOL,
             file_get_contents(config_path('app.php'))
+        ));
+
+        file_put_contents(app_path('User.php'), str_replace(
+            "use UserResolvers;".PHP_EOL,
+            "use UserResolvers;".PHP_EOL."        use Haxibiao\Live\Traits\Macroable;".PHP_EOL,
+            file_get_contents(app_path('User.php'))
         ));
     }
 
