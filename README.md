@@ -24,8 +24,8 @@
 5. 配置env文件以下三个参数值：
 ```
 LIVE_KEY=
-LIVE_PUSH_URL=69045.livepush.myqcloud.com
-LIVE_PULL_URL=live.dongdezhuan.com
+LIVE_PUSH_URL=
+LIVE_PULL_URL=
 ```
 6. 完成
 
@@ -53,8 +53,8 @@ api/live/cutOut
 
 | params | must | desc |
 | ---- | ---- | ---- |
-| stream_id | yes | 经度 |
-| event_type | yes | 纬度 |
+| stream_id | yes |  |
+| event_type | yes |  |
 
 
 ## 录制回调
