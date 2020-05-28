@@ -70,7 +70,7 @@ class LiveRoom extends Resource
             DateTime::make('最近直播时间', 'latest_live_time'),
             DateTime::make('直播间创建时间', 'created_at'),
             Select::make('直播状态', 'status')->options(LiveRoomModel::getStatuses())->displayUsingLabels(),
-            Image::make('封面', 'cover')->disk('cos'),
+            Image::make('封面', 'cover')->disk('cosv5'),
         ];
     }
 

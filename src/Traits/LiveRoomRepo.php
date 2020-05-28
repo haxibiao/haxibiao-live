@@ -2,8 +2,8 @@
 
 namespace Haxibiao\Live\Traits;
 
-use App\Events\LiveRoom\CloseRoom;
 use App\User;
+use Haxibiao\Live\Events\CloseRoom;
 use Haxibiao\Live\Models\LiveRoom;
 use Illuminate\Support\Facades\Redis;
 

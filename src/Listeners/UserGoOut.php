@@ -20,10 +20,9 @@ class UserGoOut
     /**
      * Handle the event.
      *
-     * @param \App\Events\LiveRoom\UserGoOut $event
-     * @return void
+     * @param \Haxibiao\Live\Events\UserGoOut $event
      */
-    public function handle(\App\Events\LiveRoom\UserGoOut $event)
+    public function handle(\Haxibiao\Live\Events\UserGoOut $event)
     {
         $room = $event->liveRoom;
         $user = $event->user;

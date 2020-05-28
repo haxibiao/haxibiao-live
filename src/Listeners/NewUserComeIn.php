@@ -20,10 +20,9 @@ class NewUserComeIn
     /**
      * Handle the event.
      *
-     * @param \App\Events\LiveRoom\NewUserComeIn $event
-     * @return void
+     * @param \Haxibiao\Live\Events\NewUserComeIn $event
      */
-    public function handle(\App\Events\LiveRoom\NewUserComeIn $event)
+    public function handle(\Haxibiao\Live\Events\NewUserComeIn $event)
     {
         LiveRoom::joinLiveRoom($event->user, $event->liveRoom);
     }

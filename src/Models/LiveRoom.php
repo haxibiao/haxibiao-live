@@ -17,6 +17,11 @@ class LiveRoom extends Model
 
     public const prefix   = self::protocol . '://';
 
+    protected $casts = [
+        'latest_live_time' => 'datetime',
+        'data'             => 'array',
+    ];
+
     use LiveRoomRepo, LiveRoomResolvers, LiveRoomAttrs;
 
     protected $guarded = [];
@@ -29,6 +34,11 @@ class LiveRoom extends Model
     public function streamer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'anchor_id');
+    }
+
+    public function userLive(): BelongsTo
+    {
+        return $this->belongsTo(UserLive::class, 'id', 'live_id');
     }
 
     public static function getStatuses()

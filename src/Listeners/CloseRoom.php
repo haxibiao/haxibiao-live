@@ -21,10 +21,9 @@ class CloseRoom
     /**
      * Handle the event.
      *
-     * @param \App\Events\LiveRoom\CloseRoom $event
-     * @return void
+     * @param \Haxibiao\Live\Events\CloseRoom $event
      */
-    public function handle(\App\Events\LiveRoom\CloseRoom $event)
+    public function handle(\Haxibiao\Live\Events\CloseRoom $event)
     {
         $room = $event->liveRoom;
         // 关闭直播间需要刷新直播间状态和推流key
