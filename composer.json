@@ -14,10 +14,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Haxibiao\\Live\\Providers\\AppServiceProvider",
-                "Haxibiao\\Live\\Providers\\RouteServiceProvider",
-                "Haxibiao\\Live\\Providers\\EventServiceProvider",
-                "Haxibiao\\Live\\Providers\\ModelServiceProvider"
+                "Haxibiao\\Live\\Providers\\AppServiceProvider"
             ]
         }
     }

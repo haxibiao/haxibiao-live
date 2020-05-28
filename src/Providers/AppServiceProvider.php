@@ -8,9 +8,27 @@ use Haxibiao\Live\Models\LiveRoom;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Event;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * The event listener mappings for the application.
+     *
+     * @var array
+     */
+    protected $listen = [
+        'Haxibiao\Live\Events\NewUserComeIn' => [
+            'Haxibiao\Live\Listeners\NewUserComeIn',
+        ],
+        'Haxibiao\Live\Events\UserGoOut'     => [
+            'Haxibiao\Live\Listeners\UserGoOut',
+        ],
+        'Haxibiao\Live\Events\CloseRoom'     => [
+            'Haxibiao\Live\Listeners\CloseRoom',
+        ],
+    ];
+
     /**
      * Boorstrap the service provider.
      *
@@ -46,6 +64,16 @@ class AppServiceProvider extends ServiceProvider
             }
             return false;
         });
+
+        $this->loadRoutesFrom(
+            $this->app->make('path.haxibiao-live-sdk').'/router.php'
+        );
+
+        foreach ($this->listens() as $event => $listeners) {
+            foreach ($listeners as $listener) {
+                Event::listen($event, $listener);
+            }
+        }
     }
 
     /**
@@ -92,5 +120,15 @@ class AppServiceProvider extends ServiceProvider
         $this->commands([
             InstallCommand::class,
         ]);
+    }
+
+    /**
+     * Get the events and handlers.
+     *
+     * @return array
+     */
+    public function listens()
+    {
+        return $this->listen;
     }
 }
