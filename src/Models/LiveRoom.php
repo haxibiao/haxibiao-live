@@ -30,4 +30,13 @@ class LiveRoom extends Model
     {
         return $this->belongsTo(User::class, 'anchor_id');
     }
+
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_ON      => '正在直播',
+            self::STATUS_OFF     => '已下播',
+            self::STATUS_DISABLE => '异常封禁',
+        ];
+    }
 }
