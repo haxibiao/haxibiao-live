@@ -3,8 +3,8 @@
 namespace App\Nova;
 
 use App\Nova\Resource;
-use App\User;
-use App\Video;
+use App\Nova\User;
+use App\Nova\Video;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Code;
