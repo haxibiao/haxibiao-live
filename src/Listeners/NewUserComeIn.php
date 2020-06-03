@@ -1,8 +1,8 @@
 <?php
 
-namespace Haxibiao\Live\Listeners;
+namespace haxibiao\live\Listeners;
 
-use Haxibiao\Live\Models\LiveRoom;
+use haxibiao\live\LiveRoom;
 
 class NewUserComeIn
 {
@@ -20,9 +20,9 @@ class NewUserComeIn
     /**
      * Handle the event.
      *
-     * @param \Haxibiao\Live\Events\NewUserComeIn $event
+     * @param \haxibiao\live\Events\NewUserComeIn $event
      */
-    public function handle(\Haxibiao\Live\Events\NewUserComeIn $event)
+    public function handle(\haxibiao\live\Events\NewUserComeIn $event)
     {
         LiveRoom::joinLiveRoom($event->user, $event->liveRoom);
     }

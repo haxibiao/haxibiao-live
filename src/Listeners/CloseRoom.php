@@ -1,9 +1,8 @@
 <?php
 
-namespace Haxibiao\Live\Listeners;
+namespace haxibiao\live\Listeners;
 
-
-use Haxibiao\Live\Models\LiveRoom;
+use haxibiao\live\LiveRoom;
 
 class CloseRoom
 {
@@ -21,9 +20,9 @@ class CloseRoom
     /**
      * Handle the event.
      *
-     * @param \Haxibiao\Live\Events\CloseRoom $event
+     * @param \haxibiao\live\Events\CloseRoom $event
      */
-    public function handle(\Haxibiao\Live\Events\CloseRoom $event)
+    public function handle(\haxibiao\live\Events\CloseRoom $event)
     {
         $room = $event->liveRoom;
         // 关闭直播间需要刷新直播间状态和推流key

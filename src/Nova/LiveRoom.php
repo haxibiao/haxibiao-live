@@ -12,7 +12,7 @@ use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use \Haxibiao\Live\Models\LiveRoom as LiveRoomModel;
+use \haxibiao\live\LiveRoom as LiveRoomModel;
 
 class LiveRoom extends Resource
 {

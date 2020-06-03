@@ -1,10 +1,10 @@
 <?php
 
-namespace Haxibiao\Live\Traits;
+namespace haxibiao\live\Traits;
 
 use App\User;
-use Haxibiao\Live\Events\CloseRoom;
-use Haxibiao\Live\Models\LiveRoom;
+use haxibiao\live\Events\CloseRoom;
+use haxibiao\live\LiveRoom;
 use Illuminate\Support\Facades\Redis;
 
 trait LiveRoomRepo
@@ -42,8 +42,6 @@ trait LiveRoomRepo
         return self::getPushUrl($domain, $streamName, $key, $endAt);
     }
 
-
-
     /**
      * 主播创建直播室,初始化流信息
      * @param User $user 主播用户
@@ -55,7 +53,7 @@ trait LiveRoomRepo
         list($streamName, $key, $domain, $pullUrl) = self::getLiveConfig($user);
 
         $pullStreamUrl = $pullUrl . $streamName;
-        $room = LiveRoom::create([
+        $room          = LiveRoom::create([
             'anchor_id'        => $user->id,
             'push_stream_url'  => $domain,
             'push_stream_key'  => $key,
@@ -105,10 +103,10 @@ trait LiveRoomRepo
      * @param string $title
      * @return LiveRoom
      */
-    public static function openLive(User $user,LiveRoom $liveRoom, string $title): LiveRoom
+    public static function openLive(User $user, LiveRoom $liveRoom, string $title): LiveRoom
     {
         list($streamName, $key, $domain, $pullUrl) = self::getLiveConfig($user);
-        $pullStreamUrl = $pullUrl . $streamName;
+        $pullStreamUrl                             = $pullUrl . $streamName;
         $liveRoom->update([
             'latest_live_time' => now(),
             'title'            => $title,
@@ -132,7 +130,7 @@ trait LiveRoomRepo
      */
     public static function closeRoom(LiveRoom $room)
     {
-        event(new CloseRoom($room,'主播关闭了直播~'));
+        event(new CloseRoom($room, '主播关闭了直播~'));
         if (Redis::exists($room->redis_room_key)) {
             Redis::del($room->redis_room_key);
         }
@@ -155,9 +153,9 @@ trait LiveRoomRepo
     public static function getLiveConfig(User $user): array
     {
         $streamName = self::getStreamName($user);
-        $key = self::getUserPushLiveUrl($streamName);
-        $domain = config('tencent-live.live_push_url');
-        $pullUrl = config('tencent-live.live_pull_url');
+        $key        = self::getUserPushLiveUrl($streamName);
+        $domain     = config('tencent-live.live_push_url');
+        $pullUrl    = config('tencent-live.live_pull_url');
         return array($streamName, $key, $domain, $pullUrl);
     }
 }

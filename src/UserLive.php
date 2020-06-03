@@ -1,10 +1,10 @@
 <?php
 
-namespace Haxibiao\Live\Models;
+namespace haxibiao\live;
 
 use App\User;
 use App\Video;
-use Haxibiao\Live\Traits\UserLiveRepo;
+use haxibiao\live\Traits\UserLiveRepo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Haxibiao\Live\Controllers\Api;
+namespace haxibiao\live\Controllers\Api;
 
 use App\Exceptions\UserException;
 use App\Http\Controllers\Controller;
-use Haxibiao\Live\Models\LiveRoom;
+use haxibiao\live\LiveRoom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;

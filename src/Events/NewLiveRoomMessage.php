@@ -1,16 +1,14 @@
 <?php
 
-namespace Haxibiao\Live\Events;
+namespace haxibiao\live\Events;
 
 use App\User;
-use Haxibiao\Live\Models\LiveRoom;
+use haxibiao\live\LiveRoom;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
 class NewLiveRoomMessage implements ShouldBroadcast
@@ -28,28 +26,28 @@ class NewLiveRoomMessage implements ShouldBroadcast
      * @param $liveRoomId 直播室id
      * @param $message 弹幕内容
      */
-    public function __construct($userId,$liveRoomId,$message)
+    public function __construct($userId, $liveRoomId, $message)
     {
-        $this->user = User::find($userId);
+        $this->user     = User::find($userId);
         $this->liveRoom = LiveRoom::find($liveRoomId);
-        $this->message = $message;
+        $this->message  = $message;
     }
 
-    public function broadcastWith():array
+    public function broadcastWith(): array
     {
         $popup = false;
         // 给大哥大姐们的彩蛋
-        if(Str::contains($this->message,['杨柳','李峥','胡蹦','小谷','罗静','小芳','张总','老王','王彬'])){
+        if (Str::contains($this->message, ['杨柳', '李峥', '胡蹦', '小谷', '罗静', '小芳', '张总', '老王', '王彬'])) {
             $popup = true;
         }
         return [
-            'user_id' => $this->user->id,
-            'user_name' => $this->user->name,
-            'user_avatar' => $this->user->avatar_url,
+            'user_id'      => $this->user->id,
+            'user_name'    => $this->user->name,
+            'user_avatar'  => $this->user->avatar_url,
             'live_room_id' => $this->liveRoom->id,
-            'message' => $this->message,
+            'message'      => $this->message,
             // 彩蛋
-            'egg' => [
+            'egg'          => [
                 'popup' => $popup,
                 'type'  => 'BboBbo',
             ],
@@ -58,10 +56,10 @@ class NewLiveRoomMessage implements ShouldBroadcast
 
     public function broadcastOn(): Channel
     {
-        return new Channel('live_room.'.$this->liveRoom->id);
+        return new Channel('live_room.' . $this->liveRoom->id);
     }
 
-    public function broadcastAs():string
+    public function broadcastAs(): string
     {
         return 'new_comment';
     }

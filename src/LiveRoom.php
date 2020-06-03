@@ -1,11 +1,11 @@
 <?php
 
-namespace Haxibiao\Live\Models;
+namespace haxibiao\live;
 
 use App\User;
-use Haxibiao\Live\Traits\LiveRoomAttrs;
-use Haxibiao\Live\Traits\LiveRoomRepo;
-use Haxibiao\Live\Traits\LiveRoomResolvers;
+use haxibiao\live\Traits\LiveRoomAttrs;
+use haxibiao\live\Traits\LiveRoomRepo;
+use haxibiao\live\Traits\LiveRoomResolvers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -15,7 +15,7 @@ class LiveRoom extends Model
 
     public const protocol = 'rtmp';
 
-    public const prefix   = self::protocol . '://';
+    public const prefix = self::protocol . '://';
 
     protected $casts = [
         'latest_live_time' => 'datetime',
@@ -27,8 +27,8 @@ class LiveRoom extends Model
     protected $guarded = [];
 
     //-1:下直播 -2:直播间被封 1:直播中
-    public const STATUS_ON     = 1;
-    public const STATUS_OFF    = -1;
+    public const STATUS_ON      = 1;
+    public const STATUS_OFF     = -1;
     public const STATUS_DISABLE = -2;
 
     public function streamer(): BelongsTo

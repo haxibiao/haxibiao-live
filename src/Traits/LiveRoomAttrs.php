@@ -1,6 +1,6 @@
 <?php
 
-namespace Haxibiao\Live\Traits;
+namespace haxibiao\live\Traits;
 
 use Illuminate\Support\Facades\Redis;
 
@@ -27,7 +27,7 @@ trait LiveRoomAttrs
         return self::prefix . config('tencent-live.live_pull_url') . $this->stream_name;
     }
 
-    public function getCoverUrlAttribute():string
+    public function getCoverUrlAttribute(): string
     {
         return $this->cover ?? 'https://dtzq-1251052432.cos.ap-shanghai.myqcloud.com/2020-03-25/u%3A980235-screenshot-15-20-45-1192x746.jpg';
     }

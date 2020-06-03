@@ -11,7 +11,7 @@ use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
-use Haxibiao\Live\Models\LiveRoom as LiveRoomModel;
+use haxibiao\live\LiveRoom as LiveRoomModel;
 
 
 class UserLive extends Resource

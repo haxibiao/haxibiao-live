@@ -1,6 +1,6 @@
-# live-sdk
+# haxibiao-live
 
-> live-sdk是哈希表基于腾讯云直播开发的小直播扩展包
+> haxibiao-live是哈希表基于腾讯云直播开发的小直播扩展包
 > 欢迎大家提交代码或提出建议
 
 ## 导语
@@ -17,9 +17,9 @@
 ## 安装步骤
 1. `App/User`模型需要增加Trait: `use App\Traits\Macroable`(文件需要自己创建，Macroable详情放在文档附录中);
 2. `composer.json`改动如下：
-    1. 在`require`中加入`"haxibiao/live-sdk": "*"`
+    1. 在`require`中加入`"haxibiao/live": "*"`
     2. 在`repositories`中添加远程仓库指向`http://code.haxibiao.cn/packages/haxibiao-live.git` 
-3. 执行`composer update haxibiao/live-sdk --lock --ignore-platform-reqs`
+3. 执行`composer update haxibiao/live --lock --ignore-platform-reqs`
 4. 执行`php artisan live:install`
 5. 配置env文件以下三个参数值：
 ```
@@ -31,7 +31,7 @@ LIVE_PULL_URL=
 
 ### 如何完成更新？
 > 远程仓库的composer package发生更新时如何进行更新操作呢？
-1. 执行`composer update haxibiao/live-sdk`
+1. 执行`composer update haxibiao/live`
 2. 执行`php artisan live:install`
 
 ## GQL接口说明
@@ -51,10 +51,10 @@ POST
 
 api/live/cutOut
 
-| params | must | desc |
-| ---- | ---- | ---- |
-| stream_id | yes |  |
-| event_type | yes |  |
+| params     | must | desc |
+| ---------- | ---- | ---- |
+| stream_id  | yes  |      |
+| event_type | yes  |      |
 
 
 ## 录制回调
@@ -68,9 +68,9 @@ api/live/recording
 
 #### 参数说明
 
-| params | must | desc | 
-| ---- | ---- | ---- |
-|channel_id | yes | 直播流名称 | 
+| params     | must | desc       |
+| ---------- | ---- | ---------- |
+| channel_id | yes  | 直播流名称 |
 
 ## 腾讯云直播截图回调
 
@@ -83,9 +83,9 @@ api/live/screenShots
 
 #### 参数说明
 
-| params | must | desc | 
-| ---- | ---- | ---- |
-|channel_id | yes | 直播流名称 | 
+| params     | must | desc       |
+| ---------- | ---- | ---------- |
+| channel_id | yes  | 直播流名称 |
 
 ### 附录
 #### App\Traits\Macroable

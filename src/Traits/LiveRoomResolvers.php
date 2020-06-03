@@ -1,13 +1,13 @@
 <?php
 
-namespace Haxibiao\Live\Traits;
+namespace haxibiao\live\Traits;
 
 use App\Exceptions\UserException;
 use App\User;
-use Haxibiao\Live\Events\NewLiveRoomMessage;
-use Haxibiao\Live\Events\NewUserComeIn;
-use Haxibiao\Live\Events\UserGoOut;
-use Haxibiao\Live\Models\LiveRoom;
+use haxibiao\live\Events\NewLiveRoomMessage;
+use haxibiao\live\Events\NewUserComeIn;
+use haxibiao\live\Events\UserGoOut;
+use haxibiao\live\LiveRoom;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;

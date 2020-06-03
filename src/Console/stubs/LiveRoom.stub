@@ -1,0 +1,10 @@
+<?php
+
+namespace App;
+
+use haxibiao\live\LiveRoom as BaseLiveRoom;
+
+class LiveRoom extends BaseLiveRoom
+{
+
+}

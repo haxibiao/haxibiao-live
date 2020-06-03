@@ -1,11 +1,10 @@
 <?php
 
-namespace Haxibiao\Live\Events;
+namespace haxibiao\live\Events;
 
-use Haxibiao\Live\Models\LiveRoom;
+use haxibiao\live\LiveRoom;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -25,13 +24,13 @@ class CloseRoom implements ShouldBroadcast
     public function __construct(LiveRoom $liveRoom, string $message)
     {
         $this->liveRoom = $liveRoom;
-        $this->message = $message;
+        $this->message  = $message;
     }
 
     public function broadcastWith(): array
     {
         return [
-            'message' => $this->message,
+            'message'      => $this->message,
             'live_room_id' => $this->liveRoom->id,
         ];
     }
@@ -41,12 +40,12 @@ class CloseRoom implements ShouldBroadcast
      *
      * @return Channel|array
      */
-    public function broadcastOn():Channel
+    public function broadcastOn(): Channel
     {
-        return new Channel('live_room.'.$this->liveRoom->id);
+        return new Channel('live_room.' . $this->liveRoom->id);
     }
 
-    public function broadcastAs():string
+    public function broadcastAs(): string
     {
         return 'close_room';
     }
