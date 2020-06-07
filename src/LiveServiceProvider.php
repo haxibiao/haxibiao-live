@@ -1,12 +1,13 @@
 <?php
 
-namespace haxibiao\live\Providers;
+namespace haxibiao\live;
 
 use haxibiao\live\Console\InstallCommand;
 use haxibiao\live\LiveRoom;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class LiveServiceProvider extends ServiceProvider
@@ -35,23 +36,32 @@ class LiveServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Register a database migration path.
-        $this->loadMigrationsFrom($this->app->make('path.haxibiao-live-sdk.migrations'));
+        //安装时 vendor:publish 用
+        if ($this->app->runningInConsole()) {
+            // 注册 migrations.
+            $this->loadMigrationsFrom($this->app->make('path.haxibiao-live.migrations'));
 
-        // 发布配置文件.
-        $this->publishes([
-            $this->app->make('path.haxibiao-live-sdk.config') . '/tencent-live.php' => $this->app->configPath('tencent-live.php'),
-        ], 'live-config');
+            // 发布配置文件.
+            $this->publishes([
+                $this->app->make('path.haxibiao-live.config') . '/live.php' => $this->app->configPath('live.php'),
+            ], 'live-config');
 
-        // 发布lighhouse graphql文件
-        $this->publishes([
-            __DIR__ . '/../../graphql/liveRoom' => base_path('graphql/liveRoom'),
-        ], 'live-graphql');
+            // 发布 Nova
+            $this->publishes([
+                __DIR__ . '/Nova' => base_path('app/Nova'),
+            ], 'live-nova');
 
-        // 发布Nova相关文件
-        $this->publishes([
-            __DIR__ . '/../Nova' => base_path('app/Nova'),
-        ], 'live-nova');
+            // 发布 graphql
+            $this->publishes([
+                __DIR__ . '/../graphql' => base_path('graphql'),
+            ], 'live-graphql');
+
+            // 发布 tests
+            $this->publishes([
+                __DIR__ . '/../tests' => base_path('tests'),
+            ], 'live-tests');
+
+        }
 
         // Regist Broadcast
         Broadcast::channel('live_room.{liveRoomId}', function ($user, $liveRoomId) {
@@ -64,15 +74,40 @@ class LiveServiceProvider extends ServiceProvider
             return false;
         });
 
-        $this->loadRoutesFrom(
-            $this->app->make('path.haxibiao-live-sdk') . '/router.php'
-        );
+        //注册Api路由
+        $this->registerRoutes();
 
         foreach ($this->listens() as $event => $listeners) {
             foreach ($listeners as $listener) {
                 Event::listen($event, $listener);
             }
         }
+
+    }
+
+    /**
+     * Register the package routes.
+     *
+     * @return void
+     */
+    protected function registerRoutes()
+    {
+        Route::group($this->apiRoutesConfiguration(), function () {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+        });
+    }
+
+    /**
+     * Get the Nova route group configuration array.
+     *
+     * @return array
+     */
+    protected function apiRoutesConfiguration()
+    {
+        return [
+            // 'namespace' => 'haxibiao\live\Http\Controllers\Api',
+            // 'prefix'    => 'api',
+        ];
     }
 
     /**
@@ -87,8 +122,8 @@ class LiveServiceProvider extends ServiceProvider
 
         // Merge config.
         $this->mergeConfigFrom(
-            $this->app->make('path.haxibiao-live-sdk.config') . '/tencent-live.php',
-            'tencent-live'
+            $this->app->make('path.haxibiao-live.config') . '/live.php',
+            'live'
         );
         // Register Commands
         $this->registerCommands();
@@ -103,12 +138,12 @@ class LiveServiceProvider extends ServiceProvider
     protected function bindPathsInContainer()
     {
         foreach ([
-            'path.haxibiao-live-sdk'            => $root = dirname(dirname(__DIR__)),
-            'path.haxibiao-live-sdk.config'     => $root . '/config',
-            'path.haxibiao-live-sdk.database'   => $database = $root . '/database',
-            'path.haxibiao-live-sdk.migrations' => $database . '/migrations',
-            'path.haxibiao-live-sdk.seeds'      => $database . '/seeds',
-            'path.haxibiao-live-sdk.graphql'    => $database . '/graphql',
+            'path.haxibiao-live'            => $root = dirname(__DIR__),
+            'path.haxibiao-live.config'     => $root . '/config',
+            'path.haxibiao-live.database'   => $database = $root . '/database',
+            'path.haxibiao-live.migrations' => $database . '/migrations',
+            'path.haxibiao-live.seeds'      => $database . '/seeds',
+            'path.haxibiao-live.graphql'    => $database . '/graphql',
         ] as $abstract => $instance) {
             $this->app->instance($abstract, $instance);
         }
@@ -118,6 +153,7 @@ class LiveServiceProvider extends ServiceProvider
     {
         $this->commands([
             InstallCommand::class,
+            UninstallCommand::class,
         ]);
     }
 

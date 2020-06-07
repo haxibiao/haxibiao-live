@@ -16,7 +16,9 @@ type LiveRoom {
 }
 
 extend type Query {
-  liveRoom(id: ID! @eq): LiveRoom @find(model: "Haxibiao\\Live\\Models\\LiveRoom")
-  recommendLiveRoom: [LiveRoom] @paginate(defaultCount: 10, builder: "Haxibiao\\Live\\Models\\LiveRoom@recommendLiveRoom")
-  getLiveRoomUsers(live_room_id: Int!): [User!] @field(resolver: "Haxibiao\\Live\\Models\\LiveRoom@getLiveRoomUsers")
+  liveRoom(id: ID! @eq): LiveRoom @find(model: "App\\LiveRoom")
+  recommendLiveRoom: [LiveRoom]
+    @paginate(defaultCount: 10, builder: "App\\LiveRoom@recommendLiveRoom")
+  getLiveRoomUsers(live_room_id: Int!): [User!]
+    @field(resolver: "App\\LiveRoom@getLiveRoomUsers")
 }

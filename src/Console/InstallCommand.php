@@ -31,20 +31,19 @@ class InstallCommand extends Command
     public function handle()
     {
         $this->comment("复制 stubs ...");
-        copy($this->resolveStubPath('/stubs/LiveRoom.stub'), app_path('LiveRoom.php'));
+        copy(__DIR__ . '/stubs/LiveRoom.stub', app_path('LiveRoom.php'));
+        copy(__DIR__ . '/stubs/UserLive.stub', app_path('UserLive.php'));
 
-        $this->comment('Publishing Live Service Provider...');
+        $this->comment('发布资源...');
+        $this->callSilent('vendor:publish', ['--provider' => 'haxibiao\live\LiveServiceProvider', '--force']);
 
-        $this->callSilent('vendor:publish', ['--provider' => 'haxibiao\live\Providers\AppServiceProvider', '--force']);
-
-        $this->comment('Migrate...');
-
+        $this->comment('迁移数据库变化...');
         $this->callSilent('migrate');
 
-        $this->comment('Register Live Service Provider...');
-        $this->registerLiveServiceProvider();
+        // $this->comment('注册 Service Provider...');
+        // $this->registerLiveServiceProvider();
 
-        $this->info('Live scaffolding installed successfully.');
+        $this->info('Haxibiao Live 安装 successfully.');
     }
 
     /**
@@ -58,7 +57,7 @@ class InstallCommand extends Command
 
         file_put_contents(config_path('app.php'), str_replace(
             "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL,
-            "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL . "        haxibiao\live\Providers\LiveServiceProvider::class," . PHP_EOL,
+            "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL . "        haxibiao\live\LiveServiceProvider::class," . PHP_EOL,
             file_get_contents(config_path('app.php'))
         ));
     }

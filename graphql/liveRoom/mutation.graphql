@@ -2,25 +2,31 @@ extend type Mutation {
   """
   创建直播
   """
-  createLiveRoom(title: String): LiveRoom @field(resolver: "Haxibiao\\Live\\Models\\LiveRoom@createLiveRoomResolver")
+  createLiveRoom(title: String): LiveRoom
+    @field(resolver: "App\\LiveRoom@createLiveRoomResolver")
   """
   加入直播
   """
-  joinLiveRoom(live_room_id: ID!): LiveRoom @field(resolver: "Haxibiao\\Live\\Models\\LiveRoom@joinLiveRoomResolver")
+  joinLiveRoom(live_room_id: ID!): LiveRoom
+    @field(resolver: "App\\LiveRoom@joinLiveRoomResolver")
   """
   直播间评论
   """
-  commentLiveRoom(live_room_id: ID!, message: String!): String @field(resolver: "Haxibiao\\Live\\Models\\LiveRoom@commentLiveRoomResolver")
+  commentLiveRoom(live_room_id: ID!, message: String!): String
+    @field(resolver: "App\\LiveRoom@commentLiveRoomResolver")
   """
   离开直播间
   """
-  leaveLiveRoom(live_room_id: ID!): LiveRoom @field(resolver: "Haxibiao\\Live\\Models\\LiveRoom@leaveLiveRoomResolver")
+  leaveLiveRoom(live_room_id: ID!): LiveRoom
+    @field(resolver: "App\\LiveRoom@leaveLiveRoomResolver")
   """
   主播关闭直播
   """
-  closeLiveRoom(live_room_id: ID!): Boolean @field(resolver: "Haxibiao\\Live\\Models\\LiveRoom@closeLiveRoomResolver")
+  closeLiveRoom(live_room_id: ID!): Boolean
+    @field(resolver: "App\\LiveRoom@closeLiveRoomResolver")
   """
   直播间异常（断流）
   """
-  ExceptionLiveRoom(live_room_id: ID!): Boolean @field(resolver: "Haxibiao\\Live\\Models\\LiveRoom@exceptionLiveRoomResolver")
+  ExceptionLiveRoom(live_room_id: ID!): Boolean
+    @field(resolver: "App\\LiveRoom@exceptionLiveRoomResolver")
 }

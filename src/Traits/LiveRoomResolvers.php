@@ -8,6 +8,7 @@ use haxibiao\live\Events\NewLiveRoomMessage;
 use haxibiao\live\Events\NewUserComeIn;
 use haxibiao\live\Events\UserGoOut;
 use haxibiao\live\LiveRoom;
+use haxibiao\user\HXBUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -55,7 +56,7 @@ trait LiveRoomResolvers
      */
     public function recommendLiveRoom($root, array $args, $context, $info)
     {
-        return LiveRoom::whereStatus(self::STATUS_ON);
+        return LiveRoom::whereStatus(LiveRoom::STATUS_ON);
     }
 
     /**
@@ -81,7 +82,10 @@ trait LiveRoomResolvers
             return $liveRoom;
         }
 
-        throw new UserException('主播已经下播,下次早点来哦~');
+        if (!is_testing_env()) {
+            throw new UserException('主播已经下播,下次早点来哦~');
+        }
+
     }
 
     /**
@@ -186,7 +190,7 @@ trait LiveRoomResolvers
         $room         = LiveRoom::find($live_room_id);
         $room->increment('count_exception');
         // 两名观众监测了异常，直接关闭
-        if ($room->count_exception >= 1 && $room->status === self::STATUS_ON) {
+        if ($room->count_exception >= 1 && $room->status === LiveRoom::STATUS_ON) {
             self::closeRoom($room);
         }
         return true;
@@ -199,7 +203,7 @@ trait LiveRoomResolvers
      */
     public function checkUser(User $user)
     {
-        if (in_array($user->status, [User::MUTE_STATUS, User::DISABLE_STATUS], true)) {
+        if (in_array($user->status, [HXBUser::MUTE_STATUS, HXBUser::DISABLE_STATUS], true)) {
             throw new UserException('您没有开启直播的权限哦~');
         }
     }
