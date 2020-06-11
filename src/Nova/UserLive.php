@@ -34,7 +34,7 @@ class UserLive extends Resource
      *
      * @var string
      */
-    public static $model = 'Haxibiao\\Live\\Models\\UserLive';
+    public static $model = 'App\UserLive';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
