@@ -13,6 +13,9 @@ class CreateUserLivesTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('user_lives')) {
+            return;
+        }
         Schema::create('user_lives', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id')->comment('主播 ID');

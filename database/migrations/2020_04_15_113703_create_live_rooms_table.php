@@ -13,6 +13,9 @@ class CreateLiveRoomsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('live_rooms')) {
+            return;
+        }
         Schema::create('live_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('anchor_id')->comment('主播id');
