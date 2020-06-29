@@ -18,8 +18,7 @@ class LiveRoom extends Model
     public const prefix = self::protocol . '://';
 
     protected $casts = [
-        'latest_live_time' => 'datetime',
-        'data'             => 'array',
+        'data' => 'array',
     ];
 
     use LiveRoomRepo, LiveRoomResolvers, LiveRoomAttrs;

@@ -54,14 +54,13 @@ trait LiveRoomRepo
 
         $pullStreamUrl = $pullUrl . $streamName;
         $room          = LiveRoom::create([
-            'anchor_id'        => $user->id,
-            'push_stream_url'  => $domain,
-            'push_stream_key'  => $key,
-            'pull_stream_url'  => $pullStreamUrl,
-            'stream_name'      => $streamName,
-            'latest_live_time' => now(),
-            'status'           => LiveRoom::STATUS_ON,
-            'title'            => $title,
+            'anchor_id'       => $user->id,
+            'push_stream_url' => $domain,
+            'push_stream_key' => $key,
+            'pull_stream_url' => $pullStreamUrl,
+            'stream_name'     => $streamName,
+            'status'          => LiveRoom::STATUS_ON,
+            'title'           => $title,
         ]);
 
         // 设置redis 直播室初始值
@@ -108,13 +107,12 @@ trait LiveRoomRepo
         list($streamName, $key, $domain, $pullUrl) = self::getLiveConfig($user);
         $pullStreamUrl                             = $pullUrl . $streamName;
         $liveRoom->update([
-            'latest_live_time' => now(),
-            'title'            => $title,
-            'push_stream_key'  => $key,
-            'push_stream_url'  => $domain,
-            'pull_stream_url'  => $pullStreamUrl,
-            'stream_name'      => $streamName,
-            'status'           => self::STATUS_ON,
+            'title'           => $title,
+            'push_stream_key' => $key,
+            'push_stream_url' => $domain,
+            'pull_stream_url' => $pullStreamUrl,
+            'stream_name'     => $streamName,
+            'status'          => self::STATUS_ON,
         ]);
 
         Redis::del($liveRoom->redis_room_key);

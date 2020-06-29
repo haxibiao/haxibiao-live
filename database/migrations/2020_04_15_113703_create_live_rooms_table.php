@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateLiveRoomsTable extends Migration
 {
@@ -24,12 +24,10 @@ class CreateLiveRoomsTable extends Migration
             $table->string('pull_stream_url')->nullable()->comment('拉流地址');
             $table->string('stream_name')->nullable()->comment('流名称');
             $table->string('cover', 100)->nullable();
-            $table->unsignedInteger('count_audience')->default(0)->comment('直播室观众');
-            $table->timestamp('latest_live_time')->nullable()->comment('最近直播时间');
             $table->tinyInteger('status')->default(0)->comment('-1:下直播 -2:直播间被封 0:正常 1:直播中');
             $table->string('title')->nullable();
-            $table->unsignedTinyInteger('count_exception')->nullable()->comment('异常断流次数(网络原因)');
-            $table->unsignedTinyInteger('type')->default(0)->comment('直播间类型: 普通房间（0）答题房间（1）你画我猜房间（2）');
+            $table->unsignedTinyInteger('count_exception')->nullable()->comment('异常断流次数');
+            $table->unsignedTinyInteger('type')->default(0)->comment('直播间类型: 普通房间（0）答题房间（1）你画我猜房间（2）...等等自定义类型');
             $table->timestamps();
 
             $table->index('anchor_id');

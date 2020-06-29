@@ -23,6 +23,7 @@ class CreateUserLivesTable extends Migration
             $table->unsignedInteger('video_id')->comment('直播录制视频 ID')->nullable();
             $table->unsignedInteger('live_duration')->nullable()->comment('直播时长');
             $table->unsignedInteger('count_users')->nullable()->comment('总观看人数');
+            $table->unsignedInteger('count_comments')->nullable()->comment('总观看人数');
             $table->json('data')->nullable();
 
             $table->index(['user_id', 'live_id', 'live_duration', 'video_id']);
