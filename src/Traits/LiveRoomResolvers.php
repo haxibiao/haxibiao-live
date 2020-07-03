@@ -8,7 +8,7 @@ use Haxibiao\Live\Events\NewLiveRoomMessage;
 use Haxibiao\Live\Events\NewUserComeIn;
 use Haxibiao\Live\Events\UserGoOut;
 use Haxibiao\Live\LiveRoom;
-use haxibiao\user\HXBUser;
+use Haxibiao\User\HXBUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
