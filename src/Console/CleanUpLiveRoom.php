@@ -2,6 +2,7 @@
 
 namespace Haxibiao\Live\Console;
 
+use Haxibiao\Helpers\LiveUtils;
 use Haxibiao\Live\LiveRoom;
 use Illuminate\Console\Command;
 

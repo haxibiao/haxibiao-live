@@ -4,7 +4,7 @@ namespace Haxibiao\Live\Traits;
 
 use App\Exceptions\UserException;
 use App\User;
-use Haxibiao\Live\Console\LiveUtils;
+use Haxibiao\Helpers\LiveUtils;
 use Haxibiao\Live\Events\NewLiveRoomMessage;
 use Haxibiao\Live\Events\NewUserComeIn;
 use Haxibiao\Live\Events\UserGoOut;
