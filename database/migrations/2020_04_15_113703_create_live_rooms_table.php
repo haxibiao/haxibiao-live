@@ -13,12 +13,9 @@ class CreateLiveRoomsTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('live_rooms')) {
-            return;
-        }
         Schema::create('live_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('anchor_id')->comment('主播id');
+            $table->unsignedInteger('user_id')->comment('主播id');
             $table->string('push_stream_url')->nullable()->comment('推流地址');
             $table->string('push_stream_key')->nullable()->comment('鉴权密钥');
             $table->string('pull_stream_url')->nullable()->comment('拉流地址');
@@ -30,7 +27,7 @@ class CreateLiveRoomsTable extends Migration
             $table->unsignedTinyInteger('type')->default(0)->comment('直播间类型: 普通房间（0）答题房间（1）你画我猜房间（2）...等等自定义类型');
             $table->timestamps();
 
-            $table->index('anchor_id');
+            $table->index('user_id');
             $table->index('pull_stream_url');
             $table->index('stream_name');
             $table->index('title');

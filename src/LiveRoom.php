@@ -8,7 +8,11 @@ use haxibiao\live\Traits\LiveRoomRepo;
 use haxibiao\live\Traits\LiveRoomResolvers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * 直播间
+ */
 class LiveRoom extends Model
 {
 
@@ -38,9 +42,18 @@ class LiveRoom extends Model
         return $this->belongsTo(User::class, 'anchor_id');
     }
 
+    //FIXME: 不是多个直播秀么？
     public function userLive(): BelongsTo
     {
         return $this->belongsTo(UserLive::class, 'id', 'live_id');
+    }
+
+    /**
+     * 多场用户直播秀
+     */
+    public function userLives(): HasMany
+    {
+        return $this->hasMany(UserLive::class, 'id', 'live_id');
     }
 
     public static function getStatuses()
