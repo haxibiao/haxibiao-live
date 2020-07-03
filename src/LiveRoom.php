@@ -11,6 +11,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LiveRoom extends Model
 {
+
+    use LiveRoomRepo;
+    use LiveRoomResolvers;
+    use LiveRoomAttrs;
+
     protected $table = 'live_rooms';
 
     public const protocol = 'rtmp';
@@ -20,8 +25,6 @@ class LiveRoom extends Model
     protected $casts = [
         'data' => 'array',
     ];
-
-    use LiveRoomRepo, LiveRoomResolvers, LiveRoomAttrs;
 
     protected $guarded = [];
 

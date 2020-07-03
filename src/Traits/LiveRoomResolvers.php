@@ -19,6 +19,28 @@ use Throwable;
 trait LiveRoomResolvers
 {
     /**
+     * 推荐直播间列表
+     * @param $root
+     * @param array $args
+     * @param $context
+     * @param $info
+     * @return LiveRoom|Builder
+     */
+    public function recommendLiveRoom($root, array $args, $context, $info)
+    {
+        $live_utils     = app('live_utils');
+        $pageSize       = data_get($args, 'page_size');
+        $pageNum        = data_get($args, 'page_num');
+        $onlineInfo     = $live_utils->getStreamOnlineList($pageNum, $pageSize);
+        $streamList     = data_get($onlineInfo, 'OnlineInfo');
+        $streamNameList = [];
+        foreach ($streamList as $stream) {
+            $streamNameList[] = $stream['StreamName'];
+        }
+        return self::whereIn('stream_name', $streamNameList)->get();
+    }
+
+    /**
      * 创建直播室
      * @param $root
      * @param array $args
@@ -31,32 +53,19 @@ trait LiveRoomResolvers
     public function createLiveRoomResolver($root, array $args, $context, $info)
     {
         $user  = getUser();
-        $title = Arr::get($args, 'title', null);
+        $title = data_get($args, 'title', null);
         $this->checkUser($user);
 
         throw_if(!$title, UserException::class, '请输入直播间标题~');
 
         // 开过直播室,更新直播间信息即可
         if ($liveRoom = $user->liveRoom) {
-            $liveRoom = LiveRoom::openLive($user, $liveRoom, $title);
+            $liveRoom = self::openLive($user, $liveRoom, $title);
         } else {
             // 创建直播室
-            $liveRoom = LiveRoom::createLiveRoom($user, $title);
+            $liveRoom = self::createLiveRoom($user, $title);
         }
         return $liveRoom;
-    }
-
-    /**
-     * 推荐直播间列表
-     * @param $root
-     * @param array $args
-     * @param $context
-     * @param $info
-     * @return LiveRoom|Builder
-     */
-    public function recommendLiveRoom($root, array $args, $context, $info)
-    {
-        return LiveRoom::whereStatus(LiveRoom::STATUS_ON);
     }
 
     /**
