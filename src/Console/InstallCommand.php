@@ -35,10 +35,10 @@ class InstallCommand extends Command
         copy(__DIR__ . '/stubs/UserLive.stub', app_path('UserLive.php'));
 
         $this->comment('发布资源...');
-        $this->callSilent('vendor:publish', ['--provider' => 'Haxibiao\Live\LiveServiceProvider', '--force']);
+        $this->call('live:publish', ['--force' => true]);
 
         $this->comment('迁移数据库变化...');
-        $this->callSilent('migrate');
+        $this->call('migrate');
 
         // $this->comment('注册 Service Provider...');
         // $this->registerLiveServiceProvider();

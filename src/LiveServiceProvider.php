@@ -3,6 +3,7 @@
 namespace Haxibiao\Live;
 
 use Haxibiao\Live\Console\InstallCommand;
+use Haxibiao\Live\Console\PublishCommand;
 use Haxibiao\Live\Console\UninstallCommand;
 use Haxibiao\Live\LiveRoom;
 use Illuminate\Support\Facades\Broadcast;
@@ -57,10 +58,10 @@ class LiveServiceProvider extends ServiceProvider
                 __DIR__ . '/../graphql' => base_path('graphql'),
             ], 'live-graphql');
 
-            // 发布 tests
-            $this->publishes([
-                __DIR__ . '/../tests' => base_path('tests'),
-            ], 'live-tests');
+            // // 发布 tests
+            // $this->publishes([
+            //     __DIR__ . '/../tests' => base_path('tests'),
+            // ], 'live-tests');
 
         }
 
@@ -154,6 +155,7 @@ class LiveServiceProvider extends ServiceProvider
     {
         $this->commands([
             InstallCommand::class,
+            PublishCommand::class,
             UninstallCommand::class,
         ]);
     }

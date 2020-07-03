@@ -7,14 +7,19 @@
   },
   "autoload": {
     "psr-4": {
-      "haxibiao\\live\\": "src/"
+      "Haxibiao\\Live\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Haxibiao\\Live\\Tests\\": "tests/"
     }
   },
   "version": "1.0.0",
   "extra": {
     "laravel": {
       "providers": [
-        "haxibiao\\live\\LiveServiceProvider"
+        "Haxibiao\\Live\\LiveServiceProvider"
       ]
     }
   }
