@@ -1,9 +1,9 @@
 <?php
 
-namespace haxibiao\live\Events;
+namespace Haxibiao\Live\Events;
 
 use App\User;
-use haxibiao\live\LiveRoom;
+use Haxibiao\Live\LiveRoom;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;

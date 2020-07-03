@@ -1,6 +1,6 @@
 <?php
 
-namespace haxibiao\live\Traits;
+namespace Haxibiao\Live\Traits;
 
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;

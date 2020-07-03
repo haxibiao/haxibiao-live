@@ -1,6 +1,6 @@
 <?php
 
-namespace haxibiao\live;
+namespace Haxibiao\Live\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;

@@ -1,9 +1,9 @@
 <?php
-namespace haxibiao\live\Traits;
+namespace Haxibiao\Live\Traits;
 
 use App\User;
-use haxibiao\live\LiveRoom;
-use haxibiao\live\UserLive;
+use Haxibiao\Live\LiveRoom;
+use Haxibiao\Live\UserLive;
 
 trait UserLiveRepo
 {

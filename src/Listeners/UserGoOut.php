@@ -1,6 +1,6 @@
 <?php
 
-namespace haxibiao\live\Listeners;
+namespace Haxibiao\Live\Listeners;
 
 use Illuminate\Support\Facades\Redis;
 
@@ -20,9 +20,9 @@ class UserGoOut
     /**
      * Handle the event.
      *
-     * @param \haxibiao\live\Events\UserGoOut $event
+     * @param \Haxibiao\Live\Events\UserGoOut $event
      */
-    public function handle(\haxibiao\live\Events\UserGoOut $event)
+    public function handle(\Haxibiao\Live\Events\UserGoOut $event)
     {
         $room = $event->liveRoom;
         $user = $event->user;

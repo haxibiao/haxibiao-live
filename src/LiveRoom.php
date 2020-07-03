@@ -1,11 +1,11 @@
 <?php
 
-namespace haxibiao\live;
+namespace Haxibiao\Live;
 
 use App\User;
-use haxibiao\live\Traits\LiveRoomAttrs;
-use haxibiao\live\Traits\LiveRoomRepo;
-use haxibiao\live\Traits\LiveRoomResolvers;
+use Haxibiao\Live\Traits\LiveRoomAttrs;
+use Haxibiao\Live\Traits\LiveRoomRepo;
+use Haxibiao\Live\Traits\LiveRoomResolvers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;

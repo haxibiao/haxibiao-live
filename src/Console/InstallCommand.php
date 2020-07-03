@@ -1,6 +1,6 @@
 <?php
 
-namespace haxibiao\live\Console;
+namespace Haxibiao\Live\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Container\Container;
@@ -35,7 +35,7 @@ class InstallCommand extends Command
         copy(__DIR__ . '/stubs/UserLive.stub', app_path('UserLive.php'));
 
         $this->comment('发布资源...');
-        $this->callSilent('vendor:publish', ['--provider' => 'haxibiao\live\LiveServiceProvider', '--force']);
+        $this->callSilent('vendor:publish', ['--provider' => 'Haxibiao\Live\LiveServiceProvider', '--force']);
 
         $this->comment('迁移数据库变化...');
         $this->callSilent('migrate');
@@ -57,7 +57,7 @@ class InstallCommand extends Command
 
         file_put_contents(config_path('app.php'), str_replace(
             "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL,
-            "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL . "        haxibiao\live\LiveServiceProvider::class," . PHP_EOL,
+            "{$namespace}\\Providers\EventServiceProvider::class," . PHP_EOL . "        Haxibiao\Live\LiveServiceProvider::class," . PHP_EOL,
             file_get_contents(config_path('app.php'))
         ));
     }

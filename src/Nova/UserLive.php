@@ -5,14 +5,13 @@ namespace App\Nova;
 use App\Nova\Resource;
 use App\Nova\User;
 use App\Nova\Video;
+use Haxibiao\Live\LiveRoom as LiveRoomModel;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
-use haxibiao\live\LiveRoom as LiveRoomModel;
-
 
 class UserLive extends Resource
 {

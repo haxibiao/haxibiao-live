@@ -2,7 +2,7 @@
 
 namespace App;
 
-use haxibiao\live\LiveRoom as BaseLiveRoom;
+use Haxibiao\Live\LiveRoom as BaseLiveRoom;
 
 class LiveRoom extends BaseLiveRoom
 {

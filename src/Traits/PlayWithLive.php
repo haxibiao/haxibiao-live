@@ -1,8 +1,8 @@
 <?php
 
-namespace haxibiao\live\Traits;
+namespace Haxibiao\Live\Traits;
 
-use haxibiao\live\LiveRoom;
+use Haxibiao\Live\LiveRoom;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**

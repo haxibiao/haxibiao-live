@@ -2,7 +2,7 @@
 
 namespace App;
 
-use haxibiao\live\UserLive as BaseUserLive;
+use Haxibiao\Live\UserLive as BaseUserLive;
 
 class UserLive extends BaseUserLive
 {

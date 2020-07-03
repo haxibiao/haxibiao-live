@@ -1,9 +1,10 @@
 <?php
 
-namespace haxibiao\live;
+namespace Haxibiao\Live;
 
-use haxibiao\live\Console\InstallCommand;
-use haxibiao\live\LiveRoom;
+use Haxibiao\Live\Console\InstallCommand;
+use Haxibiao\Live\Console\UninstallCommand;
+use Haxibiao\Live\LiveRoom;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Redis;
@@ -18,14 +19,14 @@ class LiveServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'haxibiao\live\Events\NewUserComeIn' => [
-            'haxibiao\live\Listeners\NewUserComeIn',
+        'Haxibiao\Live\Events\NewUserComeIn' => [
+            'Haxibiao\Live\Listeners\NewUserComeIn',
         ],
-        'haxibiao\live\Events\UserGoOut'     => [
-            'haxibiao\live\Listeners\UserGoOut',
+        'Haxibiao\Live\Events\UserGoOut'     => [
+            'Haxibiao\Live\Listeners\UserGoOut',
         ],
-        'haxibiao\live\Events\CloseRoom'     => [
-            'haxibiao\live\Listeners\CloseRoom',
+        'Haxibiao\Live\Events\CloseRoom'     => [
+            'Haxibiao\Live\Listeners\CloseRoom',
         ],
     ];
 
@@ -105,7 +106,7 @@ class LiveServiceProvider extends ServiceProvider
     protected function apiRoutesConfiguration()
     {
         return [
-            // 'namespace' => 'haxibiao\live\Http\Controllers\Api',
+            // 'namespace' => 'Haxibiao\Live\Http\Controllers\Api',
             // 'prefix'    => 'api',
         ];
     }

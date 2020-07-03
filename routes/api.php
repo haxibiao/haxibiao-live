@@ -1,6 +1,6 @@
 <?php
 
-use haxibiao\live\Controllers\Api\LiveController;
+use Haxibiao\Live\Controllers\Api\LiveController;
 use Illuminate\Contracts\Routing\Registrar as RouteRegisterContract;
 use Illuminate\Support\Facades\Route;
 

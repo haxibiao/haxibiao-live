@@ -1,10 +1,10 @@
 <?php
 
-namespace haxibiao\live\Traits;
+namespace Haxibiao\Live\Traits;
 
 use App\User;
-use haxibiao\live\Events\CloseRoom;
-use haxibiao\live\LiveRoom;
+use Haxibiao\Live\Events\CloseRoom;
+use Haxibiao\Live\LiveRoom;
 use Illuminate\Support\Facades\Redis;
 
 trait LiveRoomRepo
