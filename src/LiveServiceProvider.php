@@ -2,6 +2,7 @@
 
 namespace Haxibiao\Live;
 
+use Haxibiao\Live\Console\CleanUpLiveRoom;
 use Haxibiao\Live\Console\InstallCommand;
 use Haxibiao\Live\Console\PublishCommand;
 use Haxibiao\Live\Console\UninstallCommand;
@@ -156,6 +157,7 @@ class LiveServiceProvider extends ServiceProvider
         $this->commands([
             InstallCommand::class,
             PublishCommand::class,
+            CleanUpLiveRoom::class,
             UninstallCommand::class,
         ]);
     }

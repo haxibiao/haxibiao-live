@@ -5,6 +5,8 @@ return [
 
     //推流key
     'live_key'      => env('LIVE_KEY'),
+    //云直播机房地区
+    'location'      => env('LIVE_LOCATION', "ap-guangzhou"),
 
     //app名称, 意思一个域名下可以配置多个直播APP
     'app_name'      => 'live',

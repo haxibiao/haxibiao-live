@@ -4,6 +4,7 @@ namespace Haxibiao\Live\Traits;
 
 use App\Exceptions\UserException;
 use App\User;
+use Haxibiao\Live\Console\LiveUtils;
 use Haxibiao\Live\Events\NewLiveRoomMessage;
 use Haxibiao\Live\Events\NewUserComeIn;
 use Haxibiao\Live\Events\UserGoOut;
@@ -28,7 +29,7 @@ trait LiveRoomResolvers
      */
     public function recommendLiveRoom($root, array $args, $context, $info)
     {
-        $live_utils     = app('live_utils');
+        $live_utils     = LiveUtils::getInstance();
         $pageSize       = data_get($args, 'page_size');
         $pageNum        = data_get($args, 'page_num');
         $onlineInfo     = $live_utils->getStreamOnlineList($pageNum, $pageSize);
