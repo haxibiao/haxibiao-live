@@ -7,3 +7,10 @@ class LiveApiTest
 {
 
 }
+
+// 断流回调
+// http://haxibiao.com/api/live/cutOut
+// 录制回调
+// http://haxibiao.com/api/live/recording
+// 截图回调
+// http://haxibiao.com/api/live/screenShots
