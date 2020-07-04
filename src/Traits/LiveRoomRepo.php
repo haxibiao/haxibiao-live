@@ -36,8 +36,8 @@ trait LiveRoomRepo
     {
         //直播结束时间
         $endAt  = now()->addDay()->toDateTimeString();
-        $key    = config('tencent-live.live_key');
-        $domain = config('tencent-live.live_push_url');
+        $key    = config('live.live_key');
+        $domain = config('live.live_push_domain');
         //流名称,用于鉴别不同的主播,必须唯一
         return self::getPushUrl($domain, $streamName, $key, $endAt);
     }
@@ -50,7 +50,7 @@ trait LiveRoomRepo
      */
     public static function createLiveRoom(User $user, string $title): LiveRoom
     {
-        list($streamName, $key, $domain, $pullUrl) = self::getLiveConfig($user);
+        list($streamName, $key, $domain, $pullUrl) = LiveRoom::getLiveConfig($user);
 
         $pullStreamUrl = $pullUrl . $streamName;
         $room          = LiveRoom::create([
@@ -152,8 +152,8 @@ trait LiveRoomRepo
     {
         $streamName = self::getStreamName($user);
         $key        = self::getUserPushLiveUrl($streamName);
-        $domain     = config('tencent-live.live_push_url');
-        $pullUrl    = config('tencent-live.live_pull_url');
-        return array($streamName, $key, $domain, $pullUrl);
+        $pushUrl    = config('live.live_push_domain') . "/" . config('live.app_name');
+        $pullUrl    = config('live.live_pull_domain') . "/" . config('live.app_name');
+        return array($streamName, $key, $pushUrl, $pullUrl);
     }
 }

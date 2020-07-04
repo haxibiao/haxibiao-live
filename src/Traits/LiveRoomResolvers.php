@@ -64,7 +64,7 @@ trait LiveRoomResolvers
             $liveRoom = self::openLive($user, $liveRoom, $title);
         } else {
             // 创建直播室
-            $liveRoom = self::createLiveRoom($user, $title);
+            $liveRoom = LiveRoom::createLiveRoom($user, $title);
         }
         return $liveRoom;
     }

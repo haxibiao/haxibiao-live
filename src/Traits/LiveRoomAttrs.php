@@ -2,6 +2,7 @@
 
 namespace Haxibiao\Live\Traits;
 
+use App\LiveRoom;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,12 +21,12 @@ trait LiveRoomAttrs
 
     public function getPushUrlAttribute(): string
     {
-        return self::prefix . $this->push_stream_url . $this->push_stream_key;
+        return LiveRoom::prefix . $this->push_stream_url . "/" . $this->push_stream_key;
     }
 
     public function getPullUrlAttribute(): string
     {
-        return self::prefix . config('tencent-live.live_pull_url') . $this->stream_name;
+        return LiveRoom::prefix . config('live.live_pull_domain') . "/" . config('live.app_name') . "/" . $this->stream_name;
     }
 
     public function getCoverUrlAttribute(): string
