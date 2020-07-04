@@ -39,13 +39,7 @@ class LiveRoom extends Model
 
     public function streamer(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'anchor_id');
-    }
-
-    //FIXME: 不是多个直播秀么？
-    public function userLive(): BelongsTo
-    {
-        return $this->belongsTo(UserLive::class, 'id', 'live_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -56,7 +50,7 @@ class LiveRoom extends Model
         return $this->hasMany(UserLive::class, 'id', 'live_id');
     }
 
-    public static function getStatuses()
+    public static function getStatuses(): array
     {
         return [
             self::STATUS_ON      => '正在直播',
