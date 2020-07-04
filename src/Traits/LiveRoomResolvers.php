@@ -30,15 +30,17 @@ trait LiveRoomResolvers
     public function recommendLiveRoom($root, array $args, $context, $info)
     {
         $live_utils     = LiveUtils::getInstance();
-        $pageSize       = data_get($args, 'page_size');
-        $pageNum        = data_get($args, 'page_num');
-        $onlineInfo     = $live_utils->getStreamOnlineList($pageNum, $pageSize);
+        // $pageSize       = data_get($args, 'page_size');
+        // $pageNum        = data_get($args, 'page_num');
+        $pageSize       = data_get($args, 'first'); //TODO:兼容老版本写法 以前使用的是 paginate 写法 参数名字为 first 和 page
+        $pageNum        = data_get($args, 'page');
+        $onlineInfo     = $live_utils->getStreamOnlineList((int) $pageNum, (int) $pageSize);
         $streamList     = data_get($onlineInfo, 'OnlineInfo');
         $streamNameList = [];
         foreach ($streamList as $stream) {
             $streamNameList[] = $stream['StreamName'];
         }
-        return self::whereIn('stream_name', $streamNameList)->get();
+        return self::whereIn('stream_name', $streamNameList); //TODO:使用 paginate 不需要 get
     }
 
     /**
@@ -95,7 +97,6 @@ trait LiveRoomResolvers
         if (!is_testing_env()) {
             throw new UserException('主播已经下播,下次早点来哦~');
         }
-
     }
 
     /**
