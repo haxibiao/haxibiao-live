@@ -34,7 +34,7 @@ class LiveRoom extends Resource
      *
      * @var string
      */
-    public static $model = 'Haxibiao\\Live\\Models\\LiveRoom';
+    public static $model = 'Haxibiao\\Live\\LiveRoom';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
