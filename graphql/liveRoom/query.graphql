@@ -1,7 +1,14 @@
 type LiveRoom {
   id: ID!
   title: String
-  streamer: User! @belongsTo
+  """
+  主播（兼容已上线版本gql）
+  """
+  streamer: User! @belongsTo @rename(attribute: "user")
+  """
+  主播
+  """
+  user: User! @belongsTo
   push_stream_url: String
   push_stream_key: String
   push_url: String
@@ -15,7 +22,23 @@ type LiveRoom {
 }
 
 extend type Query {
+  """
+  获取单个直播间
+  """
   liveRoom(id: ID! @eq): LiveRoom @find(model: "App\\LiveRoom")
-  recommendLiveRoom: [LiveRoom] @paginate(defaultCount: 10, builder: "App\\LiveRoom@recommendLiveRoom")
-  getLiveRoomUsers(live_room_id: Int!): [User!] @field(resolver: "App\\LiveRoom@getLiveRoomUsers")
+
+  """
+  推荐直播间列表（就是目前在播的）
+  """
+  recommendLiveRoom: [LiveRoom]
+    @paginate(
+      defaultCount: 10
+      builder: "App\\LiveRoom@resolveRecommendLiveRoom"
+    )
+
+  """
+  直播间在线观众(topN)
+  """
+  getLiveRoomUsers(live_room_id: Int!): [User!]
+    @field(resolver: "App\\LiveRoom@resolveOnlineUsers")
 }

@@ -37,7 +37,8 @@ class LiveRoom extends Model
     public const STATUS_OFF     = -1;
     public const STATUS_DISABLE = -2;
 
-    public function streamer(): BelongsTo
+    //主播
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }

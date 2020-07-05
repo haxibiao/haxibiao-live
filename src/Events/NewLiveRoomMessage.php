@@ -11,6 +11,9 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
+/**
+ * 直播间评论的事件(socket到前端，有特效...)
+ */
 class NewLiveRoomMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;

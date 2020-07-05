@@ -21,14 +21,11 @@ class LiveServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Haxibiao\Live\Events\NewUserComeIn' => [
-            'Haxibiao\Live\Listeners\NewUserComeIn',
+        'Haxibiao\Live\Events\UserComeIn' => [
+            'Haxibiao\Live\Listeners\UpdateUsersInRoom',
         ],
-        'Haxibiao\Live\Events\UserGoOut'     => [
-            'Haxibiao\Live\Listeners\UserGoOut',
-        ],
-        'Haxibiao\Live\Events\CloseRoom'     => [
-            'Haxibiao\Live\Listeners\CloseRoom',
+        'Haxibiao\Live\Events\UserGoOut'  => [
+            'Haxibiao\Live\Listeners\RemoveUserFromRoom',
         ],
     ];
 

@@ -4,7 +4,10 @@ namespace Haxibiao\Live\Listeners;
 
 use Haxibiao\Live\LiveRoom;
 
-class NewUserComeIn
+/**
+ * 更新直播间的人数列表
+ */
+class UpdateUsersInRoom
 {
 
     /**
@@ -20,10 +23,10 @@ class NewUserComeIn
     /**
      * Handle the event.
      *
-     * @param \Haxibiao\Live\Events\NewUserComeIn $event
+     * @param \Haxibiao\Live\Events\UserComeIn $event
      */
-    public function handle(\Haxibiao\Live\Events\NewUserComeIn $event)
+    public function handle(\Haxibiao\Live\Events\UserComeIn $event)
     {
-        LiveRoom::joinLiveRoom($event->user, $event->liveRoom);
+        $event->user->joinLiveRoom($event->liveRoom);
     }
 }

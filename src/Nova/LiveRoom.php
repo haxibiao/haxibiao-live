@@ -62,7 +62,7 @@ class LiveRoom extends Resource
     {
         return [
             ID::make()->sortable(),
-            BelongsTo::make('主播', 'streamer', User::class),
+            BelongsTo::make('主播', 'user', User::class),
             Number::make('观众数', function () {
                 return $this->getCountOnlineAudienceAttribute();
             })->sortable(),

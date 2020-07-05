@@ -10,6 +10,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
+/**
+ * 用户退出直播间
+ */
 class UserGoOut implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;

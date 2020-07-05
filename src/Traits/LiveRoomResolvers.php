@@ -6,91 +6,69 @@ use App\Exceptions\UserException;
 use App\User;
 use Haxibiao\Helpers\LiveUtils;
 use Haxibiao\Live\Events\NewLiveRoomMessage;
-use Haxibiao\Live\Events\NewUserComeIn;
+use Haxibiao\Live\Events\UserComeIn;
 use Haxibiao\Live\Events\UserGoOut;
 use Haxibiao\Live\LiveRoom;
-use Haxibiao\User\HXBUser;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
-use Throwable;
 
 trait LiveRoomResolvers
 {
     /**
-     * 推荐直播间列表
-     * @param $root
-     * @param array $args
-     * @param $context
-     * @param $info
-     * @return LiveRoom|Builder
+     * 推荐直播间列表(就是目前在播的)
      */
-    public function recommendLiveRoom($root, array $args, $context, $info)
+    public function resolveRecommendLiveRoom($root, array $args, $context, $info)
     {
-        $live_utils     = LiveUtils::getInstance();
+        $live_utils = LiveUtils::getInstance();
         // $pageSize       = data_get($args, 'page_size');
         // $pageNum        = data_get($args, 'page_num');
-        $pageSize       = data_get($args, 'first'); //TODO:兼容老版本写法 以前使用的是 paginate 写法 参数名字为 first 和 page
-        $pageNum        = data_get($args, 'page');
+        $pageSize = data_get($args, 'first'); //TODO:兼容老版本写法 以前使用的是 paginate 写法 参数名字为 first 和 page
+        $pageNum  = data_get($args, 'page');
+        //获取在线直播间stream_names
         $onlineInfo     = $live_utils->getStreamOnlineList((int) $pageNum, (int) $pageSize);
         $streamList     = data_get($onlineInfo, 'OnlineInfo');
         $streamNameList = [];
         foreach ($streamList as $stream) {
             $streamNameList[] = $stream['StreamName'];
         }
-        return self::whereIn('stream_name', $streamNameList); //TODO:使用 paginate 不需要 get
+        return LiveRoom::whereIn('stream_name', $streamNameList); //TODO:使用 paginate 不需要 get
     }
 
     /**
-     * 创建直播室
-     * @param $root
-     * @param array $args
-     * @param $context
-     * @param $info
-     * @return LiveRoom|mixed
-     * @throws UserException
-     * @throws Throwable
+     * 开直播
      */
-    public function createLiveRoomResolver($root, array $args, $context, $info)
+    public function resolveOpen($root, array $args, $context, $info)
     {
         $user  = getUser();
         $title = data_get($args, 'title', null);
-        $this->checkUser($user);
 
         throw_if(!$title, UserException::class, '请输入直播间标题~');
+        throw_if(!$user->canOpenLive(), UserException::class, '您没有开启直播的权限哦~');
 
-        // 开过直播室,更新直播间信息即可
-        if ($liveRoom = $user->liveRoom) {
-            $liveRoom = self::openLive($user, $liveRoom, $title);
-        } else {
-            // 创建直播室
-            $liveRoom = LiveRoom::createLiveRoom($user, $title);
-        }
-        return $liveRoom;
+        // 开直播
+        $room = $user->openLiveRoom($title);
+
+        return $room;
     }
 
     /**
      * 加入直播间
-     * @param $root
-     * @param array $args
-     * @param $context
-     * @param $info
-     * @return LiveRoom|LiveRoom[]|Collection|Model|mixed|null
-     * @throws UserException
      */
-    public function joinLiveRoomResolver($root, array $args, $context, $info)
+    public function resolveJoin($root, array $args, $context, $info)
     {
         $user       = getUser();
         $liveRoomId = Arr::get($args, 'live_room_id', null);
         $liveRoom   = LiveRoom::find($liveRoomId);
 
+        //未下播
         if ($userIds = Redis::get($liveRoom->redis_room_key)) {
             $userIds = json_decode($userIds, true);
+            //未加入过
             if (array_search($user->id, $userIds) === false) {
-                event(new NewUserComeIn($user, $liveRoom));
+                //事件：加入直播间
+                event(new UserComeIn($user, $liveRoom));
             }
+            //成功返回直播间信息
             return $liveRoom;
         }
 
@@ -101,13 +79,8 @@ trait LiveRoomResolvers
 
     /**
      * 发送弹幕
-     * @param $root
-     * @param array $args
-     * @param $context
-     * @param $info
-     * @return mixed
      */
-    public function commentLiveRoomResolver($root, array $args, $context, $info)
+    public function resolveComment($root, array $args, $context, $info)
     {
         $user         = getUser();
         $live_room_id = Arr::get($args, 'live_room_id', null);
@@ -119,13 +92,8 @@ trait LiveRoomResolvers
 
     /**
      * 用户离开直播间
-     * @param $root
-     * @param array $args
-     * @param $context
-     * @param $info
-     * @return LiveRoom|LiveRoom[]|Collection|Model|mixed|null
      */
-    public function leaveLiveRoomResolver($root, array $args, $context, $info)
+    public function resolveLeave($root, array $args, $context, $info)
     {
         $user         = getUser();
         $live_room_id = Arr::get($args, 'live_room_id', null);
@@ -145,77 +113,50 @@ trait LiveRoomResolvers
 
     /**
      * 主播关闭直播间
-     * @param $root
-     * @param array $args
-     * @param $context
-     * @param $info
-     * @return bool
-     * @throws UserException
      */
-    public function closeLiveRoomResolver($root, array $args, $context, $info)
+    public function resolveClose($root, array $args, $context, $info)
     {
         $live_room_id = Arr::get($args, 'live_room_id', null);
         $user         = getUser();
         $room         = LiveRoom::find($live_room_id);
-        if ($user->id !== $room->streamer->id) {
+        if ($room && $user->id !== $room->user_id) {
             throw new UserException('关闭直播失败~');
         }
-        self::closeRoom($room);
+        LiveRoom::closeLiveRoom($room);
         return true;
     }
 
     /**
-     * 主播获取当前直播间观众列表
-     * @param $root
-     * @param array $args
-     * @param $context
-     * @param $info
-     * @return User[]|Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection|null
+     * 获取直播间观众列表(在线的)
      */
-    public function getLiveRoomUsers($root, array $args, $context, $info)
+    public function resolveOnlineUsers($root, array $args, $context, $info)
     {
         $live_room_id = Arr::get($args, 'live_room_id', null);
         $room         = LiveRoom::find($live_room_id);
-        $users_key    = Redis::get($room->redis_room_key);
-        if (!$users_key) {
+
+        //获得在线的
+        $users_ids_json = Redis::get($room->redis_room_key);
+        if (!$users_ids_json) {
             return null;
         }
-
-        $userIds = json_decode($users_key, true);
+        $userIds = json_decode($users_ids_json, true);
         // 去掉主播自己
-        $userIds = array_diff($userIds, array($room->streamer->id));
-        return User::whereIn('id', $userIds)->get();
+        $online_user_ids = array_diff($userIds, array($room->user_id));
+        return User::whereIn('id', $online_user_ids)->get();
     }
 
     /**
      * 直播间异常（断流）
-     * @param $root
-     * @param array $args
-     * @param $context
-     * @param $info
-     * @return bool
      */
-    public function exceptionLiveRoomResolver($root, array $args, $context, $info)
+    public function resolveExceptionFired($root, array $args, $context, $info)
     {
         $live_room_id = Arr::get($args, 'live_room_id', null);
         $room         = LiveRoom::find($live_room_id);
         $room->increment('count_exception');
         // 两名观众监测了异常，直接关闭
         if ($room->count_exception >= 1 && $room->status === LiveRoom::STATUS_ON) {
-            self::closeRoom($room);
+            LiveRoom::closeLiveRoom($room);
         }
         return true;
-    }
-
-    /**
-     * 检测用户是否有有资格开启直播
-     * @param User $user
-     * @throws UserException
-     */
-    public function checkUser(User $user)
-    {
-        if (in_array($user->status, [HXBUser::MUTE_STATUS, HXBUser::DISABLE_STATUS], true)) {
-            throw new UserException('您没有开启直播的权限哦~');
-        }
     }
 }

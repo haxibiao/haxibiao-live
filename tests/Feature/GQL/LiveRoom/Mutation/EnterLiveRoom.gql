@@ -1,12 +1,12 @@
 #加入直播间
 mutation EnterLiveRoom($id: ID!) {
-  joinLiveRoom(live_room_id: $id){
+  joinLiveRoom(live_room_id: $id) {
     id
     title
     pull_url
     cover
     count_audience
-    streamer{
+    user {
       id
       name
       avatar
