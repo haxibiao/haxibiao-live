@@ -2,8 +2,8 @@
 
 namespace Haxibiao\Live\Traits;
 
+use Haxibiao\Base\User;
 use Haxibiao\Live\LiveRoom;
-use Haxibiao\User\HXBUser;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Redis;
 
@@ -36,7 +36,7 @@ trait PlayWithLive
     public function canOpenLive()
     {
         $user = $this;
-        return in_array($user->status, [HXBUser::MUTE_STATUS, HXBUser::DISABLE_STATUS], true);
+        return in_array($user->status, [User::MUTE_STATUS, User::DISABLE_STATUS], true);
     }
 
     /**

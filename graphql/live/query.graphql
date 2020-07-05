@@ -4,7 +4,7 @@ type LiveRoom {
   """
   主播（兼容已上线版本gql）
   """
-  streamer: User! @belongsTo @rename(attribute: "user")
+  streamer: User! @rename(attribute: "user")
   """
   主播
   """

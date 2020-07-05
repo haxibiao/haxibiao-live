@@ -1,0 +1,8 @@
+#开直播 - 获取直播推流地址
+mutation OpenLiveMutation($title: String) {
+  createLiveRoom(title: $title) {
+    id
+    title
+    push_url
+  }
+}
