@@ -83,11 +83,11 @@ class LiveController extends Controller
     public function screenShots(Request $request)
     {
         $coverInfo = $request->all();
-        $channelId = Arr::get($coverInfo, 'channel_id', null);
+        $channelId = data_get($coverInfo, 'channel_id', null);
         $room      = LiveRoom::where('stream_name', $channelId)->first();
         // 如果主播之前有自定义过封面，截图回调就不去更新直播间封面了，screenshot是腾讯云截图回调的图片的文件名称
         $isNeedUpdateCover = $room->cover ? Str::contains($room->cover, 'screenshot') : true;
-        if ($channelId && $room && $isNeedUpdateCover) {
+        if ($room && $isNeedUpdateCover) {
             $room->update(['cover' => $coverInfo['pic_url']]);
         }
     }
