@@ -4,7 +4,6 @@ namespace Haxibiao\Live\Traits;
 
 use Haxibiao\Live\Events\OwnerCloseRoom;
 use Haxibiao\Live\LiveRoom;
-use Haxibiao\User\HXBUser;
 use Illuminate\Support\Facades\Redis;
 
 trait LiveRoomRepo
@@ -66,7 +65,7 @@ trait LiveRoomRepo
         return LiveRoom::makeStreamName($this->user);
     }
 
-    public static function makeStreamName(HXBUser $user)
+    public static function makeStreamName($user)
     {
         return "u:{$user->id}";
     }

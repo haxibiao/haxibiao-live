@@ -4,6 +4,7 @@ namespace Haxibiao\Live\Traits;
 
 use Haxibiao\Base\User;
 use Haxibiao\Live\LiveRoom;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Redis;
 
@@ -17,6 +18,11 @@ trait PlayWithLive
         return $this->hasOne(LiveRoom::class);
     }
 
+    public function lives(): HasMany
+    {
+        return $this->hasMany(UserLive::class);
+    }
+
     /**
      * 一个用户 一个直播间（默认）
      */
@@ -28,6 +34,12 @@ trait PlayWithLive
         return LiveRoom::firstOrCreate(['user_id' => $this->id]);
     }
 
+    // 获取当前直播记录对象
+    public function getCurrentLive()
+    {
+        return $this->lives()->latest('id')->first();
+    }
+
     /**
      * 检测用户是否有有资格开启直播
      * @param User $user
@@ -36,7 +48,7 @@ trait PlayWithLive
     public function canOpenLive()
     {
         $user = $this;
-        return in_array($user->status, [User::MUTE_STATUS, User::DISABLE_STATUS], true);
+        return !in_array($user->status, [User::MUTE_STATUS, User::DISABLE_STATUS]);
     }
 
     /**
