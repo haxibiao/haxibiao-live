@@ -4,6 +4,7 @@ namespace Haxibiao\Live\Traits;
 
 use Haxibiao\Base\User;
 use Haxibiao\Live\LiveRoom;
+use Haxibiao\Live\UserLive;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Redis;
