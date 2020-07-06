@@ -74,8 +74,6 @@ trait PlayWithLive
 
         // 设置redis 直播室初始值
         Redis::set($room->redis_room_key, json_encode(array($user->id)));
-        // 一天后过期
-        Redis::expire($room->redis_room_key, now()->addDay()->diffInSeconds(now()));
 
         return $room;
     }

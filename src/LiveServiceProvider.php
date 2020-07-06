@@ -2,14 +2,10 @@
 
 namespace Haxibiao\Live;
 
-use Haxibiao\Live\Console\CleanUpLiveRoom;
 use Haxibiao\Live\Console\InstallCommand;
 use Haxibiao\Live\Console\PublishCommand;
 use Haxibiao\Live\Console\UninstallCommand;
-use Haxibiao\Live\LiveRoom;
-use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -49,23 +45,7 @@ class LiveServiceProvider extends ServiceProvider
                 __DIR__ . '/../graphql' => base_path('graphql'),
             ], 'live-graphql');
 
-            // // 发布 tests
-            // $this->publishes([
-            //     __DIR__ . '/../tests' => base_path('tests'),
-            // ], 'live-tests');
-
         }
-
-        // Regist Broadcast
-        Broadcast::channel('live_room.{liveRoomId}', function ($user, $liveRoomId) {
-            $room    = LiveRoom::find($liveRoomId);
-            $userIds = Redis::get($room->redis_room_key);
-            if ($userIds) {
-                $userIds = json_decode($userIds, true);
-                return array_search($user->id, $userIds, true);
-            }
-            return false;
-        });
 
         //注册Api路由
         $this->registerRoutes();

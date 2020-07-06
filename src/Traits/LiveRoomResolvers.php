@@ -2,6 +2,7 @@
 
 namespace Haxibiao\Live\Traits;
 
+use App\Comment;
 use App\Exceptions\UserException;
 use App\User;
 use Haxibiao\Live\Events\NewLiveRoomMessage;
@@ -62,12 +63,9 @@ trait LiveRoomResolvers
         //未下播
         if ($userIds = Redis::get($liveRoom->redis_room_key)) {
             $userIds = json_decode($userIds, true);
-            //未加入过
-            if (array_search($user->id, $userIds) === false) {
-                //事件：加入直播间
-                event(new UserComeIn($user, $liveRoom));
-                $user->joinLiveRoom($liveRoom);
-            }
+            //事件：加入直播间
+            event(new UserComeIn($user, $liveRoom));
+            $user->joinLiveRoom($liveRoom);
             //成功返回直播间信息
             return $liveRoom;
         }
@@ -87,6 +85,18 @@ trait LiveRoomResolvers
         $message      = Arr::get($args, 'message', null);
 
         event(new NewLiveRoomMessage($user->id, $live_room_id, $message));
+        /**
+         * TODO:
+         * 1. 还不能确定每一个项目的comments表结构都是如此
+         * 2. 待直播日活见长,将此create事件安排到 listener 中异步执行
+         */
+        Comment::create([
+            'user_id'          => $user->id,
+            'commentable_id'   => $live_room_id,
+            'commentable_type' => 'live_rooms',
+            'body'             => $message,
+        ]);
+
         return 1;
     }
 
