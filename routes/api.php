@@ -10,5 +10,6 @@ Route::group(['prefix' => 'api'], function (RouteRegisterContract $api) {
         Route::post('/screenShots', LiveController::class . '@screenShots');
         Route::post('/cutOut', LiveController::class . '@cutOutLive');
         Route::post('/recording', LiveController::class . '@recording');
+        Route::post('/pushStreamEvent', LiveController::class . '@pushStreamEvent');
     });
 });

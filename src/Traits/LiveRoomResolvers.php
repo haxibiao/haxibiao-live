@@ -19,19 +19,17 @@ trait LiveRoomResolvers
      */
     public function resolveRecommendLiveRoom($root, array $args, $context, $info)
     {
-        $utils = LiveUtils::getInstance();
-        // $pageSize       = data_get($args, 'page_size');
-        // $pageNum        = data_get($args, 'page_num');
-        $pageSize = data_get($args, 'count', data_get($args, 'first', 10)); //TODO:兼容老版本写法 以前使用的是 paginate 写法 参数名字为 first 和 page
-        $pageNum  = data_get($args, 'page');
+        $live_utils = LiveUtils::getInstance();
+        $pageNum    = data_get($args, 'first', 1);
+        $pageSize   = data_get($args, 'count');
         //获取在线直播间stream_names
-        $onlineInfo     = $utils->getStreamOnlineList((int) $pageNum, (int) $pageSize);
+        $onlineInfo     = $live_utils->getStreamOnlineList((int) $pageNum, (int) $pageSize);
         $streamList     = data_get($onlineInfo, 'OnlineInfo');
         $streamNameList = [];
         foreach ($streamList as $stream) {
             $streamNameList[] = $stream['StreamName'];
         }
-        return LiveRoom::whereIn('stream_name', $streamNameList); //TODO:使用 paginate 不需要 get
+        return LiveRoom::whereIn('stream_name', $streamNameList);
     }
 
     /**

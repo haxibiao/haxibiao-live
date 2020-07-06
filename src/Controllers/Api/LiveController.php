@@ -12,6 +12,30 @@ use Illuminate\Support\Str;
 
 class LiveController extends Controller
 {
+
+    /**
+     * 监听到有推流事件
+     */
+    public function pushStreamEvent(Request $request)
+    {
+        $data       = $request->all();
+        $streamName = data_get($data, 'stream_id');
+        $errcode    = data_get($data, 'errcode');
+        if ($errcode == 0) {
+            $room = LiveRoom::where('stream_name', $streamName)->first();
+            // OBS开直播没有title
+            if ($room && !empty($room->title)) {
+                $room->update([
+                    'status' => LiveRoom::STATUS_ON,
+                    'title'  => '快来我的直播间🤖🤖',
+                ]);
+            }
+        }
+    }
+
+    /**
+     * 动态设置直播间封面
+     */
     public function setRoomCover(Request $request)
     {
         $cover  = $request->file('cover');
