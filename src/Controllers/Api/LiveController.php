@@ -67,8 +67,11 @@ class LiveController extends Controller
         $room          = LiveRoom::where('stream_name', $channelId)->first();
         if ($room) {
             $user = $room->user;
-            // 保存 vod录制文件记录
-            $video = \App\Video::saveByVodFileId($vodFileId, $user);
+            /**
+             * TODO:dev过程结束后,将此函数封装到trait里面
+             * 保存 vod录制文件记录
+             */
+            $video = \App\Video::saveByLiveVodFileId($vodFileId, $user);
             // 在用户直播记录中 关联 直播视频文件
             $userLive = $user->getCurrentLive();
             if (empty($userLive)) {
