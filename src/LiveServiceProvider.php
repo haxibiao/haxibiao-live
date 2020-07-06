@@ -147,7 +147,6 @@ class LiveServiceProvider extends ServiceProvider
         $this->commands([
             InstallCommand::class,
             PublishCommand::class,
-            CleanUpLiveRoom::class,
             UninstallCommand::class,
         ]);
     }
