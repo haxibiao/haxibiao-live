@@ -67,6 +67,7 @@ trait LiveRoomResolvers
             if (array_search($user->id, $userIds) === false) {
                 //事件：加入直播间
                 event(new UserComeIn($user, $liveRoom));
+                $user->joinLiveRoom($liveRoom);
             }
             //成功返回直播间信息
             return $liveRoom;
@@ -87,7 +88,7 @@ trait LiveRoomResolvers
         $message      = Arr::get($args, 'message', null);
 
         event(new NewLiveRoomMessage($user->id, $live_room_id, $message));
-        return $message;
+        return 1;
     }
 
     /**
@@ -99,15 +100,15 @@ trait LiveRoomResolvers
         $live_room_id = Arr::get($args, 'live_room_id', null);
         $room         = LiveRoom::find($live_room_id);
 
-        if ($usersData = Redis::get($room->redis_room_key)) {
-            $userIds = json_decode($usersData, true);
+        if ($uids_json = Redis::get($room->redis_room_key)) {
+            $userIds = json_decode($uids_json, true);
 
             // 保证不多给前端发通知
             if (array_search($user->id, $userIds) !== false) {
                 event(new UserGoOut($user, $room));
+                $user->leaveLiveRoom($room);
             }
         }
-
         return $room;
     }
 

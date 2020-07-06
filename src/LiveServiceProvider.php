@@ -20,14 +20,7 @@ class LiveServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [
-        'Haxibiao\Live\Events\UserComeIn' => [
-            'Haxibiao\Live\Listeners\UpdateUsersInRoom',
-        ],
-        'Haxibiao\Live\Events\UserGoOut'  => [
-            'Haxibiao\Live\Listeners\RemoveUserFromRoom',
-        ],
-    ];
+    protected $listen = [];
 
     /**
      * Boorstrap the service provider.

@@ -32,6 +32,8 @@ class LiveController extends Controller
             throw new UserException('设置封面失败,请稍后再试~');
         }
     }
+
+    //保存回放
     public function recording(Request $request)
     {
         $recordingInfo = $request->all();

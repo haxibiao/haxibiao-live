@@ -34,7 +34,9 @@ trait PlayWithLive
         return LiveRoom::firstOrCreate(['user_id' => $this->id]);
     }
 
-    // 获取当前直播记录对象
+    /**
+     * 用户最近的直播秀 保存回放用
+     */
     public function getCurrentLive()
     {
         return $this->lives()->latest('id')->first();
@@ -42,8 +44,6 @@ trait PlayWithLive
 
     /**
      * 检测用户是否有有资格开启直播
-     * @param User $user
-     * @throws UserException
      */
     public function canOpenLive()
     {
@@ -54,7 +54,6 @@ trait PlayWithLive
     /**
      * 开直播
      * @param string $title 直播间标题
-     * @return LiveRoom 直播室对象
      */
     public function openLiveRoom(string $title): LiveRoom
     {
@@ -69,7 +68,7 @@ trait PlayWithLive
         $room->pull_stream_url = LiveRoom::getPullUrl() . "/" . $streamName;
         $room->stream_name     = $streamName;
         $room->status          = LiveRoom::STATUS_ON;
-        $room->title           = $title; //TODO: 后续需要记录用户每次开播更改过的历史标题
+        $room->title           = $title; //FIXME: 后续需要记录用户每次开播更改过的历史标题
         $room->save();
 
         // 设置redis 直播室初始值
@@ -82,9 +81,6 @@ trait PlayWithLive
 
     /**
      * 加入直播间
-     * @param User $user
-     * @param LiveRoom $room
-     * @return null
      */
     public function joinLiveRoom(LiveRoom $room)
     {
@@ -101,6 +97,21 @@ trait PlayWithLive
             $appendValue = array_unique($appendValue);
             Redis::set($room->redis_room_key, json_encode($appendValue));
         }
-        return null;
     }
+
+    /**
+     * 离开直播间
+     */
+    public function leaveLiveRoom(LiveRoom $room)
+    {
+        $user     = $this;
+        $user_ids = Redis::get($room->redis_room_key);
+        if ($user_ids) {
+            $userIds = json_decode($user_ids, true);
+            // 从数组中删除要离开的用户
+            $userIds = array_diff($userIds, array($user->id));
+            Redis::set($room->redis_room_key, json_encode($userIds));
+        }
+    }
+
 }
