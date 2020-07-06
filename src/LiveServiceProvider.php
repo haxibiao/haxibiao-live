@@ -140,10 +140,10 @@ class LiveServiceProvider extends ServiceProvider
         foreach ([
             'path.haxibiao-live'            => $root = dirname(__DIR__),
             'path.haxibiao-live.config'     => $root . '/config',
+            'path.haxibiao-live.graphql'    => $root . '/graphql',
             'path.haxibiao-live.database'   => $database = $root . '/database',
             'path.haxibiao-live.migrations' => $database . '/migrations',
             'path.haxibiao-live.seeds'      => $database . '/seeds',
-            'path.haxibiao-live.graphql'    => $database . '/graphql',
         ] as $abstract => $instance) {
             $this->app->instance($abstract, $instance);
         }
