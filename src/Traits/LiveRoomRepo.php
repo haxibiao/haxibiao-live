@@ -60,11 +60,6 @@ trait LiveRoomRepo
      * @param User $user
      * @return string
      */
-    public function getStreamNameAttribute()
-    {
-        return LiveRoom::makeStreamName($this->user);
-    }
-
     public static function makeStreamName($user)
     {
         return "u:{$user->id}";

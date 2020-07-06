@@ -1,11 +1,11 @@
 #直播列表
-query RecommendLiveRoom($page: Int){
-  recommendLiveRoom(first:10,page: $page){
-    paginatorInfo{
+query RecommendLiveRoom($page: Int) {
+  recommendLiveRoom(page: $page) {
+    paginatorInfo {
       currentPage
       hasMorePages
     }
-    data{
+    data {
       id
       title
       cover

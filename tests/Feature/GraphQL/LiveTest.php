@@ -18,7 +18,7 @@
 
 //         $this->liveRoom = factory(LiveRoom::class)->create([
 //             //用户ID
-//             'anchor_id'   => $this->user->id,
+//             'user_id'   => $this->user->id,
 //             //流名称
 //             'stream_name' => 'u:' . $this->user->id,
 //         ]);

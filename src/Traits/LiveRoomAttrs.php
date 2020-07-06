@@ -26,7 +26,8 @@ trait LiveRoomAttrs
 
     public function getPullUrlAttribute(): string
     {
-        return LiveRoom::prefix . config('live.live_pull_domain') . "/" . config('live.app_name') . "/" . $this->stream_name;
+        return LiveRoom::prefix . config('live.live_pull_domain') . "/" . config('live.app_name') . "/"
+        . LiveRoom::makeStreamName($this);
     }
 
     public function getCoverUrlAttribute(): string

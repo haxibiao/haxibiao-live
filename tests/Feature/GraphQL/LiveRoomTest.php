@@ -2,8 +2,8 @@
 
 namespace Haxibiao\Live\Tests\Feature\GraphQL;
 
+use App\User;
 use Haxibiao\Base\GraphQLTestCase;
-use Haxibiao\Base\User;
 use Haxibiao\Live\LiveRoom;
 
 class LiveRoomTest extends GraphQLTestCase
@@ -33,7 +33,7 @@ class LiveRoomTest extends GraphQLTestCase
     public function testEnterLiveRoom()
     {
         $mutation = file_get_contents(__DIR__ . '/Live/Mutation/EnterLiveRoom.gql');
-        $header   = $this->getHeaders(User::find(3));
+        $header   = $this->getHeaders($this->user);
         $id       = LiveRoom::max('id');
         $data     = array(
             "id" => $id,
@@ -44,7 +44,7 @@ class LiveRoomTest extends GraphQLTestCase
     public function testLeaveLiveRoom()
     {
         $mutation = file_get_contents(__DIR__ . '/Live/Mutation/LeaveLiveRoom.gql');
-        $header   = $this->getHeaders(User::find(3));
+        $header   = $this->getHeaders($this->user);
         $id       = LiveRoom::max('id');
         $data     = array(
             "roomid" => $id,
@@ -55,7 +55,7 @@ class LiveRoomTest extends GraphQLTestCase
     public function testCommentLive()
     {
         $mutation = file_get_contents(__DIR__ . '/Live/Mutation/CommentLive.gql');
-        $header   = $this->getHeaders(User::find(3));
+        $header   = $this->getHeaders($this->user);
         $id       = LiveRoom::max('id');
         $data     = array(
             "id"      => $id,
@@ -67,8 +67,9 @@ class LiveRoomTest extends GraphQLTestCase
     public function testCloseLiveRoom()
     {
         $mutation = file_get_contents(__DIR__ . '/Live/Mutation/CloseLiveRoom.gql');
-        $header   = $this->getHeaders(User::find(2));
-        $id       = $this->user->liveRoom->id;
+        $header   = $this->getHeaders($this->user);
+        $live     = $this->user->live;
+        $id       = $live->id;
         $data     = array(
             "roomid" => $id,
         );
@@ -78,7 +79,7 @@ class LiveRoomTest extends GraphQLTestCase
     public function testExceptionLiveReport()
     {
         $mutation = file_get_contents(__DIR__ . '/Live/Mutation/ExceptionLiveReport.gql');
-        $header   = $this->getHeaders(User::find(2));
+        $header   = $this->getHeaders($this->user);
         $id       = LiveRoom::max('id');
         $data     = array(
             "roomid" => $id,
@@ -92,8 +93,8 @@ class LiveRoomTest extends GraphQLTestCase
 
     public function testRecommendLiveRoom()
     {
-        $mutation = file_get_contents(__DIR__ . '/LiveRoom/Query/RecommendLiveRoom.gql');
-        $header   = $this->getHeaders(User::find(3));
+        $mutation = file_get_contents(__DIR__ . '/Live/Query/RecommendLiveRoom.gql');
+        $header   = $this->getHeaders($this->user);
         $data     = array(
             "page" => 1,
         );
@@ -102,8 +103,8 @@ class LiveRoomTest extends GraphQLTestCase
 
     public function testGetLiveRoomUsers()
     {
-        $mutation = file_get_contents(__DIR__ . '/LiveRoom/Query/GetLiveRoomUsers.gql');
-        $header   = $this->getHeaders(User::find(2));
+        $mutation = file_get_contents(__DIR__ . '/Live/Query/GetLiveRoomUsers.gql');
+        $header   = $this->getHeaders($this->user);
         $id       = LiveRoom::max('id');
         $data     = array(
             "roomid" => $id,

@@ -2,8 +2,8 @@
 
 namespace Haxibiao\Live\Console;
 
-use Haxibiao\Helpers\LiveUtils;
 use Haxibiao\Live\LiveRoom;
+use Haxibiao\Live\LiveUtils;
 use Illuminate\Console\Command;
 
 class CleanUpLiveRoom extends Command
