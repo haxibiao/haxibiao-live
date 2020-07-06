@@ -21,6 +21,8 @@ class UserLive extends Model
         'data' => 'array',
     ];
 
+    protected $guarded = [];
+
     /**
      * 主播
      */
