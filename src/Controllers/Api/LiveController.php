@@ -5,6 +5,7 @@ namespace Haxibiao\Live\Controllers\Api;
 use App\Exceptions\UserException;
 use App\Http\Controllers\Controller;
 use Haxibiao\Live\LiveRoom;
+use Haxibiao\Live\UserLive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -69,7 +70,10 @@ class LiveController extends Controller
             // 保存 vod录制文件记录
             $video = \App\Video::saveByVodFileId($vodFileId, $user);
             // 在用户直播记录中 关联 直播视频文件
-            $userLive                = $user->getCurrentLive();
+            $userLive = $user->getCurrentLive();
+            if (empty($userLive)) {
+                $userLive = UserLive::recordLive($user, $room);
+            }
             $userLive->video_id      = $video->id;
             $userLive->live_duration = $video->duration;
             $userLive->save();

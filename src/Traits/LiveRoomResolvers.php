@@ -9,6 +9,7 @@ use Haxibiao\Live\Events\UserComeIn;
 use Haxibiao\Live\Events\UserGoOut;
 use Haxibiao\Live\LiveRoom;
 use Haxibiao\Live\LiveUtils;
+use Haxibiao\Live\UserLive;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
 
@@ -45,7 +46,7 @@ trait LiveRoomResolvers
 
         // 开直播
         $room = $user->openLiveRoom($title);
-
+        UserLive::recordLive($user, $room);
         return $room;
     }
 
