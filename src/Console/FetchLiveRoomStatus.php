@@ -6,21 +6,21 @@ use Haxibiao\Live\LiveRoom;
 use Haxibiao\Live\LiveUtils;
 use Illuminate\Console\Command;
 
-class CleanUpLiveRoom extends Command
+class FetchLiveRoomStatus extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'cleanup:live';
+    protected $signature = 'fetch:live';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '定时清理直播间数据';
+    protected $description = '';
 
     /**
      * Create a new command instance.
@@ -39,9 +39,10 @@ class CleanUpLiveRoom extends Command
      */
     public function handle()
     {
-        $live_utils     = LiveUtils::getInstance();
-        $streamData     = $live_utils->getStreamOnlineList(1);
-        $totalPage      = data_get($streamData, 'TotalPage');
+        $live_utils = LiveUtils::getInstance();
+        $streamData = $live_utils->getStreamOnlineList(1);
+        $totalPage  = data_get($streamData, 'TotalPage');
+        // 获取腾讯云给的正在直播的流名称列表
         $streamNameList = [];
         for ($pageNum = 1; $pageNum < $totalPage; $pageNum++) {
             $streamData       = $live_utils->getStreamOnlineList($pageNum);
@@ -50,7 +51,12 @@ class CleanUpLiveRoom extends Command
         if (empty($streamNameList)) {
             return null;
         }
-        LiveRoom::whereNotIn('id', $streamNameList)->update([
+        // 正在直播的状态
+        LiveRoom::whereIn('stream_name', $streamNameList)->update([
+            'status' => LiveRoom::STATUS_ON,
+        ]);
+        // 已下播的状态
+        LiveRoom::whereNotIn('stream_name', $streamNameList)->update([
             'status' => LiveRoom::STATUS_OFF,
         ]);
     }
