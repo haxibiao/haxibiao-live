@@ -20,7 +20,7 @@ trait LiveRoomResolvers
     public function resolveRecommendLiveRoom($root, array $args, $context, $info)
     {
         $live_utils = LiveUtils::getInstance();
-        $pageNum    = data_get($args, 'first', 1);
+        $pageNum    = data_get($args, 'page', 1);
         $pageSize   = data_get($args, 'count');
         //获取在线直播间stream_names
         $onlineInfo     = $live_utils->getStreamOnlineList((int) $pageNum, (int) $pageSize);
