@@ -54,7 +54,7 @@ class LiveUtils
     public function getStreamOnlineList(int $pageNum = 1, int $PageSize = 10): array
     {
         $req    = new DescribeLiveStreamOnlineListRequest();
-        $params = sprintf('{"PageNum":%d,"PageSize":%d}', $pageNum, $PageSize);
+        $params = sprintf('{"PageNum":%d,"PageSize":%d,"DomainName":%s}', $pageNum, $PageSize, config('live.live_push_domain'));
         $req->fromJsonString($params);
         $resp = $this->liveClient->DescribeLiveStreamOnlineList($req);
         return json_decode($resp->toJsonString(), true);
