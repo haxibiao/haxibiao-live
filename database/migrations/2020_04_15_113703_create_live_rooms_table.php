@@ -13,6 +13,9 @@ class CreateLiveRoomsTable extends Migration
      */
     public function up()
     {
+        //部分APP已存在live_rooms表, 会导致art migrate报错, 因此引入package/live 首先需要使用 package/live 中的数据库迁移文件
+        Schema::dropIfExists('live_rooms');
+
         Schema::create('live_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id')->comment('主播id');
