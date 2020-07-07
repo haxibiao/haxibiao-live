@@ -83,7 +83,7 @@ trait PlayWithLive
      */
     public function joinLiveRoom(LiveRoom $room)
     {
-        $user = $this; //主播
+        $user = $this; // 观众
         if (Redis::exists($room->redis_room_key)) {
             if (empty(Redis::get($room->redis_room_key))) {
                 $appendValue = array($user->id);
@@ -95,6 +95,10 @@ trait PlayWithLive
             // 去重
             $appendValue = array_unique($appendValue);
             Redis::set($room->redis_room_key, json_encode($appendValue));
+            // 记录到主播的直播记录中
+            $streamer = $room->user;
+            $live     = $streamer->getCurrentLive();
+            $live->updateCountUsers($user);
         }
     }
 
