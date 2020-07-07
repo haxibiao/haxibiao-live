@@ -3,8 +3,8 @@
 namespace Haxibiao\Live\Traits;
 
 use App\Video;
-use Haxibaio\Live\Jobs\ProcessLiveRecordingVodFile;
 use Haxibiao\Helpers\VodUtils;
+use Haxibiao\Live\Jobs\ProcessLiveRecordingVodFile;
 
 /**
  * 关联直播能力到Video
@@ -29,11 +29,10 @@ trait VideoPlayWithLive
         $video->path     = $sourceVideoUrl;
         $video->duration = $duration;
         $video->disk     = 'vod';
-        $video->hash     = hash_file('md5', $sourceVideoUrl);
         $video->save();
-        VodUtils::simpleProcessFile($video->qcvod_fileid);
         //触发保存截图和更新主播直播时长
         dispatch(new ProcessLiveRecordingVodFile($video->id))->delay(now()->addMinute())->onQueue('video');
+        return $video;
     }
 
 }
