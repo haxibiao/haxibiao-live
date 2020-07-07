@@ -34,6 +34,7 @@ trait VideoPlayWithLive
         VodUtils::simpleProcessFile($video->qcvod_fileid);
         //触发保存截图和更新主播直播时长
         dispatch(new ProcessLiveRecordingVodFile($video->id))->delay(now()->addMinute())->onQueue('video');
+        return $video;
     }
 
 }
