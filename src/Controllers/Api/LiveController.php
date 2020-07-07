@@ -62,9 +62,10 @@ class LiveController extends Controller
     public function recording(Request $request)
     {
         $recordingInfo = $request->all();
-        $vodFileId     = data_get($recordingInfo, 'file_id');
-        $channelId     = data_get($recordingInfo, 'channel_id');
-        $room          = LiveRoom::where('stream_name', $channelId)->first();
+        info(json_encode($recordingInfo));
+        $vodFileId = data_get($recordingInfo, 'file_id');
+        $channelId = data_get($recordingInfo, 'channel_id');
+        $room      = LiveRoom::where('stream_name', $channelId)->first();
         if ($room) {
             $user = $room->user;
             // 保存 vod录制文件并记录信息到直播记录
