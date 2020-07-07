@@ -1,6 +1,6 @@
 <?php
 
-namespace Haxibaio\Live\Jobs;
+namespace Haxibiao\Live\Jobs;
 
 use App\Video;
 use Haxibiao\Helpers\VodUtils;

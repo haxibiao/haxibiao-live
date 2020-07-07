@@ -3,8 +3,8 @@
 namespace Haxibiao\Live\Traits;
 
 use App\Video;
-use Haxibaio\Live\Jobs\ProcessLiveRecordingVodFile;
 use Haxibiao\Helpers\VodUtils;
+use Haxibiao\Live\Jobs\ProcessLiveRecordingVodFile;
 
 /**
  * 关联直播能力到Video
