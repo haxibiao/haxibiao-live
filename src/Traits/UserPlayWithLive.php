@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redis;
 /**
  * 关联直播能力到User
  */
-trait PlayWithLive
+trait UserPlayWithLive
 {
     public function liveRoom(): HasOne
     {

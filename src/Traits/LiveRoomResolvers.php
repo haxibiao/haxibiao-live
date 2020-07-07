@@ -24,7 +24,9 @@ trait LiveRoomResolvers
         $live_utils = LiveUtils::getInstance();
         $pageNum    = data_get($args, 'page', 1);
         $pageSize   = data_get($args, 'count');
-        //获取在线直播间stream_names
+        /**
+         * 开发阶段直接读腾讯云在线列表, 上线后使用定时任务更新直播间状态,再根据状态推荐
+         */
         $onlineInfo     = $live_utils->getStreamOnlineList((int) $pageNum, (int) $pageSize);
         $streamList     = data_get($onlineInfo, 'OnlineInfo');
         $streamNameList = [];
@@ -108,16 +110,9 @@ trait LiveRoomResolvers
         $user         = getUser();
         $live_room_id = Arr::get($args, 'live_room_id', null);
         $room         = LiveRoom::find($live_room_id);
-
-        if ($uids_json = Redis::get($room->redis_room_key)) {
-            $userIds = json_decode($uids_json, true);
-
-            // 保证不多给前端发通知
-            if (array_search($user->id, $userIds) !== false) {
-                event(new UserGoOut($user, $room));
-                $user->leaveLiveRoom($room);
-            }
-        }
+        // 发socket通知
+        event(new UserGoOut($user, $room));
+        $user->leaveLiveRoom($room);
         return $room;
     }
 
@@ -129,9 +124,11 @@ trait LiveRoomResolvers
         $live_room_id = Arr::get($args, 'live_room_id', null);
         $user         = getUser();
         $room         = LiveRoom::find($live_room_id);
+        // 不是创建者不能关
         if ($room && $user->id !== $room->user_id) {
             throw new UserException('关闭直播失败~');
         }
+        // 发socket通知
         LiveRoom::closeLiveRoom($room);
         return true;
     }
