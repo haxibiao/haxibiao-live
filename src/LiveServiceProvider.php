@@ -2,6 +2,7 @@
 
 namespace Haxibiao\Live;
 
+use Haxibiao\Live\Console\FetchLiveRoomStatus;
 use Haxibiao\Live\Console\InstallCommand;
 use Haxibiao\Live\Console\PublishCommand;
 use Haxibiao\Live\Console\UninstallCommand;
@@ -128,6 +129,7 @@ class LiveServiceProvider extends ServiceProvider
             InstallCommand::class,
             PublishCommand::class,
             UninstallCommand::class,
+            FetchLiveRoomStatus::class,
         ]);
     }
 
