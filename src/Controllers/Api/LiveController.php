@@ -74,8 +74,7 @@ class LiveController extends Controller
             if (empty($userLive)) {
                 $userLive = UserLive::recordLive($user, $room);
             }
-            $userLive->video_id      = $video->id;
-            $userLive->live_duration = $video->duration;
+            $userLive->video_id = $video->id;
             $userLive->save();
         }
     }
