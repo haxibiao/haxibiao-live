@@ -32,26 +32,8 @@ trait VideoPlayWithLive
         $video->hash     = hash_file('md5', $sourceVideoUrl);
         $video->save();
         VodUtils::simpleProcessFile($video->qcvod_fileid);
-
-        self::saveByLiveRecording($video);
-        return $video;
-    }
-
-    /**
-     * 处理直播录制文件,保存到videos表中,更新直播时长到主播的直播记录中
-     */
-    public static function saveByLiveRecording($video)
-    {
-        $videoInfo       = VodUtils::getVideoInfo($video->qcvod_fileid);
-        $duration        = data_get($videoInfo, 'basicInfo.duration');
-        $sourceVideoUrl  = data_get($videoInfo, 'basicInfo.sourceVideoUrl');
-        $video->path     = $sourceVideoUrl;
-        $video->duration = $duration;
-        $video->disk     = 'vod';
-        $video->hash     = hash_file('md5', $sourceVideoUrl);
-        $video->save();
-        VodUtils::simpleProcessFile($video->qcvod_fileid);
-        //触发保存截图和更新资源
+        //触发保存截图和更新主播直播时长
         dispatch(new ProcessLiveRecordingVodFile($video->id))->delay(now()->addMinute())->onQueue('video');
     }
+
 }
