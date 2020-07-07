@@ -29,7 +29,6 @@ trait VideoPlayWithLive
         $video->path     = $sourceVideoUrl;
         $video->duration = $duration;
         $video->disk     = 'vod';
-        $video->hash     = hash_file('md5', $sourceVideoUrl);
         $video->save();
         VodUtils::simpleProcessFile($video->qcvod_fileid);
         //触发保存截图和更新主播直播时长

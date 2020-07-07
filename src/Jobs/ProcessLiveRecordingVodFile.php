@@ -43,8 +43,10 @@ class ProcessLiveRecordingVodFile implements ShouldQueue
         $video    = Video::find($this->video_id);
         $fileInfo = VodUtils::getVideoInfo($video->qcvod_fileid);
         $coverUrl = data_get($fileInfo, 'basicInfo.coverUrl');
+        $hash     = hash_file('md5', $video->path);
         $video->update([
             'cover' => $coverUrl,
+            'hash'  => $hash,
         ]);
         // 更新用户直播记录的直播时长
         $this->updateUserLiveDuration($video);
