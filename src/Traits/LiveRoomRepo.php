@@ -4,10 +4,26 @@ namespace Haxibiao\Live\Traits;
 
 use Haxibiao\Live\Events\OwnerCloseRoom;
 use Haxibiao\Live\LiveRoom;
+use Haxibiao\Live\LiveUtils;
 use Illuminate\Support\Facades\Redis;
 
 trait LiveRoomRepo
 {
+
+    /**
+     * 获取正在推流的直播间
+     */
+    public static function onlineRoomsQuery($pageNum, $pageSize)
+    {
+        $live_utils     = LiveUtils::getInstance();
+        $onlineInfo     = $live_utils->getStreamOnlineList($pageNum, $pageSize);
+        $streamList     = data_get($onlineInfo, 'OnlineInfo');
+        $streamNameList = [];
+        foreach ($streamList as $stream) {
+            $streamNameList[] = $stream['StreamName'];
+        }
+        return LiveRoom::whereIn('stream_name', $streamNameList);
+    }
 
     /**
      * 关闭直播间

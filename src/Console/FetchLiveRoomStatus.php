@@ -20,7 +20,7 @@ class FetchLiveRoomStatus extends Command
      *
      * @var string
      */
-    protected $description = '';
+    protected $description = '更新 live room 推流状态,更新 status';
 
     /**
      * Create a new command instance.

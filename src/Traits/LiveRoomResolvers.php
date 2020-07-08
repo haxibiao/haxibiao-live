@@ -9,7 +9,6 @@ use Haxibiao\Live\Events\NewLiveRoomMessage;
 use Haxibiao\Live\Events\UserComeIn;
 use Haxibiao\Live\Events\UserGoOut;
 use Haxibiao\Live\LiveRoom;
-use Haxibiao\Live\LiveUtils;
 use Haxibiao\Live\UserLive;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redis;
@@ -21,19 +20,8 @@ trait LiveRoomResolvers
      */
     public function resolveRecommendLiveRoom($root, array $args, $context, $info)
     {
-        $live_utils = LiveUtils::getInstance();
-        $pageNum    = data_get($args, 'page', 1);
-        $pageSize   = data_get($args, 'count');
-        /**
-         * 开发阶段直接读腾讯云在线列表, 上线后使用定时任务更新直播间状态,再根据状态推荐
-         */
-        $onlineInfo     = $live_utils->getStreamOnlineList((int) $pageNum, (int) $pageSize);
-        $streamList     = data_get($onlineInfo, 'OnlineInfo');
-        $streamNameList = [];
-        foreach ($streamList as $stream) {
-            $streamNameList[] = $stream['StreamName'];
-        }
-        return LiveRoom::whereIn('stream_name', $streamNameList);
+        $pageNum = data_get($args, 'page', 1);
+        return LiveRoom::onlineRoomsQuery($pageNum, $args['count']);
     }
 
     /**
@@ -102,7 +90,7 @@ trait LiveRoomResolvers
             'user_id'          => $user->id,
             'commentable_id'   => $live_room_id,
             'commentable_type' => 'live_rooms',
-            $body             => $message,
+            $body              => $message,
         ]);
 
         return 1;

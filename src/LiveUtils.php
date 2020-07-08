@@ -51,7 +51,7 @@ class LiveUtils
      * @param $pageNum 当前页码
      * @param $PageSize 页面大小
      */
-    public function getStreamOnlineList(int $pageNum = 1, int $PageSize = 10): array
+    public function getStreamOnlineList($pageNum = 1, $PageSize = 10): array
     {
         $req    = new DescribeLiveStreamOnlineListRequest();
         $params = sprintf('{"PageNum":%d,"PageSize":%d,"DomainName":%s}', $pageNum, $PageSize, config('live.live_push_domain'));
