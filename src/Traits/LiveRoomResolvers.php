@@ -21,7 +21,7 @@ trait LiveRoomResolvers
     public function resolveRecommendLiveRoom($root, array $args, $context, $info)
     {
         $pageNum = data_get($args, 'page', 1);
-        return LiveRoom::onlineRoomsQuery($pageNum, $args['count']);
+        return LiveRoom::onlineRoomsQuery($pageNum, $args['first']);
     }
 
     /**
