@@ -1,4 +1,5 @@
 <?php
+
 namespace Haxibiao\Live\Traits;
 
 use App\User;
@@ -20,8 +21,7 @@ trait UserLiveRepo
     public function updateCountUsers(User $user)
     {
         $this->increment('count_users');
-        $this->data = array_unique(array_merge($this->data, array($user->id)));
+        $this->data = array_unique(array_merge($this->data ?? [], array($user->id)));
         $this->save();
     }
-
 }
