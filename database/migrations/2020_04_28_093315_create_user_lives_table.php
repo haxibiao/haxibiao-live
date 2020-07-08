@@ -13,6 +13,8 @@ class CreateUserLivesTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('user_lives');
+        DB::table('migrations')->where('migration', 'like', '%user_lives%')->delete();
         Schema::create('user_lives', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id')->comment('主播 ID');
