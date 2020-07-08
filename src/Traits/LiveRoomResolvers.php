@@ -92,11 +92,17 @@ trait LiveRoomResolvers
          * 1. 还不能确定每一个项目的comments表结构都是如此
          * 2. 待直播日活见长,将此create事件安排到 listener 中异步执行
          */
+
+        //FIXME:只有变现大学的表结构就是 body 其他项目是 content
+        $body = 'content';
+        if (config('app.name') === '变现大学') {
+            $body = 'body';
+        }
         Comment::create([
             'user_id'          => $user->id,
             'commentable_id'   => $live_room_id,
             'commentable_type' => 'live_rooms',
-            'body'             => $message,
+            $body             => $message,
         ]);
 
         return 1;
