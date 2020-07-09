@@ -2,13 +2,14 @@
 
 namespace Haxibiao\Live;
 
-use Haxibiao\Live\Console\FetchLiveRoomStatus;
-use Haxibiao\Live\Console\InstallCommand;
-use Haxibiao\Live\Console\PublishCommand;
-use Haxibiao\Live\Console\UninstallCommand;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Haxibiao\Live\Console\InstallCommand;
+use Haxibiao\Live\Console\PublishCommand;
+use Haxibiao\Live\Console\UninstallCommand;
+use Haxibiao\Live\Console\FetchLiveRoomStatus;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class LiveServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,9 @@ class LiveServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Relation::morphMap([
+            'live_rooms'       => '\Haxibiao\Live\LiveRoom',
+        ]);
         //安装时 vendor:publish 用
         if ($this->app->runningInConsole()) {
             // 注册 migrations.
@@ -45,7 +49,6 @@ class LiveServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../graphql' => base_path('graphql'),
             ], 'live-graphql');
-
         }
 
         //注册Api路由
@@ -56,7 +59,6 @@ class LiveServiceProvider extends ServiceProvider
                 Event::listen($event, $listener);
             }
         }
-
     }
 
     /**
@@ -101,7 +103,6 @@ class LiveServiceProvider extends ServiceProvider
         );
         // Register Commands
         $this->registerCommands();
-
     }
 
     /**
