@@ -78,7 +78,7 @@ trait LiveRoomRepo
      */
     public static function makeStreamName($user)
     {
-        return "u:{$user->id}";
+        return "u{$user->id}";
     }
 
     public static function getPushUrl()
