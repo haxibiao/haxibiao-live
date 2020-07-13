@@ -2,14 +2,14 @@
 
 namespace Haxibiao\Live;
 
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\ServiceProvider;
+use Haxibiao\Live\Console\FetchLiveRoomStatus;
 use Haxibiao\Live\Console\InstallCommand;
 use Haxibiao\Live\Console\PublishCommand;
 use Haxibiao\Live\Console\UninstallCommand;
-use Haxibiao\Live\Console\FetchLiveRoomStatus;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
 
 class LiveServiceProvider extends ServiceProvider
 {
@@ -28,7 +28,7 @@ class LiveServiceProvider extends ServiceProvider
     public function boot()
     {
         Relation::morphMap([
-            'live_rooms'       => '\Haxibiao\Live\LiveRoom',
+            'live_rooms' => '\Haxibiao\Live\LiveRoom',
         ]);
         //安装时 vendor:publish 用
         if ($this->app->runningInConsole()) {
@@ -70,6 +70,7 @@ class LiveServiceProvider extends ServiceProvider
     {
         Route::group($this->apiRoutesConfiguration(), function () {
             $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         });
     }
 

@@ -32,6 +32,8 @@ class LiveRoom extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['cover_url', 'pull_url'];
+
     //-1:下直播 -2:直播间被封 1:直播中
     public const STATUS_ON      = 1;
     public const STATUS_OFF     = -1;
