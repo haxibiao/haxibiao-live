@@ -2,7 +2,6 @@
 
 namespace Haxibiao\Live\Traits;
 
-use App\Comment;
 use App\Exceptions\UserException;
 use App\User;
 use Haxibiao\Live\Events\NewLiveRoomMessage;
@@ -21,7 +20,7 @@ trait LiveRoomResolvers
     public function resolveRecommendLiveRoom($root, array $args, $context, $info)
     {
         $pageNum = data_get($args, 'page', 1);
-        $page = data_get($args, 'first', data_get($args, 'page'));
+        $page    = data_get($args, 'first', data_get($args, 'page'));
         return LiveRoom::onlineRoomsQuery($pageNum, $page);
     }
 
@@ -34,7 +33,6 @@ trait LiveRoomResolvers
         $title = data_get($args, 'title', null);
 
         throw_if(!$title, UserException::class, '请输入直播间标题~');
-        throw_if(!$user->canOpenLive(), UserException::class, '您没有开启直播的权限哦~');
 
         // 开直播
         $room = $user->openLiveRoom($title);
@@ -74,26 +72,7 @@ trait LiveRoomResolvers
         $user         = getUser();
         $live_room_id = Arr::get($args, 'live_room_id', null);
         $message      = Arr::get($args, 'message', null);
-
         event(new NewLiveRoomMessage($user->id, $live_room_id, $message));
-        /**
-         * TODO:
-         * 1. 还不能确定每一个项目的comments表结构都是如此
-         * 2. 待直播日活见长,将此create事件安排到 listener 中异步执行
-         */
-
-        //FIXME:只有变现大学的表结构就是 body 其他项目是 content
-        $body = 'content';
-        if (config('app.name') === '变现大学') {
-            $body = 'body';
-        }
-        Comment::create([
-            'user_id'          => $user->id,
-            'commentable_id'   => $live_room_id,
-            'commentable_type' => 'live_rooms',
-            $body              => $message,
-        ]);
-
         return 1;
     }
 
