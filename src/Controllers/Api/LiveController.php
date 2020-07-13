@@ -5,6 +5,7 @@ namespace Haxibiao\Live\Controllers\Api;
 use App\Exceptions\UserException;
 use App\Http\Controllers\Controller;
 use Haxibiao\Live\LiveRoom;
+use Haxibiao\Live\Traits\PlayWithLive;
 use Haxibiao\Live\UserLive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -15,21 +16,10 @@ class LiveController extends Controller
 {
 
     /**
-     * 获取在线直播间列表（web-api）
-     */
-    public function getOnlineLiveRoomList(Request $request)
-    {
-        $pageNum = $request->get('pageNum');
-        return LiveRoom::take(10)->get();
-        // return LiveRoom::onlineRoomsQuery($pageNum, 10)->get();
-    }
-
-    /**
      * 分享页面
      */
     public function share($id)
     {
-        dd($id);
         $room = LiveRoom::find($id);
         abort_if(empty($room), 404, '未找到页面');
         return view('live.share', [
@@ -93,7 +83,7 @@ class LiveController extends Controller
         if ($room) {
             $user = $room->user;
             // 保存 vod录制文件并记录信息到直播记录
-            $video = \App\Video::processLiveRecording($vodFileId, $user);
+            $video = PlayWithLive::processLiveRecording($vodFileId, $user);
             // 在用户直播记录中 关联 直播视频文件
             $userLive = $user->getCurrentLive();
             if (empty($userLive)) {
