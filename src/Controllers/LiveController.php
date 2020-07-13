@@ -29,6 +29,7 @@ class LiveController extends Controller
         return view('live.share', [
             'pull_domain' => config('live.live_pull_domain'),
             'stream_name' => $room->stream_name,
+            'title'       => $room->title,
         ]);
     }
 
