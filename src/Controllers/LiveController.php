@@ -26,7 +26,7 @@ class LiveController extends Controller
     {
         $room = LiveRoom::find($id);
         abort_if(empty($room), 404, '未找到页面');
-        return view('live.share', [
+        return view('live::share', [
             'pull_domain' => config('live.live_pull_domain'),
             'stream_name' => $room->stream_name,
             'title'       => $room->title,

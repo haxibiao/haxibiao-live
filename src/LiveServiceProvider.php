@@ -59,6 +59,14 @@ class LiveServiceProvider extends ServiceProvider
                 Event::listen($event, $listener);
             }
         }
+
+        // 注册视图
+        $this->registerViews();
+    }
+
+    protected function registerViews()
+    {
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'live');
     }
 
     /**
