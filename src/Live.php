@@ -8,6 +8,7 @@ use Haxibiao\Base\Model;
 use Haxibiao\Live\Traits\LiveAttrs;
 use Haxibiao\Live\Traits\LiveRepo;
 use Haxibiao\Live\Traits\LiveResolvers;
+use Haxibiao\Live\Traits\LiveRoomResolvers;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -18,6 +19,7 @@ class Live extends Model
     use LiveRepo;
     use LiveAttrs;
     use LiveResolvers;
+    use LiveRoomResolvers;
 
     protected $table = 'lives';
 
