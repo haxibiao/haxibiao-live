@@ -15,12 +15,13 @@ trait LiveRoomAttrs
      */
     public function getLiveAttribute()
     {
+        //FIXME: 断流3分钟内别关闭live status 可以连回来
         $live = $this->lives()->where('status', '>=', 0)->latest('id')->first();
         //没有，开一个，关了，再开一个
         if (is_null($live)) {
             $live = Live::create([
-                'user_id' => $this->user_id,
-                'room_id' => $this->id,
+                'user_id'      => $this->user_id,
+                'live_room_id' => $this->id,
             ]);
             return $live;
         }

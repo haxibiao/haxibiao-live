@@ -19,7 +19,7 @@ class CreateLivesTable extends Migration
             $table->bigIncrements('id');
             $table->string('title')->index()->nullable()->comment('直播秀标题');
             $table->unsignedInteger('user_id')->index()->comment('主播 ID');
-            $table->unsignedInteger('room_id')->index()->comment('直播间 ID');
+            $table->unsignedInteger('live_room_id')->index()->comment('直播间 ID');
             $table->tinyInteger('status')->default(0)->comment('状态:0默认,-1关闭,1推荐');
 
             //开播
@@ -48,5 +48,7 @@ class CreateLivesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('user_lives');
+        Schema::dropIfExists('lives');
+
     }
 }

@@ -4,6 +4,7 @@ namespace Haxibiao\Live;
 
 use App\User;
 use Haxibiao\Base\Model;
+use Haxibiao\Live\Live;
 use Haxibiao\Live\Traits\LiveRoomAttrs;
 use Haxibiao\Live\Traits\LiveRoomRepo;
 use Haxibiao\Live\Traits\LiveRoomResolvers;
@@ -42,15 +43,15 @@ class LiveRoom extends Model
     //主播
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     /**
      * 多场用户直播秀
      */
-    public function userLives(): HasMany
+    public function lives(): HasMany
     {
-        return $this->hasMany(UserLive::class, 'id', 'live_id');
+        return $this->hasMany(Live::class);
     }
 
     public static function getStatuses(): array

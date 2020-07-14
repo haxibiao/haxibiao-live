@@ -32,7 +32,7 @@ class InstallCommand extends Command
     {
         $this->comment("复制 stubs ...");
         copy(__DIR__ . '/stubs/LiveRoom.stub', app_path('LiveRoom.php'));
-        copy(__DIR__ . '/stubs/UserLive.stub', app_path('UserLive.php'));
+        copy(__DIR__ . '/stubs/Live.stub', app_path('Live.php'));
 
         $this->comment('发布资源...');
         $this->call('live:publish', ['--force' => true]);

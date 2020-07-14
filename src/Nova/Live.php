@@ -5,7 +5,6 @@ namespace App\Nova;
 use App\Nova\Resource;
 use App\Nova\User;
 use App\Nova\Video;
-use Haxibiao\Live\LiveRoom as LiveRoomModel;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Code;
@@ -13,19 +12,19 @@ use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 
-class UserLive extends Resource
+class Live extends Resource
 {
 
     public static $category = "直播管理";
 
     public static function label()
     {
-        return '直播间数据';
+        return '直播';
     }
 
     public static function singularLabel()
     {
-        return '直播间数据';
+        return '直播';
     }
 
     /**
@@ -33,7 +32,7 @@ class UserLive extends Resource
      *
      * @var string
      */
-    public static $model = 'App\UserLive';
+    public static $model = 'App\Live';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -62,7 +61,7 @@ class UserLive extends Resource
         return [
             ID::make()->sortable(),
             BelongsTo::make('主播', 'user', User::class),
-            BelongsTo::make('直播间', 'live', LiveRoomModel::class),
+            BelongsTo::make('直播间', 'liveRoom', LiveRoom::class),
             BelongsTo::make('直播回放', 'video', Video::class),
             Number::make('观众数', 'count_users')->sortable(),
             Number::make('直播时长（秒）', 'live_duration')->sortable(),

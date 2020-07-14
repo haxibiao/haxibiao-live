@@ -1,5 +1,5 @@
 type LiveRoom {
-  id: ID!
+  id: Int!
   title: String
   """
   主播（兼容已上线版本gql）
@@ -24,7 +24,7 @@ type LiveRoom {
 }
 
 type Live {
-  id: ID!
+  id: Int!
   title: String
   push_stream_url: String
   push_stream_key: String
@@ -42,19 +42,19 @@ type Live {
 
 extend type Query {
   """
-  获取单个直播间
+  获取单场直播
   """
-  liveRoom(id: ID! @eq): LiveRoom @find(model: "App\\LiveRoom")
+  live(id: Int! @eq): Live @find(model: "App\\Live")
 
   """
-  推荐直播间列表（就是目前在播的）
+  推荐直播列表（就是目前在播的）
   """
-  recommendLiveRoom: [LiveRoom]
-    @paginate(defaultCount: 10, builder: "App\\Live@resolveRecommendLiveRoom")
+  recommendLives: [Live]
+    @paginate(defaultCount: 10, builder: "App\\Live@resolveRecommendLives")
 
   """
   直播间在线观众(topN)
   """
-  getLiveRoomUsers(live_room_id: Int!): [User!]
-    @field(resolver: "App\\Live@resolveOnlineUsers")
+  roomUsers(room_id: Int!): [User!]
+    @field(resolver: "App\\LiveRoom@resolveRoomUsers")
 }

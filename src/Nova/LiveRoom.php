@@ -21,12 +21,12 @@ class LiveRoom extends Resource
 
     public static function label()
     {
-        return '直播';
+        return '直播间';
     }
 
     public static function singularLabel()
     {
-        return '直播';
+        return '直播间';
     }
 
     /**

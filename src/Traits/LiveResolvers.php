@@ -3,25 +3,23 @@
 namespace Haxibiao\Live\Traits;
 
 use App\Exceptions\UserException;
-use App\User;
 use Haxibiao\Live\Events\NewLiveRoomMessage;
 use Haxibiao\Live\Events\UserComeIn;
 use Haxibiao\Live\Events\UserGoOut;
 use Haxibiao\Live\Live;
 use Haxibiao\Live\LiveRoom;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Redis;
 
 trait LiveResolvers
 {
     /**
-     * 推荐直播间列表(就是目前在播的)
+     * 推荐直播列表(就是目前在播的)
      */
-    public function resolveRecommendLiveRoom($root, array $args, $context, $info)
+    public function resolveRecommendLives($root, array $args, $context, $info)
     {
         $pageNum = data_get($args, 'page', 1);
         $page    = data_get($args, 'first', data_get($args, 'page'));
-        return LiveRoom::onlineRoomsQuery($pageNum, $page);
+        return Live::onlineLivesQuery($pageNum, $page);
     }
 
     /**
@@ -35,7 +33,7 @@ trait LiveResolvers
         throw_if(!$title, UserException::class, '请输入直播间标题~');
 
         // 开直播
-        $room = $user->openLiveRoom($title);
+        $room = $user->openLive($title);
         return $room;
     }
 
@@ -109,25 +107,6 @@ trait LiveResolvers
         // 发socket通知
         LiveRoom::closeLiveRoom($room);
         return true;
-    }
-
-    /**
-     * 获取直播间观众列表(在线的)
-     */
-    public function resolveOnlineUsers($root, array $args, $context, $info)
-    {
-        $live = Live::find($args['live_id']);
-        $room = $live->room;
-
-        //获得在线的
-        $json = Redis::get($room->redis_room_key);
-        if (!$json) {
-            return null;
-        }
-        $userIds = json_decode($json, true);
-        // 去掉主播自己
-        $online_user_ids = array_diff($userIds, array($room->user_id));
-        return User::whereIn('id', $online_user_ids)->get();
     }
 
     /**

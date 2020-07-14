@@ -2,17 +2,22 @@
 
 namespace Haxibiao\Live\Tests\Feature\GraphQL;
 
+use App\LiveRoom;
 use App\User;
 use Haxibiao\Base\GraphQLTestCase;
 
 class LiveRoomTest extends GraphQLTestCase
 {
     protected $user;
-    protected $liveroom;
+    protected $liveRoom;
+    protected $live;
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::take(10)->get()->random();
+        $this->user     = User::take(10)->get()->random();
+        $this->liveRoom = $this->user->openLive("测试开直播");
+        $this->live     = $this->liveRoom->live;
+
     }
 
     public function testOpenLiveMutation()
@@ -20,66 +25,54 @@ class LiveRoomTest extends GraphQLTestCase
         $mutation = file_get_contents(__DIR__ . '/Live/Mutation/OpenLiveMutation.gql');
         $header   = $this->getHeaders($this->user);
         $data     = array(
-            "title" => "testLive",
+            "title" => "测试重开直播，修改标题",
         );
 
         $this->startGraphQL($mutation, $data, $header);
-        $this->liveroom = \Haxibiao\Live\LiveRoom::query()->latest('id')->first();
+
     }
 
-    public function testEnterLiveRoom()
+    public function testJoinLiveMutation()
     {
-        $mutation = file_get_contents(__DIR__ . '/Live/Mutation/EnterLiveRoom.gql');
+        $mutation = file_get_contents(__DIR__ . '/Live/Mutation/JoinLiveMutation.gql');
         $header   = $this->getHeaders($this->user);
-        $id       = $this->liveroom->id;
-        $data     = array(
-            "id" => $id,
-        );
-        $this->startGraphQL($mutation, $data, $header);
-    }
 
-    public function testLeaveLiveRoom()
-    {
-        $mutation = file_get_contents(__DIR__ . '/Live/Mutation/LeaveLiveRoom.gql');
-        $header   = $this->getHeaders($this->user);
-        $id       = $this->liveroom->id;
-        $data     = array(
-            "roomid" => $id,
+        $data = array(
+            "live_id" => $this->live->id,
         );
         $this->startGraphQL($mutation, $data, $header);
     }
 
-    public function testCommentLive()
+    public function testLeaveLiveMutation()
     {
-        $mutation = file_get_contents(__DIR__ . '/Live/Mutation/CommentLive.gql');
+        $mutation = file_get_contents(__DIR__ . '/Live/Mutation/LeaveLiveMutation.gql');
         $header   = $this->getHeaders($this->user);
-        $id       = $this->liveroom->id;
-        $data     = array(
-            "id"      => $id,
+
+        $data = array(
+            "live_id" => $this->live->id,
+        );
+        $this->startGraphQL($mutation, $data, $header);
+    }
+
+    public function testCommentLiveMutation()
+    {
+        $mutation = file_get_contents(__DIR__ . '/Live/Mutation/CommentLiveMutation.gql');
+        $header   = $this->getHeaders($this->user);
+
+        $data = array(
+            "live_id" => $this->live->id,
             "message" => "张志明真帅",
         );
         $this->startGraphQL($mutation, $data, $header);
     }
 
-    public function testCloseLiveRoom()
+    public function testCloseLiveMutation()
     {
-        $mutation = file_get_contents(__DIR__ . '/Live/Mutation/CloseLiveRoom.gql');
+        $mutation = file_get_contents(__DIR__ . '/Live/Mutation/CloseLiveMutation.gql');
         $header   = $this->getHeaders($this->user);
-        $live     = $this->user->live;
-        $id       = $live->id;
-        $data     = array(
-            "roomid" => $id,
-        );
-        $this->startGraphQL($mutation, $data, $header);
-    }
 
-    public function testExceptionLiveReport()
-    {
-        $mutation = file_get_contents(__DIR__ . '/Live/Mutation/ExceptionLiveReport.gql');
-        $header   = $this->getHeaders($this->user);
-        $id       = $this->liveroom->id;
-        $data     = array(
-            "roomid" => $id,
+        $data = array(
+            "live_id" => $this->live->id,
         );
         $this->startGraphQL($mutation, $data, $header);
     }
@@ -88,9 +81,9 @@ class LiveRoomTest extends GraphQLTestCase
     // /* ------------------------------- Query ----------------------------- */
     // /* --------------------------------------------------------------------- */
 
-    public function testRecommendLiveRoom()
+    public function testRecommendLivesQuery()
     {
-        $mutation = file_get_contents(__DIR__ . '/Live/Query/RecommendLiveRoom.gql');
+        $mutation = file_get_contents(__DIR__ . '/Live/Query/RecommendLivesQuery.gql');
         $header   = $this->getHeaders($this->user);
         $data     = array(
             "page" => 1,
@@ -98,21 +91,21 @@ class LiveRoomTest extends GraphQLTestCase
         $this->startGraphQL($mutation, $data, $header);
     }
 
-    public function testGetLiveRoomUsers()
+    public function testRoomUsersQuery()
     {
-        $mutation = file_get_contents(__DIR__ . '/Live/Query/GetLiveRoomUsers.gql');
+        $mutation = file_get_contents(__DIR__ . '/Live/Query/RoomUsersQuery.gql');
         $header   = $this->getHeaders($this->user);
-        $id       = $this->liveroom->id;
-        $data     = array(
-            "roomid" => $id,
+
+        $data = array(
+            "room_id" => $this->liveRoom->id,
         );
         $this->startGraphQL($mutation, $data, $header);
     }
 
     protected function tearDown(): void
     {
-        // $this->user->liveRoom->forceDelete();
-        //$this->user->forceDelete();
+        $this->liveRoom->forceDelete();
+        $this->live->forceDelete();
         parent::tearDown();
     }
 }

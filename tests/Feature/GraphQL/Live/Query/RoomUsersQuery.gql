@@ -1,0 +1,8 @@
+#在线观众列表
+query RoomUsersQuery($room_id: Int!) {
+  roomUsers(room_id: $room_id) {
+    id
+    name
+    avatar
+  }
+}

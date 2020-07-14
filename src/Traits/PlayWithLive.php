@@ -3,9 +3,9 @@
 namespace Haxibiao\Live\Traits;
 
 use Haxibiao\Base\User;
+use Haxibiao\Live\Live;
 use Haxibiao\Live\LiveRoom;
 use Haxibiao\Live\LiveUtils;
-use Haxibiao\Live\UserLive;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Redis;
@@ -15,23 +15,26 @@ use Illuminate\Support\Facades\Redis;
  */
 trait PlayWithLive
 {
-    public function liveRoom(): HasOne
+    public function myLiveRoom(): HasOne
     {
         return $this->hasOne(LiveRoom::class);
     }
 
+    /**
+     * 多场直播
+     */
     public function lives(): HasMany
     {
-        return $this->hasMany(UserLive::class);
+        return $this->hasMany(Live::class);
     }
 
     /**
-     * 一个用户 一个直播间（默认）
+     * 一个直播间（默认）
      */
     public function getLiveRoomAttribute()
     {
-        if ($live = $this->liveRoom) {
-            return $live;
+        if ($liveRoom = $this->myLiveRoom) {
+            return $liveRoom;
         }
         return LiveRoom::firstOrCreate(['user_id' => $this->id]);
     }
@@ -57,20 +60,25 @@ trait PlayWithLive
      * 开直播
      * @param string $title 直播间标题
      */
-    public function openLiveRoom(string $title): LiveRoom
+    public function openLive(string $title): LiveRoom
     {
         $user = $this; //主播
-        $room = $user->liveRoom; //开直播间
+        $room = $user->liveRoom; //直播间
 
-        //开直播秀
+        //开直播
         $live       = $room->live;
         $streamName = $live->streamName;
 
-        $live->push_stream_key = LiveUtils::genPushKey($streamName);
-        $live->push_stream_url = LiveRoom::getPushUrl();
-        $live->pull_stream_url = LiveRoom::getPullUrl() . "/" . $streamName;
-        $live->stream_name     = $streamName;
-        $live->title           = $title;
+        //新的直播
+        if (is_null($live->push_stream_key)) {
+            $live->push_stream_key = LiveUtils::genPushKey($streamName);
+            $live->push_stream_url = LiveUtils::getPushUrl();
+            $live->pull_stream_url = LiveUtils::getPullUrl() . "/" . $streamName;
+            $live->stream_name     = $streamName;
+        }
+
+        //重连回来可修改标题...
+        $live->title = $title;
         $live->save();
 
         // 设置redis 直播室初始值

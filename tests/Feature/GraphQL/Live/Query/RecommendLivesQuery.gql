@@ -1,6 +1,6 @@
 #直播列表
-query RecommendLiveRoom($page: Int) {
-  recommendLiveRoom(page: $page) {
+query RecommendLivesQuery($page: Int) {
+  recommendLives(page: $page) {
     paginatorInfo {
       currentPage
       hasMorePages
