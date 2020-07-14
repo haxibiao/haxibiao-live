@@ -106,6 +106,8 @@ class LiveUtils
 
     /**
      * 获取腾讯云推流密钥(主播使用)
+     *
+     * 返回示例：liveteststream?txSecret=225cf0e108c321755121cf5b2355d572&txTime=5F0EA446
      * @param $domain
      * @param $streamName
      * @param $key

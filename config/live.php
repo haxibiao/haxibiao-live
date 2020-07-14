@@ -1,6 +1,6 @@
 <?php
 return [
-    'secret_id'        => 'AKID50fqHTh7kAPPJCEEMPcfUDqKYWP4oOJT',
+    'secret_id'        => env('LIVE_SECRET_ID', 'AKID50fqHTh7kAPPJCEEMPcfUDqKYWP4oOJT'),
     'secret_key'       => env('LIVE_SECRET_KEY'),
 
     //推流key
