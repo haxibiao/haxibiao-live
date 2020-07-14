@@ -1,6 +1,0 @@
-#用户离开直播间
-mutation LeaveLiveRoom($roomid:ID!){
-  leaveLiveRoom(live_room_id:$roomid){
-    id
-  }
-}

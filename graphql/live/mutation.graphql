@@ -2,7 +2,7 @@ extend type Mutation {
   """
   开直播
   """
-  createLive(title: String): Live @field(resolver: "App\\Live@resolveOpen")
+  openLive(title: String): Live @field(resolver: "App\\Live@resolveOpen")
   """
   加入直播
   """
@@ -20,9 +20,4 @@ extend type Mutation {
   主播关闭直播
   """
   closeLive(live_id: Int!): Boolean @field(resolver: "App\\Live@resolveClose")
-  """
-  直播间异常（断流）上报
-  """
-  ExceptionLive(live_id: Int!): Boolean
-    @field(resolver: "App\\Live@resolveExceptionFired")
 }

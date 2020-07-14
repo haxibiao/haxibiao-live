@@ -1,4 +1,4 @@
 #直播间发表评论
-mutation CommentLive($id: ID!, $message: String!) {
-  commentLiveRoom(live_room_id: $id, message: $message)
+mutation CommentLiveMutation($id: Int!, $message: String!) {
+  commentLive(live_id: $id, message: $message)
 }

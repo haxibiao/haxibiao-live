@@ -1,4 +1,0 @@
-#主播直播间异常下播
-mutation ExceptionLiveReport($roomid:ID!){
-  ExceptionLiveRoom(live_room_id:$roomid)
-}

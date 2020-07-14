@@ -1,4 +1,4 @@
 #下播
-mutation CloseLiveRoom($roomid: ID!){
-  closeLiveRoom(live_room_id: $roomid)
+mutation CloseLiveMutation($live_id: Int!) {
+  closeLive(live_id: $live_id)
 }
