@@ -4,6 +4,7 @@ namespace Haxibiao\Live\Jobs;
 
 use App\Video;
 use Haxibiao\Helpers\VodUtils;
+use Haxibiao\Live\Live;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,20 +18,22 @@ use TencentCloud\Vod\V20180717\VodClient;
 /**
  * 处理直播录制的VOD文件,更新主播直播时长和视频预热
  */
-class ProcessLiveRecordingVodFile implements ShouldQueue
+class ProcessRecording implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
-    protected $video_id;
+    protected $live;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($video_id)
+    public function __construct(Live $live)
     {
-        $this->video_id = $video_id;
+        $this->live = $live;
+        $this->delay(now()->addMinute());
+        $this->onQueue('video');
     }
 
     /**
@@ -40,35 +43,28 @@ class ProcessLiveRecordingVodFile implements ShouldQueue
      */
     public function handle()
     {
-        $video    = Video::find($this->video_id);
-        $fileInfo = VodUtils::getVideoInfo($video->qcvod_fileid);
-        $coverUrl = data_get($fileInfo, 'basicInfo.coverUrl');
-        // 取整个大文件的散列值会很耗时间且失败率大, 简单处理: 超过60秒的视频不取散列值
-        if ($video->duration < 60) {
-            $hash = hash_file('md5', $video->path);
-        }
-        $video->update([
-            'cover' => $coverUrl,
-            'hash'  => $hash ?? null,
-        ]);
-        // 更新用户直播记录的直播时长
-        $this->updateUserLiveDuration($video);
+        //回放视频
+        $video = $this->live->video;
+
+        // 开始VOD处理
+        VodUtils::makeCoverAndSnapshots($video->qcvod_fileid);
+
+        //给vod 2秒处理封面的时间
+        sleep(2);
+
+        // 获取vod视频信息
+        $videoInfo = VodUtils::getVideoInfo($video->qcvod_fileid);
+        //cdn
+        $video->path = data_get($videoInfo, 'basicInfo.sourceVideoUrl');
+        //时长
+        $video->duration = data_get($videoInfo, 'basicInfo.duration');
+        //封面
+        $video->cover = data_get($videoInfo, 'basicInfo.coverUrl');
+        $video->disk  = 'vod';
+        $video->save();
+
         // 视频预热
         self::pushUrlCacheWithVODUrl($video->path);
-    }
-
-    /**
-     * 更新用户直播记录的直播时长
-     */
-    public function updateUserLiveDuration(Video $video)
-    {
-        $user = $video->user;
-        // $live 获得的用户最近一次的直播，假如用户1分钟内开了多次直播，可能会更新错时长
-        if ($user && $live = $user->getCurrentLive()) {
-            $live->update([
-                'live_duration' => $video->duration,
-            ]);
-        }
     }
 
     /**

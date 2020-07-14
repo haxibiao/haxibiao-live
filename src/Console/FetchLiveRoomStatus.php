@@ -39,13 +39,12 @@ class FetchLiveRoomStatus extends Command
      */
     public function handle()
     {
-        $live_utils = LiveUtils::getInstance();
-        $streamData = $live_utils->getStreamOnlineList(1);
+        $streamData = LiveUtils::getStreamOnlineList(1);
         $totalPage  = data_get($streamData, 'TotalPage');
         // 获取腾讯云给的正在直播的流名称列表
         $streamNameList = [];
         for ($pageNum = 1; $pageNum < $totalPage; $pageNum++) {
-            $streamData       = $live_utils->getStreamOnlineList($pageNum);
+            $streamData       = LiveUtils::getStreamOnlineList($pageNum);
             $streamNameList[] = data_get($streamData, 'StreamName');
         }
         if (empty($streamNameList)) {

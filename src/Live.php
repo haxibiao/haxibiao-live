@@ -4,18 +4,23 @@ namespace Haxibiao\Live;
 
 use App\User;
 use App\Video;
-use Haxibiao\Live\Traits\UserLiveRepo;
-use Illuminate\Database\Eloquent\Model;
+use Haxibiao\Base\Model;
+use Haxibiao\Live\Traits\LiveAttrs;
+use Haxibiao\Live\Traits\LiveRepo;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * 单场直播秀
  */
-class UserLive extends Model
+class Live extends Model
 {
-    use UserLiveRepo;
+    use LiveRepo;
+    use LiveAttrs;
 
-    protected $table = 'user_lives';
+    protected $table = 'lives';
+
+    const STATUS_OFFLINE = -1;
+    const STATUS_ONLINE  = 0;
 
     protected $casts = [
         'data' => 'array',
@@ -34,7 +39,7 @@ class UserLive extends Model
     /**
      * 属于哪个直播间
      */
-    public function live(): BelongsTo
+    public function room(): BelongsTo
     {
         return $this->belongsTo(LiveRoom::class);
     }

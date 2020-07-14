@@ -3,11 +3,38 @@
 namespace Haxibiao\Live\Traits;
 
 use App\LiveRoom;
+use Haxibiao\Live\Live;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 
 trait LiveRoomAttrs
 {
+
+    /**
+     * 直播间默认的直播秀
+     */
+    public function getLiveAttribute()
+    {
+        $live = $this->lives()->where('status', '>=', 0)->latest('id')->first();
+        //没有，开一个，关了，再开一个
+        if (is_null($live)) {
+            $live = Live::create([
+                'user_id' => $this->user_id,
+                'room_id' => $this->id,
+            ]);
+            return $live;
+        }
+        return $live;
+    }
+
+    /**
+     * 直播间标题
+     */
+    public function getTitleAttribute()
+    {
+        return $this->live->title;
+    }
+
     public function getRedisRoomKeyAttribute(): string
     {
         return "live_room_{$this->id}";
@@ -26,8 +53,9 @@ trait LiveRoomAttrs
 
     public function getPullUrlAttribute(): string
     {
+        $live = $this->live;
         return LiveRoom::prefix . config('live.live_pull_domain') . "/" . config('live.app_name') . "/"
-        . LiveRoom::makeStreamName($this);
+        . $live->stream_name;
     }
 
     public function getCoverUrlAttribute(): string

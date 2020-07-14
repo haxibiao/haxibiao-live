@@ -2,31 +2,27 @@ extend type Mutation {
   """
   开直播
   """
-  createLiveRoom(title: String): LiveRoom
-    @field(resolver: "App\\LiveRoom@resolveOpen")
+  createLive(title: String): Live @field(resolver: "App\\Live@resolveOpen")
   """
   加入直播
   """
-  joinLiveRoom(live_room_id: ID!): LiveRoom
-    @field(resolver: "App\\LiveRoom@resolveJoin")
+  joinLive(live_id: Int!): Live @field(resolver: "App\\Live@resolveJoin")
   """
   直播间评论
   """
-  commentLiveRoom(live_room_id: ID!, message: String!): String
-    @field(resolver: "App\\LiveRoom@resolveComment")
+  commentLive(live_id: Int!, message: String!): String
+    @field(resolver: "App\\Live@resolveComment")
   """
   离开直播间
   """
-  leaveLiveRoom(live_room_id: ID!): LiveRoom
-    @field(resolver: "App\\LiveRoom@resolveLeave")
+  leaveLive(live_id: Int!): Live @field(resolver: "App\\Live@resolveLeave")
   """
   主播关闭直播
   """
-  closeLiveRoom(live_room_id: ID!): Boolean
-    @field(resolver: "App\\LiveRoom@resolveClose")
+  closeLive(live_id: Int!): Boolean @field(resolver: "App\\Live@resolveClose")
   """
   直播间异常（断流）上报
   """
-  ExceptionLiveRoom(live_room_id: ID!): Boolean
-    @field(resolver: "App\\LiveRoom@resolveExceptionFired")
+  ExceptionLive(live_id: Int!): Boolean
+    @field(resolver: "App\\Live@resolveExceptionFired")
 }

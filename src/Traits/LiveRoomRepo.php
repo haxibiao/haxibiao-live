@@ -15,8 +15,8 @@ trait LiveRoomRepo
      */
     public static function onlineRoomsQuery($pageNum, $pageSize)
     {
-        $live_utils     = LiveUtils::getInstance();
-        $onlineInfo     = $live_utils->getStreamOnlineList($pageNum, $pageSize);
+        //FIXME: 在线的直播间列表，应该依赖扫描结果，从db查询
+        $onlineInfo     = LiveUtils::getStreamOnlineList($pageNum, $pageSize);
         $streamList     = data_get($onlineInfo, 'OnlineInfo');
         $streamNameList = [];
         foreach ($streamList as $stream) {
@@ -44,50 +44,5 @@ trait LiveRoomRepo
         $room->status = LiveRoom::STATUS_OFF; //直播间状态
         $room->save(); //更新时间
 
-    }
-
-    /**
-     * 获取腾讯云推流密钥(主播使用)
-     * @param $domain
-     * @param $streamName
-     * @param $key
-     * @param null $endTime
-     * @return string
-     */
-    public static function genPushKey($streamName): string
-    {
-        //直播结束时间
-        $endTime = now()->addDay()->toDateTimeString();
-        $key     = config('live.live_key');
-
-        if ($key && $endTime) {
-            $txTime   = strtoupper(base_convert(strtotime($endTime), 10, 16));
-            $txSecret = md5($key . $streamName . $txTime);
-            $ext_str  = '?' . http_build_query(array(
-                'txSecret' => $txSecret,
-                'txTime'   => $txTime,
-            ));
-        }
-        return $streamName . ($ext_str ?? '');
-    }
-
-    /**
-     * 获取流名称（唯一）
-     * @param User $user
-     * @return string
-     */
-    public static function makeStreamName($user)
-    {
-        return "u{$user->id}";
-    }
-
-    public static function getPushUrl()
-    {
-        return config('live.live_push_domain') . "/" . config('live.app_name');
-    }
-
-    public static function getPullUrl()
-    {
-        return config('live.live_pull_domain') . "/" . config('live.app_name');
     }
 }

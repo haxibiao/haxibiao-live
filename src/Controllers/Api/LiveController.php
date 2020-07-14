@@ -4,9 +4,10 @@ namespace Haxibiao\Live\Controllers\Api;
 
 use App\Exceptions\UserException;
 use App\Http\Controllers\Controller;
+use App\Video;
+use Haxibiao\Live\Jobs\ProcessRecording;
+use Haxibiao\Live\Live;
 use Haxibiao\Live\LiveRoom;
-use Haxibiao\Live\Traits\PlayWithLive;
-use Haxibiao\Live\UserLive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -24,7 +25,7 @@ class LiveController extends Controller
         abort_if(empty($room), 404, '未找到页面');
         return view('live.share', [
             'pull_domain' => config('live.live_pull_domain'),
-            'stream_name' => $room->stream_name,
+            'stream_name' => $room->live->stream_name,
         ]);
     }
 
@@ -37,11 +38,12 @@ class LiveController extends Controller
         $streamName = data_get($data, 'stream_id');
         $errcode    = data_get($data, 'errcode');
         if ($errcode == 0) {
-            $room = LiveRoom::where('stream_name', $streamName)->first();
+            $live = Live::where('stream_name', $streamName)->first();
+            // $room = $live->room;
             // OBS开直播没有title
-            if ($room && !empty($room->title)) {
-                $room->update([
-                    'status' => LiveRoom::STATUS_ON,
+            if ($live && !empty($live->title)) {
+                $live->update([
+                    'status' => Live::STATUS_ONLINE,
                     'title'  => '快来我的直播间🤖🤖',
                 ]);
             }
@@ -72,25 +74,30 @@ class LiveController extends Controller
         }
     }
 
-    //保存回放
+    //保存直播回放
     public function recording(Request $request)
     {
         $recordingInfo = $request->all();
         info(json_encode($recordingInfo));
-        $vodFileId = data_get($recordingInfo, 'file_id');
-        $channelId = data_get($recordingInfo, 'channel_id');
-        $room      = LiveRoom::where('stream_name', $channelId)->first();
+        $fileId      = data_get($recordingInfo, 'file_id');
+        $stream_name = data_get($recordingInfo, 'channel_id');
+        $live        = Live::where('stream_name', $stream_name)->first();
+        $room        = $live->room;
         if ($room) {
-            $user = $room->user;
-            // 保存 vod录制文件并记录信息到直播记录
-            $video = PlayWithLive::processLiveRecording($vodFileId, $user);
-            // 在用户直播记录中 关联 直播视频文件
-            $userLive = $user->getCurrentLive();
-            if (empty($userLive)) {
-                $userLive = UserLive::recordLive($user, $room);
-            }
-            $userLive->video_id = $video->id;
-            $userLive->save();
+
+            //为vod创建video
+            $video = Video::firstOrNew([
+                'qcvod_fileid' => $fileId,
+                'user_id'      => $room->user_id,
+            ]);
+            $video->save();
+
+            //触发保存截图和更新主播直播时长
+            dispatch(new ProcessRecording($live));
+
+            // 关联回放视频
+            $live->video_id = $video->id;
+            $live->save();
         }
     }
 
@@ -125,9 +132,9 @@ class LiveController extends Controller
         $eventType  = Arr::get($cutOutInfo, 'event_type', null);
 
         if ($eventType && $streamName) {
-            $room = LiveRoom::whereStreamName($streamName)->first();
-            if ($room->status === LiveRoom::STATUS_ON) {
-                LiveRoom::closeRoom($room);
+            $live = Live::whereStreamName($streamName)->first();
+            if ($live->status === Live::STATUS_ONLINE) {
+                LiveRoom::closeLive($live);
             }
         }
     }
