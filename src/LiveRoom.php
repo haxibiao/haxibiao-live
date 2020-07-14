@@ -4,7 +4,6 @@ namespace Haxibiao\Live;
 
 use App\User;
 use Haxibiao\Base\Model;
-use Haxibiao\Live\Live;
 use Haxibiao\Live\Traits\LiveRoomAttrs;
 use Haxibiao\Live\Traits\LiveRoomRepo;
 use Haxibiao\Live\Traits\LiveRoomResolvers;

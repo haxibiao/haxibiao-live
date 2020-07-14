@@ -33,8 +33,7 @@ trait LiveResolvers
         throw_if(!$title, UserException::class, '请输入直播间标题~');
 
         // 开直播
-        $room = $user->openLive($title);
-        return $room;
+        return $user->openLive($title);
     }
 
     /**
@@ -97,11 +96,15 @@ trait LiveResolvers
         $room = $live->room;
 
         // 不是创建者不能关
-        if ($room && $user->id !== $room->user_id) {
-            throw new UserException('关闭直播失败~');
+        if ($room && $user->id !== $live->user_id) {
+            throw new UserException('关闭直播秀失败~');
         }
 
         $live->status = Live::STATUS_OFFLINE;
+
+        // 关闭直播间需要刷新推流key
+        $live->push_stream_key = null;
+
         $live->save();
 
         // 发socket通知

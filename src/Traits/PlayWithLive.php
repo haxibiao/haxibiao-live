@@ -60,14 +60,14 @@ trait PlayWithLive
      * 开直播
      * @param string $title 直播间标题
      */
-    public function openLive(string $title): LiveRoom
+    public function openLive(string $title): Live
     {
         $user = $this; //主播
         $room = $user->liveRoom; //直播间
 
         //开直播
         $live       = $room->live;
-        $streamName = $live->streamName;
+        $streamName = $live->stream_name;
 
         //新的直播
         if (is_null($live->push_stream_key)) {
@@ -82,9 +82,9 @@ trait PlayWithLive
         $live->save();
 
         // 设置redis 直播室初始值
-        Redis::set($room->redis_room_key, json_encode(array($user->id)));
+        Redis::set($room->id, json_encode(array($user->id)));
 
-        return $room;
+        return $live;
     }
 
     /**

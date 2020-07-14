@@ -2,6 +2,7 @@
 
 namespace Haxibiao\Live\Console;
 
+use App\Live;
 use Haxibiao\Live\LiveRoom;
 use Haxibiao\Live\LiveUtils;
 use Illuminate\Console\Command;
@@ -52,11 +53,11 @@ class FetchLiveRoomStatus extends Command
         }
         // 正在直播的状态
         LiveRoom::whereIn('stream_name', $streamNameList)->update([
-            'status' => LiveRoom::STATUS_ON,
+            'status' => Live::STATUS_ONLINE,
         ]);
         // 已下播的状态
         LiveRoom::whereNotIn('stream_name', $streamNameList)->update([
-            'status' => LiveRoom::STATUS_OFF,
+            'status' => Live::STATUS_OFFLINE,
         ]);
     }
 }

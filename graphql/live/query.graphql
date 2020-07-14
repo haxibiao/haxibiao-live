@@ -34,11 +34,15 @@ type Live {
   user: User! @belongsTo
 
   """
+  标题
+  """
+  title: String
+
+  """
   直播间
   """
   room: LiveRoom!
 
-  title: String
   push_stream_url: String
   push_stream_key: String
   push_url: String

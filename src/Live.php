@@ -45,7 +45,7 @@ class Live extends Model
      */
     public function room(): BelongsTo
     {
-        return $this->belongsTo(LiveRoom::class);
+        return $this->belongsTo(LiveRoom::class,'live_room_id');
     }
 
     /**
