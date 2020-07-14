@@ -1,11 +1,14 @@
 #加入直播间
 mutation JoinLiveMutation($live_id: Int!) {
-  joinLive(live_id: $id) {
+  joinLive(live_id: $live_id) {
     id
     title
     pull_url
-    cover
-    count_audience
+    room {
+      id
+      cover
+    }
+    count_users
     user {
       id
       name

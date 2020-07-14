@@ -7,6 +7,7 @@ use App\Video;
 use Haxibiao\Base\Model;
 use Haxibiao\Live\Traits\LiveAttrs;
 use Haxibiao\Live\Traits\LiveRepo;
+use Haxibiao\Live\Traits\LiveResolvers;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -16,6 +17,7 @@ class Live extends Model
 {
     use LiveRepo;
     use LiveAttrs;
+    use LiveResolvers;
 
     protected $table = 'lives';
 

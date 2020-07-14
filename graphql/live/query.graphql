@@ -1,19 +1,21 @@
 type LiveRoom {
   id: Int!
-  title: String
   """
   主播（兼容已上线版本gql）
   """
   streamer: User!
     @rename(attribute: "user")
     @deprecated(reason: "概念太多，容易乱")
+
   """
   主播
   """
   user: User! @belongsTo
 
+  """
+  直播间封面
+  """
   cover: String @rename(attribute: "cover_url")
-  count_audience: Int @rename(attribute: "count_online_audience")
   created_at: String
   updated_at: String
 
@@ -25,6 +27,17 @@ type LiveRoom {
 
 type Live {
   id: Int!
+
+  """
+  主播
+  """
+  user: User! @belongsTo
+
+  """
+  直播间
+  """
+  room: LiveRoom!
+
   title: String
   push_stream_url: String
   push_stream_key: String
@@ -32,10 +45,17 @@ type Live {
   pull_url: String
   pull_stream_url: String
   stream_name: String
+
+  """
+  直播观看人数
+  """
+  count_users: Int
+
   """
   直播回放的时长
   """
   duration: String
+
   created_at: String
   updated_at: String
 }
