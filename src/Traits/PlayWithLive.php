@@ -82,7 +82,7 @@ trait PlayWithLive
         $live->save();
 
         // 设置redis 直播室初始值
-        Redis::set($room->id, json_encode(array($user->id)));
+        Redis::set($live->redis_key, json_encode(array($user->id)));
 
         return $live;
     }
@@ -100,8 +100,7 @@ trait PlayWithLive
             if (empty($json)) {
                 $appendValue = array($user->id);
             } else {
-                $users = json_decode($json, true);
-
+                $users = array(json_decode($json, true));
                 // 将新观众记录到 value 中
                 $users[] = $user->id;
                 $appendValue = $users;

@@ -42,7 +42,10 @@ trait LiveResolvers
     {
         $user = getUser();
         $live = Live::find($args['live_id']);
-        throw_if(!is_testing_env() && !$live->status, UserException::class, '抱歉，主播已下播~');
+        // !is_testing_env() && throw_if(!$live->status, UserException::class, '抱歉，主播已下播~');
+        if ($live->status < 0) {
+            throw \Exception::class('抱歉，主播已下播~');
+        }
 
         // UI事件：
         event(new UserComeIn($user, $live));

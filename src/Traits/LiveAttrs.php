@@ -19,7 +19,7 @@ trait LiveAttrs
         return "u{$user->id}l${live_id}";
     }
 
-    public function getRedisLiveKeyAttribute(): string
+    public function getRedisKeyAttribute(): string
     {
         return env('APP_NAME') . "_live_{$this->id}";
     }
@@ -28,7 +28,7 @@ trait LiveAttrs
     /**
      * 直播当前在线人数
      */
-    public function getCountOnlineAudienceAttribute(): int
+    public function getCountUsersAttribute(): int
     {
         $count = json_decode(Redis::get($this->redis_key), true);
         return $count ? count($count) : 0;
