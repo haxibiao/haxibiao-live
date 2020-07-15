@@ -2,14 +2,15 @@
 
 namespace Haxibiao\Live\Tests\Feature\GraphQL;
 
-use App\LiveRoom;
 use App\User;
 use Haxibiao\Base\GraphQLTestCase;
 
 class LiveTest extends GraphQLTestCase
 {
+    //用户
     protected $user;
-    protected $liveRoom;
+
+    //直播秀
     protected $live;
 
     protected function setUp(): void
@@ -17,7 +18,7 @@ class LiveTest extends GraphQLTestCase
         parent::setUp();
         $this->user     = User::take(10)->get()->random();
         $this->live     = $this->user->openLive("测试开直播");
-        $this->liveRoom = $this->live->room;
+        
     }
 
     public function testOpenLiveMutation()
@@ -61,7 +62,7 @@ class LiveTest extends GraphQLTestCase
 
         $data = array(
             "live_id" => $this->live->id,
-            "message" => "张志明真帅",
+            "message" => "明明是国玮真帅",
         );
         $this->startGraphQL($mutation, $data, $header);
     }
@@ -97,7 +98,7 @@ class LiveTest extends GraphQLTestCase
         $header   = $this->getHeaders($this->user);
 
         $data = array(
-            "room_id" => $this->liveRoom->id,
+            "live_id" => $this->live->id,
         );
         $this->startGraphQL($mutation, $data, $header);
     }

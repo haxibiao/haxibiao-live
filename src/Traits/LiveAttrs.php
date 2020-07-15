@@ -2,6 +2,8 @@
 
 namespace Haxibiao\Live\Traits;
 
+use Illuminate\Support\Facades\Redis;
+
 /**
  * 直播秀的属性
  */
@@ -15,5 +17,20 @@ trait LiveAttrs
         $user    = $this->user;
         $live_id = $this->id;
         return "u{$user->id}l${live_id}";
+    }
+
+    public function getRedisLiveKeyAttribute(): string
+    {
+        return env('APP_NAME') . "_live_{$this->id}";
+    }
+
+
+    /**
+     * 直播当前在线人数
+     */
+    public function getCountOnlineAudienceAttribute(): int
+    {
+        $count = json_decode(Redis::get($this->redis_key), true);
+        return $count ? count($count) : 0;
     }
 }

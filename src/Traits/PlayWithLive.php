@@ -21,7 +21,7 @@ trait PlayWithLive
     }
 
     /**
-     * 多场直播
+     * 用户有多场直播
      */
     public function lives(): HasMany
     {
@@ -29,7 +29,7 @@ trait PlayWithLive
     }
 
     /**
-     * 一个直播间（默认）
+     * 用户有一个直播间（默认）
      */
     public function getLiveRoomAttribute()
     {
@@ -94,17 +94,21 @@ trait PlayWithLive
     {
         $room = $live->room;
         $user = $this; // 观众
-        if ($json = Redis::exists($room->redis_room_key)) {
+
+        if ($json = Redis::exists($live->redis_key)) {
+
             if (empty($json)) {
                 $appendValue = array($user->id);
             } else {
-                $users       = json_decode($json, true);
-                $users[]     = $user->id;
+                $users = json_decode($json, true);
+
+                // 将新观众记录到 value 中
+                $users[] = $user->id;
                 $appendValue = $users;
             }
             // 去重
             $appendValue = array_unique($appendValue);
-            Redis::set($room->redis_room_key, json_encode($appendValue));
+            Redis::set($live->redis_key, json_encode($appendValue));
             // 记录到主播的直播记录中
             $streamer = $room->user;
             $live     = $streamer->getCurrentLive();
@@ -117,14 +121,13 @@ trait PlayWithLive
      */
     public function leaveLive(Live $live)
     {
-        $room = $live->room;
         $user = $this; //观众
-        $json = Redis::get($room->redis_room_key);
+        $json = Redis::get($live->redis_key);
         if ($json) {
             $userIds = json_decode($json, true);
             // 从数组中删除要离开的用户
             $userIds = array_diff($userIds, array($user->id));
-            Redis::set($room->redis_room_key, json_encode($userIds));
+            Redis::set($live->redis_key, json_encode($userIds));
         }
     }
 }

@@ -1,11 +1,12 @@
 type LiveRoom {
   id: Int!
+
   """
   主播（兼容已上线版本gql）
   """
   streamer: User!
-    @rename(attribute: "user")
-    @deprecated(reason: "概念太多，容易乱")
+  @rename(attribute: "user")
+  @deprecated(reason: "概念太多，容易乱")
 
   """
   主播
@@ -16,13 +17,16 @@ type LiveRoom {
   直播间封面
   """
   cover: String @rename(attribute: "cover_url")
-  created_at: String
-  updated_at: String
 
   """
   直播间的默认直播
   """
-  live: Live
+  lives: Live
+
+  created_at: String
+
+  updated_at: String
+
 }
 
 type Live {
@@ -34,19 +38,34 @@ type Live {
   user: User! @belongsTo
 
   """
-  标题
-  """
-  title: String
-
-  """
   直播间
   """
   room: LiveRoom!
 
+  """
+  直播间标题
+  """
+  title: String
+
+  """
+  推流地址
+  """
   push_stream_url: String
+
+  """
+  鉴权密钥
+  """
   push_stream_key: String
+
+
   push_url: String
+
+
   pull_url: String
+
+  """
+  播放地址（拉流地址）
+  """
   pull_stream_url: String
   stream_name: String
 
@@ -74,11 +93,11 @@ extend type Query {
   推荐直播列表（就是目前在播的）
   """
   recommendLives: [Live]
-    @paginate(defaultCount: 10, builder: "App\\Live@resolveRecommendLives")
+  @paginate(defaultCount: 10, builder: "App\\Live@resolveRecommendLives")
 
   """
   直播间在线观众(topN)
   """
-  roomUsers(room_id: Int!): [User!]
-    @field(resolver: "App\\LiveRoom@resolveRoomUsers")
+  roomUsers(live_id: Int!): [User!]
+  @field(resolver: "App\\LiveRoom@resolveRoomUsers")
 }

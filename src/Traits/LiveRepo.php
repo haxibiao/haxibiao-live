@@ -41,8 +41,8 @@ trait LiveRepo
     {
         event(new OwnerCloseLive($live, '主播关闭了直播~'));
 
-        if (Redis::exists($live->id)) {
-            Redis::del($live->id);
+        if (Redis::exists($live->redis_key)) {
+            Redis::del($live->redis_key);
         }
 
         $live->save(); //更新时间

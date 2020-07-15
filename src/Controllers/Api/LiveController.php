@@ -82,13 +82,12 @@ class LiveController extends Controller
         $fileId      = data_get($recordingInfo, 'file_id');
         $stream_name = data_get($recordingInfo, 'channel_id');
         $live        = Live::where('stream_name', $stream_name)->first();
-        $room        = $live->room;
-        if ($room) {
+        if ($live) {
 
             //为vod创建video
             $video = Video::firstOrNew([
                 'qcvod_fileid' => $fileId,
-                'user_id'      => $room->user_id,
+                'user_id'      => $live->user_id,
             ]);
             $video->save();
 

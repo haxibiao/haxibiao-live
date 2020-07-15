@@ -107,19 +107,4 @@ trait LiveResolvers
         return true;
     }
 
-    /**
-     * 直播间异常（断流）
-     * @deprecated
-     */
-    public function resolveExceptionFired($root, array $args, $context, $info)
-    {
-        // $live_room_id = Arr::get($args, 'live_room_id', null);
-        // $room         = LiveRoom::find($live_room_id);
-        // $room->increment('count_exception');
-        // // 两名观众监测了异常，直接关闭
-        // if ($room->count_exception >= 1 && $room->status === LiveRoom::STATUS_ON) {
-        //     LiveRoom::closeLiveRoom($room);
-        // }
-        return true;
-    }
 }

@@ -47,7 +47,7 @@ class LiveRoom extends Model
      */
     public function lives(): HasMany
     {
-        return $this->hasMany(Live::class);
+        return $this->hasMany(Live::class, 'live_room_id');
     }
 
     public static function getStatuses(): array

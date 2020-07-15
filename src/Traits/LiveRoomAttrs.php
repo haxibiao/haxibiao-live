@@ -36,17 +36,6 @@ trait LiveRoomAttrs
         return $this->live->title;
     }
 
-    public function getRedisRoomKeyAttribute(): string
-    {
-        return env('APP_NAME') . "_live_room_{$this->id}";
-    }
-
-    public function getCountOnlineAudienceAttribute(): int
-    {
-        $count = json_decode(Redis::get($this->redis_room_key), true);
-        return $count ? count($count) : 0;
-    }
-
     public function getPushUrlAttribute(): string
     {
         return LiveRoom::prefix . $this->push_stream_url . "/" . $this->push_stream_key;

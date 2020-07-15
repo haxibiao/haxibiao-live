@@ -1,6 +1,6 @@
 #在线观众列表
-query RoomUsersQuery($room_id: Int!) {
-  roomUsers(room_id: $room_id) {
+query RoomUsersQuery($live_id: Int!) {
+  roomUsers(live_id: $live_id) {
     id
     name
     avatar
