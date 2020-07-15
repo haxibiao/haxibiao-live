@@ -13,7 +13,10 @@ class CreateLivesTable extends Migration
      */
     public function up()
     {
+
+        //FIXME: 重构改动太大，线上价值太小，无需兼容了
         Schema::dropIfExists('user_lives');
+        Schema::dropIfExists('lives');
 
         Schema::create('lives', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -21,6 +24,7 @@ class CreateLivesTable extends Migration
             $table->unsignedInteger('user_id')->index()->comment('主播 ID');
             $table->unsignedInteger('live_room_id')->index()->comment('直播间 ID');
             $table->tinyInteger('status')->default(0)->comment('状态:0默认,-1关闭,1推荐');
+            $table->string('cover')->nullable()->comment('直播的截图，回调自动更新');
 
             //开播
             $table->string('push_stream_url')->nullable()->comment('推流地址');

@@ -3,11 +3,10 @@
 namespace Haxibiao\Live\Traits;
 
 use App\Exceptions\UserException;
-use Haxibiao\Live\Events\NewLiveRoomMessage;
+use Haxibiao\Live\Events\NewLiveMessage;
 use Haxibiao\Live\Events\UserComeIn;
 use Haxibiao\Live\Events\UserGoOut;
 use Haxibiao\Live\Live;
-use Haxibiao\Live\LiveRoom;
 use Illuminate\Support\Arr;
 
 trait LiveResolvers
@@ -43,18 +42,16 @@ trait LiveResolvers
     {
         $user = getUser();
         $live = Live::find($args['live_id']);
-        throw_if(!is_testing_env() || !$live->status, UserException::class, '抱歉，主播已下播~');
-
-        $liveRoom = $live->room;
+        throw_if(!is_testing_env() && !$live->status, UserException::class, '抱歉，主播已下播~');
 
         // UI事件：
-        event(new UserComeIn($user, $liveRoom));
+        event(new UserComeIn($user, $live));
 
         //加入直播间
-        $user->joinLiveRoom($liveRoom);
+        $user->joinLive($live);
 
-        //成功返回直播间信息
-        return $liveRoom;
+        //成功返回直播
+        return $live;
 
     }
 
@@ -67,7 +64,7 @@ trait LiveResolvers
         $live = Live::find($args['live_id']);
 
         $message = Arr::get($args, 'message', null);
-        event(new NewLiveRoomMessage($user->id, $live->room_id, $message));
+        event(new NewLiveMessage($user->id, $live->id, $message));
         return 1;
     }
 
@@ -78,12 +75,11 @@ trait LiveResolvers
     {
         $user = getUser();
         $live = Live::find($args['live_id']);
-        $room = $live->room;
 
         // 发socket通知
-        event(new UserGoOut($user, $room));
-        $user->leaveLiveRoom($room);
-        return $room;
+        event(new UserGoOut($user, $live));
+        $user->leaveLive($live);
+        return $live;
     }
 
     /**
@@ -93,10 +89,9 @@ trait LiveResolvers
     {
         $live = Live::find($args['live_id']);
         $user = getUser();
-        $room = $live->room;
 
         // 不是创建者不能关
-        if ($room && $user->id !== $live->user_id) {
+        if ($user->id !== $live->user_id) {
             throw new UserException('关闭直播秀失败~');
         }
 
@@ -108,7 +103,7 @@ trait LiveResolvers
         $live->save();
 
         // 发socket通知
-        LiveRoom::closeLiveRoom($room);
+        Live::closeLive($live);
         return true;
     }
 

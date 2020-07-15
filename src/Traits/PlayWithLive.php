@@ -90,8 +90,9 @@ trait PlayWithLive
     /**
      * 加入直播间
      */
-    public function joinLiveRoom(LiveRoom $room)
+    public function joinLive(Live $live)
     {
+        $room = $live->room;
         $user = $this; // 观众
         if ($json = Redis::exists($room->redis_room_key)) {
             if (empty($json)) {
@@ -114,9 +115,10 @@ trait PlayWithLive
     /**
      * 离开直播间
      */
-    public function leaveLiveRoom(LiveRoom $room)
+    public function leaveLive(Live $live)
     {
-        $user = $this;
+        $room = $live->room;
+        $user = $this; //观众
         $json = Redis::get($room->redis_room_key);
         if ($json) {
             $userIds = json_decode($json, true);

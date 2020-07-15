@@ -4,7 +4,7 @@ namespace Haxibiao\Live\Events;
 
 use App\Comment;
 use App\User;
-use Haxibiao\Live\LiveRoom;
+use Haxibiao\Live\Live;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -13,15 +13,15 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
 /**
- * 直播间评论的事件(socket到前端，有特效...)
+ * 某场直播的评论事件(socket到前端，有特效...)
  */
-class NewLiveRoomMessage implements ShouldBroadcast
+class NewLiveMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $user;
     public $message;
-    public $liveRoom;
+    public $live;
 
     /**
      * Create a new event instance.
@@ -30,11 +30,11 @@ class NewLiveRoomMessage implements ShouldBroadcast
      * @param $liveRoomId 直播室id
      * @param $message 弹幕内容
      */
-    public function __construct($userId, $liveRoomId, $message)
+    public function __construct($userId, $live_id, $message)
     {
-        $this->user     = User::find($userId);
-        $this->liveRoom = LiveRoom::find($liveRoomId);
-        $this->message  = $message;
+        $this->user    = User::find($userId);
+        $this->live    = Live::find($live_id);
+        $this->message = $message;
     }
 
     public function broadcastWith(): array
@@ -57,18 +57,18 @@ class NewLiveRoomMessage implements ShouldBroadcast
         }
         Comment::create([
             'user_id'          => $this->user->id,
-            'commentable_id'   => $this->liveRoom->id,
-            'commentable_type' => 'live_rooms',
+            'commentable_id'   => $this->live->id,
+            'commentable_type' => 'lives',
             $body              => $this->message,
         ]);
         return [
-            'user_id'      => $this->user->id,
-            'user_name'    => $this->user->name,
-            'user_avatar'  => $this->user->avatar_url,
-            'live_room_id' => $this->liveRoom->id,
-            'message'      => $this->message,
+            'user_id'     => $this->user->id,
+            'user_name'   => $this->user->name,
+            'user_avatar' => $this->user->avatar_url,
+            'live_id'     => $this->live->id,
+            'message'     => $this->message,
             // 彩蛋
-            'egg'          => [
+            'egg'         => [
                 'popup' => $popup,
                 'type'  => 'BboBbo',
             ],
@@ -77,7 +77,7 @@ class NewLiveRoomMessage implements ShouldBroadcast
 
     public function broadcastOn(): Channel
     {
-        return new Channel('live_room.' . $this->liveRoom->id);
+        return new Channel('live_.' . $this->live->id);
     }
 
     public function broadcastAs(): string

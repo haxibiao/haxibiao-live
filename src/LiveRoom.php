@@ -5,7 +5,6 @@ namespace Haxibiao\Live;
 use App\User;
 use Haxibiao\Base\Model;
 use Haxibiao\Live\Traits\LiveRoomAttrs;
-use Haxibiao\Live\Traits\LiveRoomRepo;
 use Haxibiao\Live\Traits\LiveRoomResolvers;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,8 +14,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class LiveRoom extends Model
 {
-
-    use LiveRoomRepo;
     use LiveRoomResolvers;
     use LiveRoomAttrs;
 

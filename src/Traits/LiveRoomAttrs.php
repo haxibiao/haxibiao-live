@@ -38,7 +38,7 @@ trait LiveRoomAttrs
 
     public function getRedisRoomKeyAttribute(): string
     {
-        return "live_room_{$this->id}";
+        return env('APP_NAME') . "_live_room_{$this->id}";
     }
 
     public function getCountOnlineAudienceAttribute(): int

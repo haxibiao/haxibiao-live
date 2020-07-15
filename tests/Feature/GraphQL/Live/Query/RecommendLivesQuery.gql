@@ -8,8 +8,11 @@ query RecommendLivesQuery($page: Int) {
     data {
       id
       title
-      cover
-      count_audience
+      room {
+        id
+        cover
+      }
+      count_users
     }
   }
 }

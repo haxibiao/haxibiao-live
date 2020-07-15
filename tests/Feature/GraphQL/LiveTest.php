@@ -6,18 +6,18 @@ use App\LiveRoom;
 use App\User;
 use Haxibiao\Base\GraphQLTestCase;
 
-class LiveRoomTest extends GraphQLTestCase
+class LiveTest extends GraphQLTestCase
 {
     protected $user;
     protected $liveRoom;
     protected $live;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->user     = User::take(10)->get()->random();
-        $this->liveRoom = $this->user->openLive("测试开直播");
-        $this->live     = $this->liveRoom->live;
-
+        $this->live     = $this->user->openLive("测试开直播");
+        $this->liveRoom = $this->live->room;
     }
 
     public function testOpenLiveMutation()
@@ -104,8 +104,8 @@ class LiveRoomTest extends GraphQLTestCase
 
     protected function tearDown(): void
     {
-        $this->liveRoom->forceDelete();
-        $this->live->forceDelete();
+        // $this->liveRoom->forceDelete();
+        // $this->live->forceDelete();
         parent::tearDown();
     }
 }

@@ -3,7 +3,7 @@
 namespace Haxibiao\Live\Events;
 
 use App\User;
-use Haxibiao\Live\LiveRoom;
+use Haxibiao\Live\Live;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -18,29 +18,26 @@ class UserComeIn implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $user;
-    public $liveRoom;
+    public $live;
 
     /**
      * Create a new event instance.
-     *
-     * @param User $user
-     * @param LiveRoom $liveRoom
      */
-    public function __construct(User $user, LiveRoom $liveRoom)
+    public function __construct(User $user, Live $live)
     {
-        $this->user     = $user;
-        $this->liveRoom = $liveRoom;
+        $this->user = $user;
+        $this->live = $live;
     }
 
     public function broadcastWith(): array
     {
 
         return [
-            'user_id'        => $this->user->id,
-            'user_name'      => $this->user->name,
-            'user_avatar'    => $this->user->avatar_url,
-            'message'        => "{$this->user->name} 进入了直播房间",
-            'count_audience' => $this->liveRoom->count_online_audience,
+            'user_id'     => $this->user->id,
+            'user_name'   => $this->user->name,
+            'user_avatar' => $this->user->avatar_url,
+            'message'     => "{$this->user->name} 进入了直播房间",
+            'count_users' => $this->live->count_users,
         ];
     }
 
@@ -51,7 +48,7 @@ class UserComeIn implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('live_room.' . $this->liveRoom->id);
+        return new Channel('live.' . $this->live->id);
     }
 
     public function broadcastAs(): string

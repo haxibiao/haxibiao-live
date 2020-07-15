@@ -51,7 +51,7 @@ class LiveController extends Controller
     }
 
     /**
-     * 动态设置直播间封面
+     * 用户主动设置直播间封面? //FIXME: 没见到调用场景
      */
     public function setRoomCover(Request $request)
     {
@@ -109,12 +109,18 @@ class LiveController extends Controller
     {
         $coverInfo = $request->all();
         $channelId = data_get($coverInfo, 'channel_id', null);
-        $room      = LiveRoom::where('stream_name', $channelId)->first();
-        // 如果主播之前有自定义过封面，截图回调就不去更新直播间封面了，screenshot是腾讯云截图回调的图片的文件名称
+        $live      = Live::where('stream_name', $channelId)->first();
+        $room      = $live->room;
+        // 如果主播之前有自定义过封面，截图回调就不去更新直播间封面了
+        // screenshot是腾讯云截图回调的图片的文件名称
         $isNeedUpdateCover = $room->cover ? Str::contains($room->cover, 'screenshot') : true;
+        $cover_cdn_url     = $coverInfo['pic_url'];
         if ($room && $isNeedUpdateCover) {
-            $room->update(['cover' => $coverInfo['pic_url']]);
+            $room->update(['cover' => $cover_cdn_url]);
         }
+        //更新直播的截图
+        $live->update(['cover' => $cover_cdn_url]);
+
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Haxibiao\Live\Events;
 
+use Haxibiao\Live\Live;
 use Haxibiao\Live\LiveRoom;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -12,11 +13,11 @@ use Illuminate\Queue\SerializesModels;
 /**
  * 主播关直播间
  */
-class OwnerCloseRoom implements ShouldBroadcast
+class OwnerCloseLive implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $liveRoom;
+    public $live;
     public $message;
     /**
      * Create a new event instance.
@@ -24,17 +25,17 @@ class OwnerCloseRoom implements ShouldBroadcast
      * @param LiveRoom $liveRoom
      * @param string $message
      */
-    public function __construct(LiveRoom $liveRoom, string $message)
+    public function __construct(Live $live, string $message)
     {
-        $this->liveRoom = $liveRoom;
-        $this->message  = $message;
+        $this->live    = $live;
+        $this->message = $message;
     }
 
     public function broadcastWith(): array
     {
         return [
-            'message'      => $this->message,
-            'live_room_id' => $this->liveRoom->id,
+            'message' => $this->message,
+            'live_id' => $this->live->id,
         ];
     }
 
@@ -45,11 +46,11 @@ class OwnerCloseRoom implements ShouldBroadcast
      */
     public function broadcastOn(): Channel
     {
-        return new Channel('live_room.' . $this->liveRoom->id);
+        return new Channel('live.' . $this->live->id);
     }
 
     public function broadcastAs(): string
     {
-        return 'close_room';
+        return 'close_live';
     }
 }

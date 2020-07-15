@@ -1,6 +1,6 @@
 #用户离开直播间
 mutation LeaveLiveMutation($live_id: Int!) {
-  leaveLiveRoom(live_id: $live_id) {
+  leaveLive(live_id: $live_id) {
     id
   }
 }
