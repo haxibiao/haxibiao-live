@@ -26,12 +26,16 @@ trait LiveRepo
         return Live::whereIn('stream_name', $streamNameList);
     }
 
-    // 更新直播间总观众数
+    /**
+     * 更新直播间总观众数
+     */
     public function updateCountUsers(User $user)
     {
         $this->increment('count_users');
         $this->data = array_unique(array_merge($this->data ?? [], array($user->id)));
         $this->save();
+
+        //FIXME: 需要记录 live_users 记录每个用户的观看时长和发言次数，和企业微信直播的直播回放记录一样
     }
 
     /**

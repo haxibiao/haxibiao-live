@@ -32,10 +32,10 @@ class UserGoOut implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'user_id'     => $this->user->id,
-            'user_name'   => $this->user->name,
-            'message'     => "{$this->user->name} 离开了直播房间",
-            'count_users' => $this->live->count_users,
+            'user_id'       => $this->user->id,
+            'user_name'     => $this->user->name,
+            'message'       => "{$this->user->name} 离开了直播房间",
+            'count_onlines' => $this->live->count_onlines,
         ];
     }
 

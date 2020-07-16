@@ -33,11 +33,11 @@ class UserComeIn implements ShouldBroadcast
     {
 
         return [
-            'user_id'     => $this->user->id,
-            'user_name'   => $this->user->name,
-            'user_avatar' => $this->user->avatar_url,
-            'message'     => "{$this->user->name} 进入了直播房间",
-            'count_users' => $this->live->count_users,
+            'user_id'       => $this->user->id,
+            'user_name'     => $this->user->name,
+            'user_avatar'   => $this->user->avatar_url,
+            'message'       => "{$this->user->name} 进入了直播房间",
+            'count_onlines' => $this->live->count_onlines,
         ];
     }
 

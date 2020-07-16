@@ -24,11 +24,10 @@ trait LiveAttrs
         return env('APP_NAME') . "_live_{$this->id}";
     }
 
-
     /**
-     * 直播当前在线人数
+     * 直播当前在线人数 count_onlines
      */
-    public function getCountUsersAttribute(): int
+    public function getCountOnlinesAttribute(): int
     {
         $count = json_decode(Redis::get($this->redis_key), true);
         return $count ? count($count) : 0;

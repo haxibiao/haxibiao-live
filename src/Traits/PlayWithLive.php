@@ -100,9 +100,11 @@ trait PlayWithLive
             if (empty($json)) {
                 $appendValue = array($user->id);
             } else {
-                $users = array(json_decode($json, true));
+                $users = json_decode($json, true);
+                //处理redis_key里数据异常，存的不是数组的情况
+                $users = is_array($users) ? $users : [];
                 // 将新观众记录到 value 中
-                $users[] = $user->id;
+                $users[]     = $user->id;
                 $appendValue = $users;
             }
             // 去重
@@ -111,6 +113,7 @@ trait PlayWithLive
             // 记录到主播的直播记录中
             $streamer = $room->user;
             $live     = $streamer->getCurrentLive();
+            //更新总观看人数
             $live->updateCountUsers($user);
         }
     }
