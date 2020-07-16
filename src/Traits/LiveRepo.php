@@ -5,6 +5,7 @@ namespace Haxibiao\Live\Traits;
 use App\User;
 use Haxibiao\Live\Events\OwnerCloseLive;
 use Haxibiao\Live\Live;
+use Haxibiao\Live\LiveAction;
 use Haxibiao\Live\LiveUtils;
 use Illuminate\Support\Facades\Redis;
 
@@ -34,8 +35,8 @@ trait LiveRepo
         $this->increment('count_users');
         $this->data = array_unique(array_merge($this->data ?? [], array($user->id)));
         $this->save();
-
-        //FIXME: 需要记录 live_users 记录每个用户的观看时长和发言次数，和企业微信直播的直播回放记录一样
+        // 记录进入直播间行为
+        LiveAction::joinLive($this, $user);
     }
 
     /**
@@ -50,5 +51,6 @@ trait LiveRepo
         }
 
         $live->save(); //更新时间
+
     }
 }

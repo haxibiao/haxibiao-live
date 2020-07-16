@@ -2,11 +2,13 @@
 
 namespace Haxibiao\Live\Traits;
 
+use App\Comment;
 use App\Exceptions\UserException;
 use Haxibiao\Live\Events\NewLiveMessage;
 use Haxibiao\Live\Events\UserComeIn;
 use Haxibiao\Live\Events\UserGoOut;
 use Haxibiao\Live\Live;
+use Haxibiao\Live\LiveAction;
 use Illuminate\Support\Arr;
 
 trait LiveResolvers
@@ -66,6 +68,24 @@ trait LiveResolvers
         $live = Live::find($args['live_id']);
 
         $message = Arr::get($args, 'message', null);
+        /**
+         * TODO:
+         * 1. 还不能确定每一个项目的comments表结构都是如此
+         * 2. 待直播日活见长,将此create事件安排到 listener 中异步执行
+         */
+        //FIXME:只有变现大学的表结构就是 body 其他项目是 content
+        $body = 'content';
+        if (config('app.name') == 'bianxiandaxue') {
+            $body = 'body';
+        }
+        $comment = Comment::create([
+            'user_id'          => $user->id,
+            'commentable_id'   => $live->id,
+            'commentable_type' => 'lives',
+            $body              => $message,
+        ]);
+        // 记录用户弹幕评论
+        LiveAction::commentLive($comment, $live);
         event(new NewLiveMessage($user->id, $live->id, $message));
         return 1;
     }

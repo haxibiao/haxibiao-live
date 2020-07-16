@@ -4,6 +4,7 @@ namespace Haxibiao\Live\Traits;
 
 use Haxibiao\Base\User;
 use Haxibiao\Live\Live;
+use Haxibiao\Live\LiveAction;
 use Haxibiao\Live\LiveRoom;
 use Haxibiao\Live\LiveUtils;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -130,6 +131,8 @@ trait PlayWithLive
             // 从数组中删除要离开的用户
             $userIds = array_diff($userIds, array($user->id));
             Redis::set($live->redis_key, json_encode($userIds));
+            // 记录用户离开事件，同时记录观看直播时长
+            LiveAction::leaveLive($live, $user);
         }
     }
 }
