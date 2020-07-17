@@ -14,7 +14,7 @@ trait LiveActionRepo
     {
         $joinAt = now()->diffInSeconds($live->created_at);
         $action = LiveAction::create([
-            'user_id'         => $user,
+            'user_id'         => $user->id,
             'live_id'         => $live->id,
             'actionable_type' => 'joins',
             'action_at'       => $joinAt,
@@ -31,11 +31,13 @@ trait LiveActionRepo
     /**
      * 离开直播间，同时会记录用户观看直播时长和离开次数
      */
-    public static function leaveLive($live, $user)
+    public static function leaveLive($live, $user, $leaveAt = null)
     {
-        $leaveAt     = now()->diffInSeconds($live->created_at);
+        if (!$leaveAt) {
+            $leaveAt = now()->diffInSeconds($live->created_at);
+        }
         $leaveAction = LiveAction::create([
-            'user_id'         => $user,
+            'user_id'         => $user->id,
             'live_id'         => $live->id,
             'actionable_type' => 'leaves',
             'action_at'       => $leaveAt,
@@ -44,7 +46,7 @@ trait LiveActionRepo
             'user_id'         => $user->id,
             'live_id'         => $live->id,
             'actionable_type' => 'joins',
-        ])->latest('id')->select('action_at')->first();
+        ])->latest('id')->select('action_at')->first()->action_at;
 
         // 用户实际观看直播的时间
         $duration = $leaveAt - $lastJoinAt;

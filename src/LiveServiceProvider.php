@@ -28,7 +28,7 @@ class LiveServiceProvider extends ServiceProvider
     public function boot()
     {
         Relation::morphMap([
-            'live_rooms' => '\Haxibiao\Live\LiveRoom',
+            'lives' => '\Haxibiao\Live\Live',
         ]);
         //安装时 vendor:publish 用
         if ($this->app->runningInConsole()) {

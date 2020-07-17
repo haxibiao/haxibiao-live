@@ -16,9 +16,10 @@ class LiveTest extends GraphQLTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user     = User::take(10)->get()->random();
-        $this->live     = $this->user->openLive("测试开直播");
-        
+        // 每个ut函数都会触发到 setup，加入、离开直播间必须
+        $this->user = User::find(1);
+        $this->live = $this->user->openLive("测试开直播");
+
     }
 
     public function testOpenLiveMutation()
@@ -98,7 +99,7 @@ class LiveTest extends GraphQLTestCase
         $header   = $this->getHeaders($this->user);
 
         $data = array(
-            "live_id" => $this->live->id,
+            "room_id" => $this->live->id,
         );
         $this->startGraphQL($mutation, $data, $header);
     }

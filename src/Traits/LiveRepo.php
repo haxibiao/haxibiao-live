@@ -4,6 +4,7 @@ namespace Haxibiao\Live\Traits;
 
 use App\User;
 use Haxibiao\Live\Events\OwnerCloseLive;
+use Haxibiao\Live\Jobs\CloseLive;
 use Haxibiao\Live\Live;
 use Haxibiao\Live\LiveAction;
 use Haxibiao\Live\LiveUtils;
@@ -51,6 +52,6 @@ trait LiveRepo
         }
 
         $live->save(); //更新时间
-
+        dispatch(new CloseLive($live, now()));
     }
 }

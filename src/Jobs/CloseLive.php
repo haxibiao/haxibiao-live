@@ -2,6 +2,8 @@
 
 namespace Haxibiao\Live\Jobs;
 
+use App\User;
+use Carbon\Carbon;
 use Haxibiao\Live\LiveAction;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,7 +21,7 @@ class CloseLive implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($live, $closeTime)
+    public function __construct($live, Carbon $closeTime)
     {
         $this->live      = $live;
         $this->closeTime = $closeTime;
@@ -34,15 +36,14 @@ class CloseLive implements ShouldQueue
     {
         $qb = LiveAction::where([
             'live_id'         => $this->live->id,
-            'actionable_type' => 'join',
+            'actionable_type' => 'joins',
         ]);
         $qb->chunkById(100, function ($liveActions) {
             foreach ($liveActions as $liveAction) {
-                $joinAt = $liveAction->action_at;
-
+                $liveDuration = $this->closeTime->diffInSeconds($this->live->created_at);
+                $user         = $liveAction->user;
+                LiveAction::leaveLive($this->live, $user, $liveDuration);
             }
-            // 下播时间 - 用户进入时间 = 用户观看时间
-
         });
     }
 }

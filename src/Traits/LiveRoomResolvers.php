@@ -4,7 +4,6 @@ namespace Haxibiao\Live\Traits;
 
 use App\User;
 use Haxibiao\Live\Live;
-use Haxibiao\Live\LiveRoom;
 use Illuminate\Support\Facades\Redis;
 
 trait LiveRoomResolvers
@@ -15,7 +14,7 @@ trait LiveRoomResolvers
      */
     public function resolveRoomUsers($root, array $args, $context, $info)
     {
-        $live = Live::find($args['live_id']);
+        $live = Live::find($args['room_id']);
 
         //获得在线的
         $json = Redis::get($live->redis_key);
