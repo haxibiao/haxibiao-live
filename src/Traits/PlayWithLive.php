@@ -113,7 +113,7 @@ trait PlayWithLive
             Redis::set($live->redis_key, json_encode($appendValue));
             // 记录到主播的直播记录中
             $streamer = $room->user;
-            $live     = $streamer->getCurrentLive();
+            $live     = $streamer->live;
             //更新总观看人数
             $live->updateCountUsers($user);
         }
