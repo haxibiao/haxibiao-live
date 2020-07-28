@@ -3,6 +3,7 @@
 namespace Haxibiao\Live\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Live;
 use Haxibiao\Live\LiveRoom;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class LiveController extends Controller
      */
     public function share($id)
     {
-        $room = LiveRoom::find($id);
+        $room = Live::find($id);
         abort_if(empty($room), 404, '未找到页面');
         return view('live::share', [
             'pull_domain' => config('live.live_pull_domain'),
