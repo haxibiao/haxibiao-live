@@ -78,10 +78,9 @@ class LiveController extends Controller
     public function recording(Request $request)
     {
         $recordingInfo = $request->all();
-        info(json_encode($recordingInfo));
-        $fileId      = data_get($recordingInfo, 'file_id');
-        $stream_name = data_get($recordingInfo, 'channel_id');
-        $live        = Live::where('stream_name', $stream_name)->first();
+        $fileId        = data_get($recordingInfo, 'file_id');
+        $stream_name   = data_get($recordingInfo, 'channel_id');
+        $live          = Live::where('stream_name', $stream_name)->first();
         if ($live) {
 
             //为vod创建video
@@ -90,13 +89,11 @@ class LiveController extends Controller
                 'user_id'      => $live->user_id,
             ]);
             $video->save();
-
-            //触发保存截图和更新主播直播时长
-            dispatch(new ProcessRecording($live));
-
             // 关联回放视频
             $live->video_id = $video->id;
             $live->save();
+            //触发保存截图和更新主播直播时长
+            dispatch(new ProcessRecording($live));
         }
     }
 
