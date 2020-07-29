@@ -5,6 +5,7 @@ namespace Haxibiao\Live\Controllers\Api;
 use App\Exceptions\UserException;
 use App\Http\Controllers\Controller;
 use App\Video;
+use Haxibiao\Helpers\VodUtils;
 use Haxibiao\Live\Jobs\ProcessRecording;
 use Haxibiao\Live\Live;
 use Haxibiao\Live\LiveRoom;
@@ -92,6 +93,8 @@ class LiveController extends Controller
             // 关联回放视频
             $live->video_id = $video->id;
             $live->save();
+            // 开始VOD处理
+            VodUtils::makeCoverAndSnapshots($fileId);
             //触发保存截图和更新主播直播时长
             dispatch(new ProcessRecording($live));
         }
