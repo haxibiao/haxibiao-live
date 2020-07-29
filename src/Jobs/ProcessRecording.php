@@ -34,6 +34,8 @@ class ProcessRecording implements ShouldQueue
         $this->live = $live;
         $this->delay(now()->addMinute());
         $this->onQueue('video');
+        // 开始VOD处理
+        VodUtils::makeCoverAndSnapshots($this->live->video->qcvod_fileid);
     }
 
     /**
@@ -48,10 +50,6 @@ class ProcessRecording implements ShouldQueue
 
         // 开始VOD处理
         VodUtils::makeCoverAndSnapshots($video->qcvod_fileid);
-
-        //给vod 2秒处理封面的时间
-        sleep(2);
-
         // 获取vod视频信息
         $videoInfo = VodUtils::getVideoInfo($video->qcvod_fileid);
         //cdn
