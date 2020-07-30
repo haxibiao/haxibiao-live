@@ -28,7 +28,7 @@ class Live extends Model
 
     protected $casts = [
         'data'       => 'array',
-        'begen_time' => 'datetime',
+        'begin_time' => 'datetime',
     ];
 
     protected $guarded = [];

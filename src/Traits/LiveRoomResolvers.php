@@ -26,5 +26,4 @@ trait LiveRoomResolvers
         $online_user_ids = array_diff($userIds, array($live->user_id));
         return User::whereIn('id', $online_user_ids)->get();
     }
-
 }

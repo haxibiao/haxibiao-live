@@ -13,6 +13,7 @@ class CreateLiveActionsTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('live_actions');
         Schema::create('live_actions', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('live_id')->index()->comment('直播秀id');
