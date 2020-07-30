@@ -4,6 +4,7 @@ namespace Haxibiao\Live\Traits;
 
 use App\Comment;
 use App\Exceptions\UserException;
+use Haxibiao\Live\AppointmentLive;
 use Haxibiao\Live\Events\NewLiveMessage;
 use Haxibiao\Live\Events\UserComeIn;
 use Haxibiao\Live\Events\UserGoOut;
@@ -133,7 +134,7 @@ trait LiveResolvers
     /**
      * 创建一个可预约直播
      */
-    public static function createAppointmentLive($root, array $args, $context, $info)
+    public static function resolverCreateDelayLive($root, array $args, $context, $info)
     {
         $user       = getUser();
         $begenTime  = data_get($args, 'begen_time');
@@ -141,5 +142,19 @@ trait LiveResolvers
         $categoryID = data_get($args, 'college_id');
         // 开直播
         return $user->openLive($title, $begenTime, $categoryID);
+    }
+
+    /**
+     * 观众预约直播
+     */
+    public static function resolverAppointmentLive($root, array $args, $context, $info)
+    {
+        $user   = getUser();
+        $liveID = data_get($args, 'live_id');
+        AppointmentLive::create([
+            'user_id' => $user->id,
+            'live_id' => $liveID,
+        ]);
+        return true;
     }
 }

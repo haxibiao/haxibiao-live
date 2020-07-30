@@ -4,9 +4,9 @@ extend type Mutation {
   """
   openLive(title: String): Live @field(resolver: "App\\Live@resolveOpen")
   """
-  创建预约直播
+  创建延迟（可被预约）直播
   """
-  createAppointmentLive(title: String!, begen_time: String!, college_id: Int!): Live @field(resolver: "App\\Live@createAppointmentLive")
+  createDelayLive(title: String!, begen_time: String!, college_id: Int!): Live @field(resolver: "App\\Live@resolverCreateDelayLive")
   """
   加入直播
   """
@@ -23,4 +23,8 @@ extend type Mutation {
   主播关闭直播
   """
   closeLive(live_id: Int!): Boolean @field(resolver: "App\\Live@resolveClose")
+  """
+  观众预约直播
+  """
+  appointmentLive(live_id: Int!): Boolean @field(resolver: "App\\Live@resolverAppointmentLive")
 }
