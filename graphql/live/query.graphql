@@ -4,9 +4,7 @@ type LiveRoom {
   """
   主播（兼容已上线版本gql）
   """
-  streamer: User!
-  @rename(attribute: "user")
-  @deprecated(reason: "概念太多，容易乱")
+  streamer: User! @rename(attribute: "user") @deprecated(reason: "概念太多，容易乱")
 
   """
   主播
@@ -23,10 +21,9 @@ type LiveRoom {
   """
   lives: Live
 
-  created_at: String
+  created_at: DateTime
 
-  updated_at: String
-
+  updated_at: DateTime
 }
 
 type Live {
@@ -57,9 +54,7 @@ type Live {
   """
   push_stream_key: String
 
-
   push_url: String
-
 
   pull_url: String
 
@@ -79,8 +74,9 @@ type Live {
   """
   duration: String
 
-  created_at: String
-  updated_at: String
+  created_at: DateTime
+  updated_at: DateTime
+  begen_time: DateTime
 }
 
 extend type Query {
@@ -92,12 +88,10 @@ extend type Query {
   """
   推荐直播列表（就是目前在播的）
   """
-  recommendLives: [Live]
-  @paginate(defaultCount: 10, builder: "App\\Live@resolveRecommendLives")
+  recommendLives: [Live] @paginate(defaultCount: 10, builder: "App\\Live@resolveRecommendLives")
 
   """
   直播间在线观众(topN)
   """
-  roomUsers(live_id: Int!): [User!]
-  @field(resolver: "App\\LiveRoom@resolveRoomUsers")
+  roomUsers(live_id: Int!): [User!] @field(resolver: "App\\LiveRoom@resolveRoomUsers")
 }

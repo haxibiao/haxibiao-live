@@ -2,6 +2,7 @@
 
 namespace Haxibiao\Live;
 
+use Carbon\Carbon;
 use TencentCloud\Common\Credential;
 use TencentCloud\Common\Profile\ClientProfile;
 use TencentCloud\Common\Profile\HttpProfile;
@@ -114,12 +115,15 @@ class LiveUtils
      * @param null $endTime
      * @return string
      */
-    public static function genPushKey($streamName): string
+    public static function genPushKey($streamName, Carbon $begenTime = null): string
     {
-        //直播结束时间
-        $endTime = now()->addDay()->toDateTimeString();
-        $key     = config('live.live_key');
+        if (is_null($begenTime)) {
+            $endTime = now()->addDay()->toDateTimeString();
+        } else {
+            $endTime = $begenTime->addDay()->toDateTimeString();
+        }
 
+        $key = config('live.live_key');
         if ($key && $endTime) {
             $txTime   = strtoupper(base_convert(strtotime($endTime), 10, 16));
             $txSecret = md5($key . $streamName . $txTime);

@@ -25,13 +25,12 @@ class CreateLivesTable extends Migration
             $table->unsignedInteger('live_room_id')->index()->comment('直播间 ID');
             $table->tinyInteger('status')->default(0)->comment('状态:0默认,-1关闭,1推荐');
             $table->string('cover')->nullable()->comment('直播的截图，回调自动更新');
-
             //开播
             $table->string('push_stream_url')->nullable()->comment('推流地址');
             $table->string('push_stream_key')->nullable()->comment('鉴权密钥');
             $table->string('pull_stream_url')->nullable()->comment('拉流地址');
             $table->string('stream_name')->index()->nullable()->comment('流名称');
-
+            $table->timestamp('begen_time')->comment('直播开始时间')->useCurrent();
             //回放
             $table->unsignedInteger('video_id')->index()->nullable()->comment('直播录制视频 ID');
             $table->unsignedInteger('duration')->nullable()->comment('直播时长');

@@ -28,13 +28,14 @@ trait LiveResolvers
      */
     public function resolveOpen($root, array $args, $context, $info)
     {
-        $user  = getUser();
-        $title = data_get($args, 'title', null);
+        $user       = getUser();
+        $title      = data_get($args, 'title', null);
+        $categoryID = data_get($args, 'college_id', null);
 
         throw_if(!$title, UserException::class, '请输入直播间标题~');
 
         // 开直播
-        return $user->openLive($title);
+        return $user->openLive($title, $categoryID);
     }
 
     /**
@@ -129,4 +130,16 @@ trait LiveResolvers
         return true;
     }
 
+    /**
+     * 创建一个可预约直播
+     */
+    public static function createAppointmentLive($root, array $args, $context, $info)
+    {
+        $user       = getUser();
+        $begenTime  = data_get($args, 'begen_time');
+        $title      = data_get($args, 'title');
+        $categoryID = data_get($args, 'college_id');
+        // 开直播
+        return $user->openLive($title, $begenTime, $categoryID);
+    }
 }

@@ -27,7 +27,8 @@ class Live extends Model
     const STATUS_ONLINE  = 0;
 
     protected $casts = [
-        'data' => 'array',
+        'data'       => 'array',
+        'begen_time' => 'datetime',
     ];
 
     protected $guarded = [];

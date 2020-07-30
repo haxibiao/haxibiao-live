@@ -61,7 +61,7 @@ trait PlayWithLive
      * 开直播
      * @param string $title 直播间标题
      */
-    public function openLive(string $title): Live
+    public function openLive(string $title, $begenTime = null): Live
     {
         $user = $this; //主播
         $room = $user->liveRoom; //直播间
@@ -72,10 +72,13 @@ trait PlayWithLive
 
         //新的直播
         if (is_null($live->push_stream_key)) {
-            $live->push_stream_key = LiveUtils::genPushKey($streamName);
+            $live->push_stream_key = LiveUtils::genPushKey($streamName, $begenTime);
             $live->push_stream_url = LiveUtils::getPushUrl();
             $live->pull_stream_url = LiveUtils::getPullUrl() . "/" . $streamName;
             $live->stream_name     = $streamName;
+            if (!empty($begenTime)) {
+                $live->begen_time = $begenTime;
+            }
         }
 
         //重连回来可修改标题...
