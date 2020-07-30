@@ -30,7 +30,7 @@ class CreateLivesTable extends Migration
             $table->string('push_stream_key')->nullable()->comment('鉴权密钥');
             $table->string('pull_stream_url')->nullable()->comment('拉流地址');
             $table->string('stream_name')->index()->nullable()->comment('流名称');
-            $table->timestamp('begen_time')->comment('直播开始时间')->useCurrent();
+            $table->timestamp('begin_time')->comment('直播开始时间')->useCurrent();
             //回放
             $table->unsignedInteger('video_id')->index()->nullable()->comment('直播录制视频 ID');
             $table->unsignedInteger('duration')->nullable()->comment('直播时长');
@@ -52,6 +52,5 @@ class CreateLivesTable extends Migration
     {
         Schema::dropIfExists('user_lives');
         Schema::dropIfExists('lives');
-
     }
 }

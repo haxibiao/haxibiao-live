@@ -14,8 +14,8 @@ class AddBeganTimeOnLivesTable extends Migration
     public function up()
     {
         Schema::table('lives', function (Blueprint $table) {
-            if (!Schema::hasColumn('lives', 'began_time')) {
-                $table->timestamp('begen_time')->comment('直播开始时间')->nullable()->useCurrent();
+            if (!Schema::hasColumn('lives', 'begin_time')) {
+                $table->timestamp('begin_time')->comment('直播开始时间')->nullable()->useCurrent();
             }
         });
     }
