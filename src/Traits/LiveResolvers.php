@@ -141,7 +141,7 @@ trait LiveResolvers
         $title      = data_get($args, 'title');
         $categoryID = data_get($args, 'college_id');
         // 开直播
-        return $user->openLive($title, $begenTime, $categoryID);
+        return $user->openLive($title, $categoryID, $begenTime);
     }
 
     /**
