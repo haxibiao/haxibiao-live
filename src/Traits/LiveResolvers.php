@@ -151,10 +151,7 @@ trait LiveResolvers
     {
         $user   = getUser();
         $liveID = data_get($args, 'live_id');
-        AppointmentLive::create([
-            'user_id' => $user->id,
-            'live_id' => $liveID,
-        ]);
+        AppointmentLive::createAppointmentLive($user, Live::findOrFail($liveID));
         return true;
     }
 }
