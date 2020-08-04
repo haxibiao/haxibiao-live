@@ -4,9 +4,7 @@ type LiveRoom {
   """
   主播（兼容已上线版本gql）
   """
-  streamer: User!
-    @rename(attribute: "user")
-    @deprecated(reason: "概念太多，容易乱")
+  streamer: User! @rename(attribute: "user") @deprecated(reason: "概念太多，容易乱")
 
   """
   主播
@@ -65,7 +63,10 @@ type Live {
   """
   pull_stream_url: String
   stream_name: String
-
+  """
+  封面
+  """
+  cover: String @rename(attr: "cover_url")
   """
   直播观看人数
   """
@@ -90,12 +91,10 @@ extend type Query {
   """
   推荐直播列表（就是目前在播的）
   """
-  recommendLives: [Live]
-    @paginate(defaultCount: 10, builder: "App\\Live@resolveRecommendLives")
+  recommendLives: [Live] @paginate(defaultCount: 10, builder: "App\\Live@resolveRecommendLives")
 
   """
   直播间在线观众(topN)
   """
-  roomUsers(room_id: Int!): [User!]
-    @field(resolver: "App\\LiveRoom@resolveRoomUsers")
+  roomUsers(room_id: Int!): [User!] @field(resolver: "App\\LiveRoom@resolveRoomUsers")
 }
