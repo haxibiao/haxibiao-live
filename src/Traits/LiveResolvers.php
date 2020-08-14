@@ -46,6 +46,9 @@ trait LiveResolvers
     {
         $user = getUser();
         $live = Live::find($args['live_id']);
+        if (empty($live)) {
+            throw new UserException('抱歉，没找到该直播间~');
+        }
         if ($live->status < 0) {
             throw new UserException('抱歉，主播已下播~');
         }
@@ -58,7 +61,6 @@ trait LiveResolvers
 
         //成功返回直播
         return $live;
-
     }
 
     /**
