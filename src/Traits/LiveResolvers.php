@@ -11,6 +11,7 @@ use Haxibiao\Live\Events\UserGoOut;
 use Haxibiao\Live\Live;
 use Haxibiao\Live\LiveAction;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Schema;
 
 trait LiveResolvers
 {
@@ -79,9 +80,11 @@ trait LiveResolvers
          */
         //FIXME:只有变现大学的表结构就是 body 其他项目是 content
         $body = 'content';
-        if (config('app.name') == 'bianxiandaxue') {
+        if(Schema::hasColumn('comments', 'body')) ; //check whether users table has email column
+        {
             $body = 'body';
         }
+
         $comment = Comment::create([
             'user_id'          => $user->id,
             'commentable_id'   => $live->id,
