@@ -144,4 +144,14 @@ class LiveUtils
     {
         return config('live.live_pull_domain') . "/" . config('live.app_name');
     }
+
+    public static function getCameraPushUrl()
+    {
+        return config('camera.camera_push_domain') . "/" . config('camera.app_name');
+    }
+
+    public static function getCameraPullUrl()
+    {
+        return config('camera.camera_pull_domain') . "/" . config('camera.app_name');
+    }
 }

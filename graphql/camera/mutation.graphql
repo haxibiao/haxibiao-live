@@ -1,0 +1,87 @@
+extend type Mutation {
+  """
+  创建实况
+  """
+  storeCamera(
+    """
+    标题
+    """
+    title:String,
+    """
+    描述
+    """
+    description:String,
+    """
+    状态
+    """
+    status:CameraStatusEnum,
+    """
+    封面图
+    """
+    cover:String,
+    """
+    可见性
+    """
+    visibility:CameraVisibilityEnum=self
+  ): Camera @field(resolver: "App\\Camera@resolveStoreCamera")
+
+  """
+  保存编辑实况
+  """
+  updateCamera(
+    """
+    实况ID
+    """
+    camera_id: Int!,
+    """
+    标题
+    """
+    title:String,
+    """
+    描述
+    """
+    description:String,
+    """
+    状态
+    """
+    status:CameraStatusEnum,
+    """
+    封面图
+    """
+    cover:String,
+    """
+    可见性
+    """
+    visibility:CameraVisibilityEnum=self
+  ): Camera @field(resolver: "App\\Camera@resolveUpdateCamera")
+
+  """
+  加入实况
+  """
+  joinCamera(camera_id: Int!): Camera @field(resolver: "App\\Camera@resolveJoinCamera")
+
+  """
+  关闭实况
+  """
+  closeCamera(camera_id: Int!): Boolean @field(resolver: "App\\Camera@resolveCloseCamera")
+}
+
+enum  CameraVisibilityEnum{
+  """
+  所有人可见
+  """
+  all
+  """
+  仅自己可见
+  """
+  self
+  """
+  部分人可见
+  """
+  auth
+}
+
+enum CameraStatusEnum{
+  STATUS_OFFLINE @enum(value: -1)
+  STATUS_ONLINE @enum(value: 0)
+}

@@ -1,0 +1,10 @@
+<?php
+
+namespace App;
+
+use Haxibiao\Live\Camera as BaseCamera;
+
+class Camera extends BaseCamera
+{
+
+}

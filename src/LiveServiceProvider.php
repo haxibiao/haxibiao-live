@@ -30,25 +30,27 @@ class LiveServiceProvider extends ServiceProvider
         Relation::morphMap([
             'lives' => '\Haxibiao\Live\Live',
         ]);
+
         //安装时 vendor:publish 用
         if ($this->app->runningInConsole()) {
             // 注册 migrations.
             $this->loadMigrationsFrom($this->app->make('path.haxibiao-live.migrations'));
 
-            // 发布配置文件.
-            $this->publishes([
+            $this->addPublishGroup('live',[
+                // 发布配置文件.
                 $this->app->make('path.haxibiao-live.config') . '/live.php' => $this->app->configPath('live.php'),
-            ], 'live-config');
-
-            // 发布 Nova
-            $this->publishes([
+                // 发布 Nova
                 __DIR__ . '/Nova' => base_path('app/Nova'),
-            ], 'live-nova');
+                // 发布 graphql
+                __DIR__ . '/../graphql/live' => base_path('graphql').'/live',
+            ]);
 
-            // 发布 graphql
-            $this->publishes([
-                __DIR__ . '/../graphql' => base_path('graphql'),
-            ], 'live-graphql');
+            $this->addPublishGroup('camera',[
+                // 发布配置文件.
+                $this->app->make('path.haxibiao-live.config') . '/camera.php' => app()->configPath('camera.php'),
+                // 发布 graphql
+                __DIR__ . '/../graphql/camera' => base_path('graphql').'/live',
+            ]);
         }
 
         //注册Api路由
