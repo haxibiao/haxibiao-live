@@ -66,12 +66,11 @@ type Live {
   """
   封面
   """
-  cover: String @rename(attr: "cover_url")
+  cover: String @rename(attribute: "cover_url")
   """
   直播观看人数
   """
   count_users: Int
-
   """
   直播回放的时长
   """
