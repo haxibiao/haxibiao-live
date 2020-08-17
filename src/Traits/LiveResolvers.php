@@ -80,7 +80,7 @@ trait LiveResolvers
          */
         //FIXME:只有变现大学的表结构就是 body 其他项目是 content
         $body = 'content';
-        if(Schema::hasColumn('comments', 'body')) ; //check whether users table has email column
+        if(Schema::hasColumn('comments', 'body')) ;
         {
             $body = 'body';
         }
