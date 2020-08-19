@@ -4,6 +4,7 @@ namespace Haxibiao\Live\Traits;
 
 use App\Exceptions\UserException;
 use App\Image;
+use App\Store;
 use Haxibiao\Live\Camera;
 use Haxibiao\Live\Live;
 use Haxibiao\Live\LiveUtils;
@@ -56,7 +57,9 @@ trait PlayWithCamera
      */
     public function canOpenCamera()
     {
-        return data_get($this,'is_store');
+        $this->store()
+            ->where('status',1) //1代表是正常商户
+            ->exists();
     }
 
 }
