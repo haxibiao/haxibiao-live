@@ -57,7 +57,7 @@ trait PlayWithCamera
      */
     public function canOpenCamera()
     {
-        $this->store()
+        return $this->store()
             ->where('status',1) //1代表是正常商户
             ->exists();
     }
