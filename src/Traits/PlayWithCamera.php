@@ -56,8 +56,7 @@ trait PlayWithCamera
      */
     public function canOpenCamera()
     {
-        return true;
-//        return data_get($this,'is_store');
+        return data_get($this,'is_store');
     }
 
 }
