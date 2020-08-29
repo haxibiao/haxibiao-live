@@ -154,4 +154,34 @@ class LiveUtils
     {
         return config('camera.camera_pull_domain') . "/" . config('camera.app_name');
     }
+
+    /**
+     * 获取腾讯云推流密钥(主播使用)
+     *
+     * 返回示例：liveteststream?txSecret=225cf0e108c321755121cf5b2355d572&txTime=5F0EA446
+     * @param $domain
+     * @param $streamName
+     * @param $key
+     * @param null $endTime
+     * @return string
+     */
+    public static function genCameraPushKey($streamName, Carbon $begenTime = null): string
+    {
+        if (is_null($begenTime)) {
+            $endTime = now()->addDays(30)->toDateTimeString();
+        } else {
+            $endTime = $begenTime->addDays(30)->toDateTimeString();
+        }
+
+        $key = config('live.live_key');
+        if ($key && $endTime) {
+            $txTime   = strtoupper(base_convert(strtotime($endTime), 10, 16));
+            $txSecret = md5($key . $streamName . $txTime);
+            $ext_str  = '?' . http_build_query(array(
+                    'txSecret' => $txSecret,
+                    'txTime'   => $txTime,
+                ));
+        }
+        return $streamName . ($ext_str ?? '');
+    }
 }

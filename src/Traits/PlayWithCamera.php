@@ -43,7 +43,7 @@ trait PlayWithCamera
         $camera->save();
 
         $streamName = $camera->stream_name;
-        $camera->push_stream_key = LiveUtils::genPushKey($streamName);
+        $camera->push_stream_key = LiveUtils::genCameraPushKey($streamName);
         $camera->push_stream_url = LiveUtils::getCameraPushUrl();
         $camera->pull_stream_url = LiveUtils::getCameraPullUrl() . "/" . $streamName;
         $camera->stream_name     = $streamName;
