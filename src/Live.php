@@ -2,9 +2,9 @@
 
 namespace Haxibiao\Live;
 
+use App\Model;
 use App\User;
 use App\Video;
-use Haxibiao\Base\Model;
 use Haxibiao\Live\Traits\LiveAttrs;
 use Haxibiao\Live\Traits\LiveRepo;
 use Haxibiao\Live\Traits\LiveResolvers;

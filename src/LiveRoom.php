@@ -2,8 +2,8 @@
 
 namespace Haxibiao\Live;
 
+use App\Model;
 use App\User;
-use Haxibiao\Base\Model;
 use Haxibiao\Live\Traits\LiveRoomAttrs;
 use Haxibiao\Live\Traits\LiveRoomResolvers;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
