@@ -3,7 +3,7 @@
 namespace Haxibiao\Live\Tests\Feature\GraphQL;
 
 use App\User;
-use Haxibiao\Base\GraphQLTestCase;
+use Haxibiao\Breeze\GraphQLTestCase;
 
 class LiveTest extends GraphQLTestCase
 {

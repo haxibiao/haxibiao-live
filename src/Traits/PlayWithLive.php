@@ -2,7 +2,7 @@
 
 namespace Haxibiao\Live\Traits;
 
-use Haxibiao\Base\User;
+use Haxibiao\Breeze\User;
 use Haxibiao\Live\Live;
 use Haxibiao\Live\LiveAction;
 use Haxibiao\Live\LiveRoom;
