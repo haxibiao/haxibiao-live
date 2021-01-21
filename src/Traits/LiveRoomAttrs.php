@@ -4,8 +4,6 @@ namespace Haxibiao\Live\Traits;
 
 use App\LiveRoom;
 use Haxibiao\Live\Live;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Storage;
 
 trait LiveRoomAttrs
 {
@@ -50,6 +48,6 @@ trait LiveRoomAttrs
 
     public function getCoverUrlAttribute(): string
     {
-        return Storage::cloud()->url($this->cover) ?? 'https://dtzq-1251052432.cos.ap-shanghai.myqcloud.com/2020-03-25/u%3A980235-screenshot-15-20-45-1192x746.jpg';
+        return cdnurl($this->cover) ?? 'https://dtzq-1251052432.cos.ap-shanghai.myqcloud.com/2020-03-25/u%3A980235-screenshot-15-20-45-1192x746.jpg';
     }
 }

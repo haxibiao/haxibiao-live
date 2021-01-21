@@ -5,7 +5,6 @@ namespace Haxibiao\Live\Traits;
 use Haxibiao\Live\Live;
 use Haxibiao\Live\LiveRoom;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * 直播秀的属性
@@ -50,6 +49,6 @@ trait LiveAttrs
 
     public function getCoverUrlAttribute(): string
     {
-        return Storage::cloud()->url($this->cover) ?? 'https://dtzq-1251052432.cos.ap-shanghai.myqcloud.com/2020-03-25/u%3A980235-screenshot-15-20-45-1192x746.jpg';
+        return cdnurl($this->cover) ?? 'https://dtzq-1251052432.cos.ap-shanghai.myqcloud.com/2020-03-25/u%3A980235-screenshot-15-20-45-1192x746.jpg';
     }
 }
