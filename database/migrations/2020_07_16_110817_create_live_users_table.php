@@ -20,6 +20,7 @@ class CreateLiveUsersTable extends Migration
             $table->id();
             $table->unsignedInteger('live_id')->index()->comment('直播秀id');
             $table->unsignedInteger('user_id')->index()->comment('用户id');
+            $table->unsignedInteger('video_id')->comment('直播录制视频 ID')->nullable();
             $table->unsignedInteger('duration')->default(0)->comment('用户加入直播间时长');
             $table->unsignedInteger('count_comments')->default(0)->comment('总评论数');
             $table->unsignedInteger('count_joins')->default(0)->comment('总加入次数');
