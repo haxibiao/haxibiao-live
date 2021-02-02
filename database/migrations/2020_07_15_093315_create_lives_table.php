@@ -13,10 +13,9 @@ class CreateLivesTable extends Migration
      */
     public function up()
     {
-
-        //FIXME: 重构改动太大，线上价值太小，无需兼容了
-        Schema::dropIfExists('user_lives');
-        Schema::dropIfExists('lives');
+        if(Schema::hasTable('lives')){
+            return;
+        }
 
         Schema::create('lives', function (Blueprint $table) {
             $table->bigIncrements('id');

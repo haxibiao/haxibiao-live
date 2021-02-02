@@ -13,7 +13,9 @@ class CreateAppointmentLivesTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('appointment_lives');
+        if(Schema::hasTable('appointment_lives')){
+            return;
+        }
         Schema::create('appointment_lives', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('user_id');

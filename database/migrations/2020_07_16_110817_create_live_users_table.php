@@ -13,8 +13,9 @@ class CreateLiveUsersTable extends Migration
      */
     public function up()
     {
-
-        Schema::dropIfExists('live_users');
+        if(Schema::hasTable('live_users')){
+            return;
+        }
         Schema::create('live_users', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('live_id')->index()->comment('直播秀id');

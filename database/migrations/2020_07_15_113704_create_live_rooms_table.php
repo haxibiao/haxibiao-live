@@ -13,9 +13,9 @@ class CreateLiveRoomsTable extends Migration
      */
     public function up()
     {
-        //FIXME: 重构改动太大，线上价值太小，无需兼容了
-        Schema::dropIfExists('live_rooms');
-
+        if(Schema::hasTable('live_rooms')){
+            return;
+        }
         Schema::create('live_rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id')->comment('主播id');
