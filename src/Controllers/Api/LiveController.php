@@ -38,7 +38,7 @@ class LiveController extends Controller
         $data       = $request->all();
         $streamName = data_get($data, 'stream_id');
         $errcode    = data_get($data, 'errcode');
-        if ($errcode == 0) {
+        if (0 == $errcode) {
             $live = Live::where('stream_name', $streamName)->first();
             // $room = $live->room;
             // OBS开直播没有title
@@ -52,7 +52,8 @@ class LiveController extends Controller
     }
 
     /**
-     * 用户主动设置直播间封面? //FIXME: 没见到调用场景
+     * 用户主动设置直播间封面?
+     * //FIXME: 没见到调用场景
      */
     public function setRoomCover(Request $request)
     {
@@ -138,7 +139,7 @@ class LiveController extends Controller
 
         if ($eventType && $streamName) {
             $live = Live::whereStreamName($streamName)->first();
-            if ($live->status === Live::STATUS_ONLINE) {
+            if (Live::STATUS_ONLINE === $live->status) {
                 LiveRoom::closeLive($live);
             }
         }
