@@ -42,14 +42,14 @@ class LiveServiceProvider extends ServiceProvider
                 // 发布 Nova
                 __DIR__ . '/Nova' => base_path('app/Nova'),
                 // 发布 graphql
-                __DIR__ . '/../graphql/live' => base_path('graphql').'/live',
+                __DIR__ . '/../graphql/live' => base_path('graphql/live'),
             ]);
 
             $this->addPublishGroup('camera',[
                 // 发布配置文件.
                 $this->app->make('path.haxibiao-live.config') . '/camera.php' => app()->configPath('camera.php'),
                 // 发布 graphql
-                __DIR__ . '/../graphql/camera' => base_path('graphql').'/live',
+                __DIR__ . '/../graphql/camera' => base_path('graphql/camera'),
             ]);
         }
 
