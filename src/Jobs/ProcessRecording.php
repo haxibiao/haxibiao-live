@@ -3,7 +3,7 @@
 namespace Haxibiao\Live\Jobs;
 
 use App\Video;
-use Haxibiao\Helpers\VodUtils;
+use Haxibiao\Helpers\utils\VodUtils;
 use Haxibiao\Live\Live;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

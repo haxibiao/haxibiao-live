@@ -2,9 +2,9 @@
 
 namespace Haxibiao\Live\Controllers\Api;
 
-use App\Exceptions\UserException;
 use App\Http\Controllers\Controller;
 use App\Video;
+use Haxibiao\Breeze\Exceptions\UserException;
 use Haxibiao\Helpers\VodUtils;
 use Haxibiao\Live\Jobs\ProcessRecording;
 use Haxibiao\Live\Live;
@@ -87,8 +87,8 @@ class LiveController extends Controller
 
             //为vod创建video
             $video = Video::firstOrNew([
-                'qcvod_fileid' => $fileId,
-                'user_id'      => $live->user_id,
+                'fileid'  => $fileId,
+                'user_id' => $live->user_id,
             ]);
             $video->save();
             // 关联回放视频
