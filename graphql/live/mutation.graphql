@@ -1,30 +1,31 @@
 extend type Mutation {
-  """
-  开直播
-  """
-  openLive(title: String): Live @field(resolver: "App\\Live@resolveOpen")
-  """
-  创建延迟（可被预约）直播
-  """
-  createDelayLive(title: String!, begen_time: String!, college_id: Int!): Live @field(resolver: "App\\Live@resolverCreateDelayLive")
-  """
-  加入直播
-  """
-  joinLive(live_id: Int!): Live @field(resolver: "App\\Live@resolveJoin")
-  """
-  直播间评论
-  """
-  commentLive(live_id: Int!, message: String!): String @field(resolver: "App\\Live@resolveComment")
-  """
-  离开直播间
-  """
-  leaveLive(live_id: Int!): Live @field(resolver: "App\\Live@resolveLeave")
-  """
-  主播关闭直播
-  """
-  closeLive(live_id: Int!): Boolean @field(resolver: "App\\Live@resolveClose")
-  """
-  观众预约直播
-  """
-  appointmentLive(live_id: Int!): Boolean @field(resolver: "App\\Live@resolverAppointmentLive")
+    """
+    开直播
+    """
+    openLive(title: String): Live @field(resolver: "App\\Live@resolveOpen")
+    """
+    创建延迟（可被预约）直播
+    """
+    createDelayLive(title: String!, begen_time: String!, college_id: Int!): Live
+        @field(resolver: "App\\Live@resolveCreateDelayLive")
+    """
+    加入直播
+    """
+    joinLive(live_id: Int!): Live @field(resolver: "App\\Live@resolveJoin")
+    """
+    直播间评论
+    """
+    commentLive(live_id: Int!, message: String!): String @field(resolver: "App\\Live@resolveComment")
+    """
+    离开直播间
+    """
+    leaveLive(live_id: Int!): Live @field(resolver: "App\\Live@resolveLeave")
+    """
+    主播关闭直播
+    """
+    closeLive(live_id: Int!): Boolean @field(resolver: "App\\Live@resolveClose")
+    """
+    观众预约直播
+    """
+    appointmentLive(live_id: Int!): Boolean @field(resolver: "App\\Live@resolveAppointmentLive")
 }

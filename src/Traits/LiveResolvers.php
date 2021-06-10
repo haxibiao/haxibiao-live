@@ -80,7 +80,7 @@ trait LiveResolvers
          */
         //FIXME:只有变现大学的表结构就是 body 其他项目是 content
         $body = 'content';
-        if(Schema::hasColumn('comments', 'body')) ;
+        if (Schema::hasColumn('comments', 'body'));
         {
             $body = 'body';
         }
@@ -139,7 +139,7 @@ trait LiveResolvers
     /**
      * 创建一个可预约直播
      */
-    public static function resolverCreateDelayLive($root, array $args, $context, $info)
+    public static function resolveCreateDelayLive($root, array $args, $context, $info)
     {
         $user       = getUser();
         $begenTime  = data_get($args, 'begen_time');
@@ -152,7 +152,7 @@ trait LiveResolvers
     /**
      * 观众预约直播
      */
-    public static function resolverAppointmentLive($root, array $args, $context, $info)
+    public static function resolveAppointmentLive($root, array $args, $context, $info)
     {
         $user   = getUser();
         $liveID = data_get($args, 'live_id');
